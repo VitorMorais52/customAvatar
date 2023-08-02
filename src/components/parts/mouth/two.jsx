@@ -1,6 +1,10 @@
-const Two = () => {
-  return (
-    <g transform="scale(0.125), translate(330, 490)">
+// eslint-disable-next-line react/prop-types
+const Two = ({ isIndividualComponent }) => {
+  const transformValue = isIndividualComponent
+    ? "translate(4,20), scale(0.37)"
+    : "scale(0.125), translate(330, 490)";
+  const Path = () => (
+    <g transform={transformValue}>
       <path
         opacity="0.5"
         d="M141.317 40.2655C116.969 70.2547 110.749 77.8276 72.8712 77.8276C34.9938 77.8276 12.1485 51.8383 4.42587 40.2655C-14.3124 12.185 37.386 -6.56823 72.8712 2.82225C107.16 -7.51922 162.594 14.0572 141.317 40.2655Z"
@@ -20,6 +24,15 @@ const Two = () => {
       />
     </g>
   );
+
+  if (isIndividualComponent)
+    return (
+      <svg width="60" height="60">
+        <Path />
+      </svg>
+    );
+
+  return <Path />;
 };
 
 export default Two;

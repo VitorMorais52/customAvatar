@@ -1,21 +1,30 @@
 /* eslint-disable react/prop-types */
 import React, { Suspense } from "react";
 
-const Body = ({ hairType, eyebrowAndNoseType, mouthType }) => {
+const Body = ({ colorSettings, partsSettings }) => {
+  const {
+    hair: hairType,
+    eyebrowAndNose: eyebrowAndNoseType,
+    mouth: mouthType,
+  } = partsSettings;
+  const { hair: hairColor } = colorSettings;
+
   const getHair = () => {
-    const HairComponent = React.lazy(() => import(`../parts/hair/${hairType}`));
+    const HairComponent = React.lazy(() =>
+      import(`../parts/hair/${hairType}.jsx`)
+    );
     return (
       <Suspense fallback={<>...loading</>}>
-        <HairComponent />
+        <HairComponent fillColor={hairColor} />
       </Suspense>
     );
   };
   const getEyebrowAndNose = () => {
     const EyebrowAndNoseComponent = React.lazy(() =>
       import(
-        `../parts/eyesAndNose/${
+        `../parts/eyebrowAndNose/${
           eyebrowAndNoseType ? eyebrowAndNoseType : "one"
-        }`
+        }.jsx`
       )
     );
     return (
@@ -26,7 +35,7 @@ const Body = ({ hairType, eyebrowAndNoseType, mouthType }) => {
   };
   const getMouth = () => {
     const EyebrowAndNoseComponent = React.lazy(() =>
-      import(`../parts/mouth/${mouthType ? mouthType : "one"}`)
+      import(`../parts/mouth/${mouthType ? mouthType : "one"}.jsx`)
     );
     return (
       <Suspense fallback={<>...loading</>}>
@@ -34,10 +43,11 @@ const Body = ({ hairType, eyebrowAndNoseType, mouthType }) => {
       </Suspense>
     );
   };
+
   return (
     <svg
-      width="400"
-      height="400"
+      width="350"
+      height="350"
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,11 @@
-const One = () => {
-  return (
-    <g className="mouthComponent">
+// eslint-disable-next-line react/prop-types
+const One = ({ isIndividualComponent }) => {
+  const transformValue = isIndividualComponent
+    ? "translate(-110,-150), scale(2.8)"
+    : "";
+
+  const Path = () => (
+    <g className="mouthComponent" transform={transformValue}>
       <path
         d="M58.1956 61.4218C58.3333 61.4298 58.468 61.4649 58.5919 61.5253C58.7159 61.5857 58.8265 61.6701 58.9175 61.7736C59.0085 61.8771 59.078 61.9976 59.122 62.1282C59.166 62.2588 59.1835 62.3968 59.1737 62.5342C58.916 64.6969 57.8735 66.6901 56.2436 68.1363C54.6137 69.5825 52.5096 70.3812 50.3298 70.3812C48.15 70.3812 46.0459 69.5825 44.416 68.1363C42.7861 66.6901 41.7436 64.6969 41.486 62.5342C41.4761 62.3951 41.4944 62.2555 41.5396 62.1236C41.5849 61.9917 41.6562 61.8702 41.7494 61.7665C41.8426 61.6627 41.9557 61.5787 42.0821 61.5195C42.2084 61.4603 42.3454 61.4271 42.4848 61.4218H58.1956Z"
         fill="#393C54"
@@ -15,6 +20,15 @@ const One = () => {
       />
     </g>
   );
+
+  if (isIndividualComponent)
+    return (
+      <svg width="60" height="60">
+        <Path />
+      </svg>
+    );
+
+  return <Path />;
 };
 
 export default One;

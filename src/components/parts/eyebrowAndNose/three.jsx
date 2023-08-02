@@ -1,6 +1,10 @@
-const Three = () => {
-  return (
-    <g className="eyebrowAndNose" transform="scale(0.1)">
+// eslint-disable-next-line react/prop-types
+const Three = ({ isIndividualComponent }) => {
+  const transformValue = isIndividualComponent
+    ? "translate(-35,-26), scale(0.13)"
+    : "scale(0.1)";
+  const Path = () => (
+    <g className="eyebrowAndNose" transform={transformValue}>
       <path
         d="M502.584 473V527.122"
         stroke="#6C4735"
@@ -33,6 +37,15 @@ const Three = () => {
       />
     </g>
   );
+
+  if (isIndividualComponent)
+    return (
+      <svg width="60" height="60">
+        <Path />
+      </svg>
+    );
+
+  return <Path />;
 };
 
 export default Three;

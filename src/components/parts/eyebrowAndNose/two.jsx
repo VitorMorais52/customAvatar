@@ -1,6 +1,10 @@
-const Two = () => {
-  return (
-    <g transform="scale(0.1)">
+// eslint-disable-next-line react/prop-types
+const Two = ({ isIndividualComponent }) => {
+  const transformValue = isIndividualComponent
+    ? "translate(-30,-22), scale(0.12)"
+    : "scale(0.1)";
+  const Path = () => (
+    <g className="eyebrowAndNose" transform={transformValue}>
       <path
         d="M454.825 427.034C449.593 419.71 433.9 400.878 396.235 400.878C353.341 400.878 342.878 424.942 342.878 425.988L323 418.664C324.046 417.618 337.647 381 396.235 381C444.363 381 465.287 406.109 471.565 417.618L454.825 427.034Z"
         fill="#604030"
@@ -15,6 +19,15 @@ const Two = () => {
       />
     </g>
   );
+
+  if (isIndividualComponent)
+    return (
+      <svg width="60" height="60">
+        <Path />
+      </svg>
+    );
+
+  return <Path />;
 };
 
 export default Two;
