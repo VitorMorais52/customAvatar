@@ -1,7 +1,6 @@
 import { useState } from "react";
-import ColorPicker from "./ColorPicker";
-
 import AssembledBody from "./AssembledBody";
+import ColorPicker from "./ColorPicker";
 import Options from "./Options";
 import NavBar from "./NavBar";
 import * as AllHair from "./AssembledBody/BodyParts/hair";
