@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AssembledBody from "./AssembledBody";
-// import ColorPicker from "./ColorPicker";
+import ColorPicker from "./ColorPicker";
 import Options from "./Options";
 import NavBar from "./NavBar";
 import * as AllHair from "./AssembledBody/BodyParts/hair";
@@ -22,7 +22,7 @@ import "./App.css";
 
 function App() {
   const [currentTab, setCurrentTab] = useState("hair");
-  const [colorSettings] = useState({
+  const [colorSettings, setColorSettings] = useState({
     hair: "#4D191A",
     skin: "#7C533E",
     background: "",
@@ -34,8 +34,8 @@ function App() {
     mouth: "one",
   });
 
-  // const changeColorSettings = (colorKey, value) =>
-  //   setColorSettings({ ...colorSettings, [colorKey]: value });
+  const changeColorSettings = (colorKey, value) =>
+    setColorSettings({ ...colorSettings, [colorKey]: value });
 
   const setConfigs = (value) =>
     setPartsSettings({ ...partsSettings, [currentTab]: value });
@@ -53,7 +53,7 @@ function App() {
           currentTab={currentTab}
           changeCurrentTab={(v) => setCurrentTab(v)}
         />
-        {/* {["skin", "tshirt", "hair"].includes(currentTab) && (
+        {["skin", "tshirt", "hair"].includes(currentTab) && (
           <div className="colorPickerWrapper">
             <ColorPicker
               type={currentTab === "hair" ? "slider" : ""}
@@ -64,7 +64,7 @@ function App() {
               }
             />
           </div>
-        )} */}
+        )}
         <Options
           tabsConfig={tabsConfig}
           currentTab={currentTab}
