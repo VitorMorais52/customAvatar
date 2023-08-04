@@ -9,3 +9,51 @@
   display: flex;
   margin: 0 auto;
 }
+
+.content {
+  display: flex;
+  flex-direction: column;
+
+  width: auto;
+  min-height: 610px;
+
+  padding: 1rem;
+
+  border-radius: 10px;
+  background-color: #ddd;
+}
+
+h2 {
+  color: black;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.colorPickerWrapper {
+  padding: 10px;
+  margin: 0 auto;
+  margin-top: 5px;
+  width: 300px;
+  background-color: rgba(0, 173, 254, 0.2);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  max-height: 5px;
+}
+
+/* Cor do fundo da barra de rolagem */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Estilo do "polegar" (a parte que o usuário arrasta) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 173, 254, 0.5);
+}
+
+/* Estilo do "polegar" ao passar o mouse */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(0, 173, 254);
+}
