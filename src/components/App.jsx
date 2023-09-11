@@ -42,7 +42,7 @@ function App() {
 
   return (
     <div className="container">
-      <div className="content">
+      <div className="content" style={{ display: "none" }}>
         <AssembledBody
           partsSettings={partsSettings}
           colorSettings={colorSettings}
@@ -71,6 +71,31 @@ function App() {
           partsSettings={partsSettings}
           changeConfigs={(v) => setConfigs(v)}
         />
+      </div>
+      <div
+        id="circle"
+        className="demo"
+        style={{ position: "relative", width: "200px" }}
+      >
+        <svg viewBox="0 0 100 100">
+          <path
+            d="M 50,50 m 0,-47 a 47,47 0 1 1 0,94 a 47,47 0 1 1 0,-94"
+            stroke="#eee"
+            strokeWidth="0"
+            fillOpacity="0"
+          ></path>
+          <path
+            className="animatedPath"
+            d="M 50,50 m 0,-47 a 47,47 0 1 1 0,94 a 47,47 0 1 1 0,-94"
+            stroke="#FFEA82"
+            strokeWidth="6"
+            fillOpacity="0"
+            style={{
+              strokeDasharray: "295.416, 295.416",
+              strokeDashoffset: "295.416",
+            }}
+          ></path>
+        </svg>
       </div>
     </div>
   );
