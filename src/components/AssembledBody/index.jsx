@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useMemo } from "react";
 import ColorPicker from "./ColorPicker";
 import Options from "../Options";
 
@@ -33,40 +33,30 @@ const Body = ({ currentTab, tabsConfig }) => {
   const setConfigs = (value) =>
     setPartsSettings({ ...partsSettings, [currentTab]: value });
 
-  const getHair = () => {
-    const HairComponent = React.lazy(() =>
-      import(`./BodyParts/hair/${hairType}.jsx`)
-    );
-    return (
-      <Suspense fallback={<>...loading</>}>
-        <HairComponent fillColor={hairColor} />
-      </Suspense>
-    );
-  };
-  const getEyebrowAndNose = () => {
-    const EyebrowAndNoseComponent = React.lazy(() =>
-      import(
-        `./BodyParts/eyebrowAndNose/${
-          eyebrowAndNoseType ? eyebrowAndNoseType : "one"
-        }.jsx`
-      )
-    );
-    return (
-      <Suspense fallback={<>...loading</>}>
-        <EyebrowAndNoseComponent skinColor={skinColor} />
-      </Suspense>
-    );
-  };
-  const getMouth = () => {
-    const EyebrowAndNoseComponent = React.lazy(() =>
-      import(`./BodyParts/mouth/${mouthType ? mouthType : "one"}.jsx`)
-    );
-    return (
-      <Suspense fallback={<>...loading</>}>
-        <EyebrowAndNoseComponent />
-      </Suspense>
-    );
-  };
+  const GetHair = useMemo(
+    () => React.lazy(() => import(`./BodyParts/hair/${hairType}.jsx`)),
+    [hairType]
+  );
+
+  const GetEyebrowAndNose = useMemo(
+    () =>
+      React.lazy(() =>
+        import(
+          `./BodyParts/eyebrowAndNose/${
+            eyebrowAndNoseType ? eyebrowAndNoseType : "one"
+          }.jsx`
+        )
+      ),
+    [eyebrowAndNoseType]
+  );
+
+  const GetMouth = useMemo(
+    () =>
+      React.lazy(() =>
+        import(`./BodyParts/mouth/${mouthType ? mouthType : "one"}.jsx`)
+      ),
+    [mouthType]
+  );
 
   return (
     <div>
@@ -210,13 +200,23 @@ const Body = ({ currentTab, tabsConfig }) => {
             d="M72.8999 39.027C70.7214 23.716 60.7371 16.8739 50.0001 16.8739C39.2631 16.8739 29.2788 23.716 27.1003 39.027C24.3503 39.027 22.1221 42.5934 22.1221 46.9921C22.1221 51.1877 24.1552 54.5888 26.7299 54.8975C29.1653 68.1375 38.6478 75.8657 50.0001 75.8657C61.3504 75.8657 70.835 68.1375 73.2683 54.8975C75.845 54.5888 77.8781 51.1877 77.8781 46.9921C77.8781 42.5934 75.6499 39.027 72.8999 39.027Z"
             fill={skinColor}
           />
-          {getEyebrowAndNose()}
+          <Suspense fallback={<>...loading</>}>
+            <GetEyebrowAndNose />
+          </Suspense>
           <path
             d="M60.4597 48.1197C61.685 48.1197 62.6874 47.0502 62.6874 45.7431C62.6874 44.436 61.685 43.3666 60.4597 43.3666C59.2345 43.3666 58.232 44.436 58.232 45.7431C58.232 47.0502 59.2345 48.1197 60.4597 48.1197ZM40.4103 48.1197C41.6356 48.1197 42.638 47.0502 42.638 45.7431C42.638 44.436 41.6356 43.3666 40.4103 43.3666C39.1851 43.3666 38.1826 44.436 38.1826 45.7431C38.1826 47.0502 39.1851 48.1197 40.4103 48.1197Z"
             fill="#262626"
           />
-          {getMouth()}
-          {hairType ? getHair() : <></>}
+          <Suspense fallback={<>...loading</>}>
+            <GetMouth />
+          </Suspense>
+          {hairType ? (
+            <Suspense fallback={<>...loading</>}>
+              <GetHair fillColor={hairColor} />
+            </Suspense>
+          ) : (
+            <></>
+          )}
         </svg>
       </div>
     </div>

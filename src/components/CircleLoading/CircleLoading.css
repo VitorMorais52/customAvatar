@@ -1,0 +1,12 @@
+.animatedPath {
+  animation: dash 5s linear forwards;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 295.416;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
