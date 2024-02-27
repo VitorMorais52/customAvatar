@@ -11,6 +11,7 @@ const CustomOptions = () => {
       <div
         style={{ width: "150px", height: "150px", overflow: "hidden" }}
         key={currentTab + component.id}
+        id={component.id}
       >
         <svg
           width="100%"
@@ -29,7 +30,7 @@ const CustomOptions = () => {
   return (
     <div className="containerCustomOptions">
       current tab: {currentTab}
-      <div className="tabs" style={{ display: "flex", width: "637px" }}>
+      <div className="tabs" style={{ display: "flex", width: "650px" }}>
         {tabList.map((tabTitle) => (
           <button
             style={{ margin: "4px" }}
@@ -40,7 +41,7 @@ const CustomOptions = () => {
           </button>
         ))}
       </div>
-      <div className="options" style={{ width: "637px" }}>
+      <div className="options" style={{ width: "650px" }}>
         {avatarComponents[currentTab].map((component) =>
           renderOption(component)
         )}
