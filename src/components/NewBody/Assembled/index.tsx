@@ -14,12 +14,12 @@ const NewBody = () => {
     sup: components.body[0],
     shadowHead: components.head[0].shadow,
     head: components.head[0],
-    hair: components.hair.rounded[0],
+    hair: components.hair[0],
     eyebrow: components.eyebrow[0],
     eyes: components.eyes[0],
     nose: components.nose[0],
     mouth: components.mouth[0],
-    clothes: components.clothes.classic[0],
+    clothes: components.clothes[0],
   };
 
   const elPositioned = (el: SVGComponent) =>
