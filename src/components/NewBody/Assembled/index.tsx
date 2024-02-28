@@ -8,25 +8,16 @@ interface SVGComponent {
   shadow?: Record<"svg", string> | Record<"x" | "y", number>;
 }
 
-const NewBody = () => {
-  const selectedComponents = {
-    background: components.background[0],
-    sup: components.body[0],
-    shadowHead: components.head[0].shadow,
-    head: components.head[0],
-    hair: components.hair[0],
-    eyebrow: components.eyebrow[0],
-    eyes: components.eyes[0],
-    nose: components.nose[0],
-    mouth: components.mouth[0],
-    clothes: components.clothes[0],
-  };
+interface NewBodyProps {
+  defaultComposition: Record<string, SVGComponent>;
+}
 
+const NewBody = ({ defaultComposition }: NewBodyProps) => {
   const elPositioned = (el: SVGComponent) =>
     `<g transform="translate(${el.coordinates.x}, ${el.coordinates.y})">${el.svg}</g>`;
 
   const svgBuilder = () => {
-    const concatenatedString = Object.values(selectedComponents).reduce(
+    const concatenatedString = Object.values(defaultComposition).reduce(
       (acc, value) => {
         return acc + elPositioned(value);
       },
