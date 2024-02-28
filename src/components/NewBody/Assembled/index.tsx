@@ -1,13 +1,11 @@
 import React from "react";
-
-import components from "../localComponents.json";
 interface SVGComponent {
   svg: string;
-  id?: string;
+  id: string;
+  viewBox: string;
   coordinates: Record<"x" | "y", number>;
   shadow?: Record<"svg", string> | Record<"x" | "y", number>;
 }
-
 interface NewBodyProps {
   defaultComposition: Record<string, SVGComponent>;
 }
