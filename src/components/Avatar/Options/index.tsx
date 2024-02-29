@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import avatarComponents from "../localComponents.json";
 
 const tabList = Object.keys(avatarComponents);
+// preciso receber o head type e body type
 interface SVGComponent {
   svg: string;
   id: string;
   coordinates: Record<"x" | "y", number>;
   viewBox: "string";
   shadow?: Record<"svg", string> | Record<"x" | "y", number>;
+  types?: Array<string>;
 }
 
 type ChangeComposition = (
@@ -16,12 +18,20 @@ type ChangeComposition = (
 
 interface CustomOptionsProps {
   changeComposition: ChangeComposition;
+  type: Record<string, string>;
 }
 
-const CustomOptions = ({ changeComposition }: CustomOptionsProps) => {
+const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
 
   const renderOption = (component: SVGComponent) => {
+    // if (component.types && !component.types.includes(type[currentTab])) return;
+    if (
+      avatarComponents[currentTab].ref &&
+      component.types &&
+      !component.types.includes(type[avatarComponents[currentTab].ref])
+    )
+      return;
     return (
       <button
         type="button"
@@ -59,12 +69,12 @@ const CustomOptions = ({ changeComposition }: CustomOptionsProps) => {
         ))}
       </div>
       <div className="options" style={{ width: "650px" }}>
-        {avatarComponents[currentTab].map((component: SVGComponent) =>
-          renderOption(component)
+        {avatarComponents[currentTab].components.map(
+          (component: SVGComponent) => renderOption(component)
         )}
       </div>
     </div>
   );
 };
 
-export default CustomOptions;
+export default Options;

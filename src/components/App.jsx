@@ -1,4 +1,4 @@
-import NewBody from "./NewBody";
+import Avatar from "./Avatar";
 import BetaCustom from "./BetaCustom";
 
 import "./App.css";
@@ -6,7 +6,7 @@ import "./App.css";
 function App() {
   return (
     <div className="container">
-      <NewBody />
+      <Avatar />
       <BetaCustom />
     </div>
   );

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Assembled from "./Assembled";
-import CustomOptions from "./CustomOptions";
+import Options from "./Options";
 
 import components from "./localComponents.json";
-import "./NewBody.css";
+import "./Avatar.css";
 interface SVGComponent {
   svg: string;
   id: string;
@@ -25,25 +25,31 @@ const NewBody = () => {
     clothes: "one",
   };
   const [selectedComponents, setSelectedComponents] = useState({});
+  const [currentTypes, setCurrentTypes] = useState({ head: "", body: "" });
 
   const handleChangeComposition =
     ({ key, id }: Record<"key" | "id", string>) =>
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      const newComponent = components[key].find(
+      const newComponent = components[key].components.find(
         (el: SVGComponent) => el.id === id
       );
       setSelectedComponents({ ...selectedComponents, [key]: newComponent });
+      if (newComponent.type)
+        setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
     };
 
   const getComposition = () => {
     const avatar = {} as SVGComponent;
 
     Object.entries(suggestedComposition).forEach(([key, id]) => {
-      const component = components[key].find(
+      const component = components[key].components.find(
         (el: SVGComponent) => el.id === id
       );
       if (key === "head" && component?.shadow) {
         avatar["shadowHead"] = component.shadow;
+      }
+      if (component.type) {
+        setCurrentTypes({ ...currentTypes, [key]: component.type });
       }
       if (component) avatar[key] = component;
     });
@@ -58,9 +64,18 @@ const NewBody = () => {
   return (
     <div>
       <Assembled defaultComposition={selectedComponents} />
-      <CustomOptions changeComposition={handleChangeComposition} />
+      <Options
+        changeComposition={handleChangeComposition}
+        type={currentTypes}
+      />
     </div>
   );
 };
 
 export default NewBody;
+
+// sem roupa
+// componentes de acordo com o head e o body
+// fazer funcionar os cabelos multicamadas
+// cabelos troll q n servem em nd
+// 6, 7, 8, 10, 12, 13
