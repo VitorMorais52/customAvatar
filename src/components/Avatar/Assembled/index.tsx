@@ -1,18 +1,36 @@
 import React from "react";
+
+type SpecificationBy = {
+  coordinates: Record<"x" | "y", number>;
+  scale: number;
+};
+
+type Shadow = {
+  svg: string;
+  coordinates: Record<"x" | "y", number>;
+};
 interface SVGComponent {
   svg: string;
   id: string;
   viewBox: string;
+  specificationsBy: SpecificationBy;
   coordinates: Record<"x" | "y", number>;
-  shadow?: Record<"svg", string> | Record<"x" | "y", number>;
+  shadow?: Shadow;
 }
 interface NewBodyProps {
   defaultComposition: Record<string, SVGComponent>;
+  type: Record<string, string>;
 }
 
-const NewBody = ({ defaultComposition }: NewBodyProps) => {
-  const elPositioned = (el: SVGComponent) =>
-    `<g transform="translate(${el.coordinates.x}, ${el.coordinates.y})">${el.svg}</g>`;
+const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
+  const elPositioned = (el: SVGComponent) => {
+    if (el.specificationsBy) {
+      const { coordinates, scale } = el.specificationsBy[type["head"]];
+      return `<g transform="translate(${coordinates.x}, ${coordinates.y}), scale(${scale})">${el.svg}</g>`;
+    }
+
+    return `<g transform="translate(${el.coordinates.x}, ${el.coordinates.y})">${el.svg}</g>`;
+  };
 
   const svgBuilder = () => {
     const concatenatedString = Object.values(defaultComposition).reduce(

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import avatarComponents from "../localComponents.json";
+import localComponents from "../localComponents.json";
 
+const avatarComponents = localComponents.pieces;
 const tabList = Object.keys(avatarComponents);
-// preciso receber o head type e body type
 interface SVGComponent {
   svg: string;
   id: string;
@@ -25,7 +25,6 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
 
   const renderOption = (component: SVGComponent) => {
-    // if (component.types && !component.types.includes(type[currentTab])) return;
     if (
       avatarComponents[currentTab].ref &&
       component.types &&

@@ -1,8 +1,11 @@
+//ver forma de escalar o json futuramente
+
 import React, { useEffect, useState } from "react";
 import Assembled from "./Assembled";
 import Options from "./Options";
 
-import components from "./localComponents.json";
+import localComponents from "./localComponents.json";
+
 import "./Avatar.css";
 interface SVGComponent {
   svg: string;
@@ -12,7 +15,8 @@ interface SVGComponent {
   shadow?: Record<"svg", string> | Record<"x" | "y", number>;
 }
 
-const NewBody = () => {
+const Avatar = () => {
+  const components = localComponents.pieces;
   const suggestedComposition = {
     background: "one",
     body: "one",
@@ -29,11 +33,17 @@ const NewBody = () => {
 
   const handleChangeComposition =
     ({ key, id }: Record<"key" | "id", string>) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    () => {
       const newComponent = components[key].components.find(
         (el: SVGComponent) => el.id === id
       );
+
+      if (Object.hasOwnProperty.call(newComponent, "type"))
+        //validar e remover o componente com ref se necessario
+        console.info(`validar a piece que tem ref=${key}`);
+
       setSelectedComponents({ ...selectedComponents, [key]: newComponent });
+
       if (newComponent.type)
         setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
     };
@@ -45,13 +55,13 @@ const NewBody = () => {
       const component = components[key].components.find(
         (el: SVGComponent) => el.id === id
       );
-      if (key === "head" && component?.shadow) {
+      if (component?.shadow) {
         avatar["shadowHead"] = component.shadow;
       }
       if (component.type) {
         setCurrentTypes({ ...currentTypes, [key]: component.type });
       }
-      if (component) avatar[key] = component;
+      avatar[key] = component;
     });
 
     setSelectedComponents({ ...avatar });
@@ -63,7 +73,7 @@ const NewBody = () => {
 
   return (
     <div>
-      <Assembled defaultComposition={selectedComponents} />
+      <Assembled defaultComposition={selectedComponents} type={currentTypes} />
       <Options
         changeComposition={handleChangeComposition}
         type={currentTypes}
@@ -72,10 +82,11 @@ const NewBody = () => {
   );
 };
 
-export default NewBody;
+export default Avatar;
 
 // sem roupa
-// componentes de acordo com o head e o body
-// fazer funcionar os cabelos multicamadas
-// cabelos troll q n servem em nd
-// 6, 7, 8, 10, 12, 13
+// componentes de acordo com o head e o body 50%
+// fazer funcionar os cabelos multicamadas 0
+// cabelos troll q n servem em nd 0
+// 6, 7, 8, 10, 12, 13 100%
+// quando trocar de cabeça, remover o cabelo caso n tenha a adaptação
