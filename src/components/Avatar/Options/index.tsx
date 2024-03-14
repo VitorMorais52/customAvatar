@@ -25,6 +25,7 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
 
   const renderOption = (component: SVGComponent) => {
+    console.info(type);
     if (
       avatarComponents[currentTab].ref &&
       component.types &&
@@ -68,9 +69,10 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
         ))}
       </div>
       <div className="options" style={{ width: "650px" }}>
-        {avatarComponents[currentTab].components.map(
-          (component: SVGComponent) => renderOption(component)
-        )}
+        {avatarComponents[currentTab].components &&
+          avatarComponents[currentTab].components.map(
+            (component: SVGComponent) => renderOption(component)
+          )}
       </div>
     </div>
   );

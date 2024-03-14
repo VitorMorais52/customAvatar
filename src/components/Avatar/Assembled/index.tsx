@@ -24,6 +24,8 @@ interface NewBodyProps {
 
 const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
   const elPositioned = (el: SVGComponent) => {
+    if (!el) return;
+
     if (el.specificationsBy) {
       const { coordinates, scale } = el.specificationsBy[type["head"]];
       return `<g transform="translate(${coordinates.x}, ${coordinates.y}), scale(${scale})">${el.svg}</g>`;

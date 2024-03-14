@@ -26,23 +26,35 @@ const Avatar = () => {
     eyes: "one",
     nose: "one",
     mouth: "one",
-    clothes: "one",
+    clothes: "",
   };
   const [selectedComponents, setSelectedComponents] = useState({});
-  const [currentTypes, setCurrentTypes] = useState({ head: "", body: "" });
+  const [currentTypes, setCurrentTypes] = useState({});
 
   const handleChangeComposition =
     ({ key, id }: Record<"key" | "id", string>) =>
     () => {
+      const changedComponents = {};
+
       const newComponent = components[key].components.find(
         (el: SVGComponent) => el.id === id
       );
 
-      if (Object.hasOwnProperty.call(newComponent, "type"))
-        //validar e remover o componente com ref se necessario
-        console.info(`validar a piece que tem ref=${key}`);
+      if (key === "body") {
+        changedComponents["shadowHead"] = newComponent.shadow;
+        if (
+          selectedComponents["clothes"] &&
+          !selectedComponents["clothes"]?.types.includes(newComponent.type)
+        )
+          selectedComponents["clothes"] = "";
+      }
 
-      setSelectedComponents({ ...selectedComponents, [key]: newComponent });
+      changedComponents[key] = newComponent;
+
+      setSelectedComponents({
+        ...selectedComponents,
+        ...changedComponents,
+      });
 
       if (newComponent.type)
         setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
@@ -50,18 +62,25 @@ const Avatar = () => {
 
   const getComposition = () => {
     const avatar = {} as SVGComponent;
+    let shadowHead = {} as SVGComponent;
 
     Object.entries(suggestedComposition).forEach(([key, id]) => {
+      if (!id) return;
+
       const component = components[key].components.find(
         (el: SVGComponent) => el.id === id
       );
-      if (component?.shadow) {
-        avatar["shadowHead"] = component.shadow;
+      if (component.shadow) {
+        shadowHead = component.shadow;
       }
       if (component.type) {
-        setCurrentTypes({ ...currentTypes, [key]: component.type });
+        setCurrentTypes((currentValue) => ({
+          ...currentValue,
+          [key]: component.type,
+        }));
       }
       avatar[key] = component;
+      if (key === "body" && shadowHead) avatar["shadowHead"] = shadowHead;
     });
 
     setSelectedComponents({ ...avatar });
