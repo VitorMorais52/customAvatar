@@ -22,7 +22,23 @@ interface NewBodyProps {
   type: Record<string, string>;
 }
 
+const keysOrder = [
+  "background",
+  "backHair",
+  "body",
+  "shadowHead",
+  "head",
+  "hair",
+  "eyebrow",
+  "eyes",
+  "mouth",
+  "nose",
+  "clothes",
+];
+
 const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
+  const orderedValues = keysOrder.map((key) => defaultComposition[key]);
+
   const elPositioned = (el: SVGComponent) => {
     if (!el) return;
 
@@ -35,12 +51,10 @@ const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
   };
 
   const svgBuilder = () => {
-    const concatenatedString = Object.values(defaultComposition).reduce(
-      (acc, value) => {
-        return acc + elPositioned(value);
-      },
-      ""
-    );
+    const concatenatedString = orderedValues.reduce((acc, value) => {
+      if (!value || !value?.svg) return acc;
+      return acc + elPositioned(value);
+    }, "");
     return concatenatedString;
   };
 

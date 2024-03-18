@@ -25,7 +25,6 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
 
   const renderOption = (component: SVGComponent) => {
-    console.info(type);
     if (
       avatarComponents[currentTab].ref &&
       component.types &&

@@ -19,6 +19,7 @@ const Avatar = () => {
   const components = localComponents.pieces;
   const suggestedComposition = {
     background: "one",
+    backHair: "",
     body: "one",
     head: "one",
     hair: "one",
@@ -49,6 +50,8 @@ const Avatar = () => {
           selectedComponents["clothes"] = "";
       }
 
+      if (key === "hair") changedComponents["backHair"] = newComponent.backHair;
+
       changedComponents[key] = newComponent;
 
       setSelectedComponents({
@@ -63,6 +66,7 @@ const Avatar = () => {
   const getComposition = () => {
     const avatar = {} as SVGComponent;
     let shadowHead = {} as SVGComponent;
+    let backHair = {} as SVGComponent;
 
     Object.entries(suggestedComposition).forEach(([key, id]) => {
       if (!id) return;
@@ -79,8 +83,12 @@ const Avatar = () => {
           [key]: component.type,
         }));
       }
+      if (component.backHair) {
+        backHair = component.backHair;
+      }
       avatar[key] = component;
       if (key === "body" && shadowHead) avatar["shadowHead"] = shadowHead;
+      if (key === "hair" && backHair) avatar["backHair"] = backHair;
     });
 
     setSelectedComponents({ ...avatar });
@@ -104,7 +112,7 @@ const Avatar = () => {
 export default Avatar;
 
 // sem roupa
-// componentes de acordo com o head e o body 50%
+// componentes de acordo com o head e o body 50% (tem sobrancelha, falta olhos)
 // fazer funcionar os cabelos multicamadas 0
 // cabelos troll q n servem em nd 0
 // 6, 7, 8, 10, 12, 13 100%
