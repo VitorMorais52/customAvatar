@@ -11,6 +11,8 @@ interface SVGComponent {
   svg: string;
   id: string;
   viewBox: "string";
+  type?: string;
+  types?: string[];
   coordinates: Record<"x" | "y", number>;
   shadow?: Record<"svg", string> | Record<"x" | "y", number>;
 }
@@ -32,36 +34,16 @@ const Avatar = () => {
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentTypes, setCurrentTypes] = useState({});
 
-  const handleChangeComposition =
-    ({ key, id }: Record<"key" | "id", string>) =>
-    () => {
-      const changedComponents = {};
+  // must work according to the replaced component
+  // const validateComposition = () => {}
 
-      const newComponent = components[key].components.find(
-        (el: SVGComponent) => el.id === id
-      );
-
-      if (key === "body") {
-        changedComponents["shadowHead"] = newComponent.shadow;
-        if (
-          selectedComponents["clothes"] &&
-          !selectedComponents["clothes"]?.types.includes(newComponent.type)
-        )
-          selectedComponents["clothes"] = "";
-      }
-
-      if (key === "hair") changedComponents["backHair"] = newComponent.backHair;
-
-      changedComponents[key] = newComponent;
-
-      setSelectedComponents({
-        ...selectedComponents,
-        ...changedComponents,
-      });
-
-      if (newComponent.type)
-        setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
-    };
+  const getFirstCompatibleComponent = (key: string, type) => {
+    const result = components[key].components.find(
+      (component: SVGComponent) =>
+        component.types && component.types.includes(type)
+    );
+    return result || "";
+  };
 
   const getComposition = () => {
     const avatar = {} as SVGComponent;
@@ -94,6 +76,61 @@ const Avatar = () => {
     setSelectedComponents({ ...avatar });
   };
 
+  const handleChangeComposition =
+    ({ key, id }: Record<"key" | "id", string>) =>
+    () => {
+      console.info("called", { key, id });
+      const changedComponents = {};
+
+      const newComponent = components[key].components.find(
+        (el: SVGComponent) => el.id === id
+      );
+
+      if (key === "body") {
+        changedComponents["shadowHead"] = newComponent.shadow;
+        if (
+          selectedComponents["clothes"] &&
+          !selectedComponents["clothes"]?.types.includes(newComponent.type)
+        )
+          selectedComponents["clothes"] = "";
+      }
+
+      if (key === "head") {
+        if (
+          selectedComponents["eyebrow"] &&
+          !selectedComponents["eyebrow"]?.types.includes(newComponent.type)
+        ) {
+          selectedComponents["eyebrow"] = getFirstCompatibleComponent(
+            "eyebrow",
+            newComponent.type
+          );
+        }
+
+        if (
+          selectedComponents["hair"] &&
+          !selectedComponents["hair"]?.types.includes(newComponent.type)
+        ) {
+          selectedComponents["hair"] = "";
+        }
+      }
+
+      if (key === "hair") {
+        changedComponents["backHair"] = newComponent
+          ? newComponent.backHair
+          : "";
+      }
+
+      changedComponents[key] = newComponent;
+
+      setSelectedComponents({
+        ...selectedComponents,
+        ...changedComponents,
+      });
+
+      if (newComponent?.type)
+        setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
+    };
+
   useEffect(() => {
     getComposition();
   }, []);
@@ -117,3 +154,5 @@ export default Avatar;
 // cabelos troll q n servem em nd 0
 // 6, 7, 8, 10, 12, 13 100%
 // quando trocar de cabeça, remover o cabelo caso n tenha a adaptação
+// testar a ideia de subcomponent ao inves de shadow/backhair
+// adicionar sistema de cores
