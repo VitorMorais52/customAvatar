@@ -112,6 +112,13 @@ const Avatar = () => {
         ) {
           selectedComponents["hair"] = "";
         }
+
+        if (
+          selectedComponents["beard"] &&
+          !selectedComponents["beard"]?.types.includes(newComponent.type)
+        ) {
+          selectedComponents["beard"] = "";
+        }
       }
 
       if (key === "hair") {
