@@ -30,6 +30,7 @@ const Avatar = () => {
     nose: "one",
     mouth: "one",
     clothes: "",
+    glasses: "",
   };
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentTypes, setCurrentTypes] = useState({});

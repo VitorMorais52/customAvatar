@@ -35,6 +35,7 @@ const keysOrder = [
   "nose",
   "clothes",
   "beard",
+  "glasses",
 ];
 
 const NewBody = ({ defaultComposition, type }: NewBodyProps) => {

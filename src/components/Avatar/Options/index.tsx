@@ -25,6 +25,7 @@ interface CustomOptionsProps {
   type: Record<string, string>;
 }
 
+const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
 const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
 
@@ -121,7 +122,7 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
         ))}
       </div>
       <div className="options" style={{ width: "650px" }}>
-        {currentTab === "hair" && renderRemoveOption()}
+        {withRemoveOption.includes(currentTab) && renderRemoveOption()}
         {avatarComponents[currentTab].components &&
           avatarComponents[currentTab].components.map(
             (component: SVGComponent) => renderOption(component)
