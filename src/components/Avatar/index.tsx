@@ -120,6 +120,16 @@ const Avatar = () => {
         ) {
           selectedComponents["beard"] = "";
         }
+
+        if (
+          selectedComponents["eyes"] &&
+          !selectedComponents["eyes"]?.types.includes(newComponent.type)
+        ) {
+          selectedComponents["eyes"] = getFirstCompatibleComponent(
+            "eyes",
+            newComponent.type
+          );
+        }
       }
 
       if (key === "hair") {
