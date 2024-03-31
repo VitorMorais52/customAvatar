@@ -1,5 +1,3 @@
-//ver forma de escalar o json futuramente
-
 import React, { useEffect, useState } from "react";
 import Assembled from "./Assembled";
 import Options from "./Options";
@@ -19,24 +17,34 @@ interface SVGComponent {
 
 const Avatar = () => {
   const components = localComponents.pieces;
-  const suggestedComposition = {
-    background: "one",
-    backHair: "",
-    body: "one",
-    head: "one",
-    hair: "one",
-    eyebrow: "one",
-    eyes: "one",
-    nose: "one",
-    mouth: "one",
-    clothes: "",
-    glasses: "",
-  };
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentTypes, setCurrentTypes] = useState({});
 
-  // must work according to the replaced component
-  // const validateComposition = () => {}
+  const assembleSuggestedComposition = () => {
+    const avatar = {} as SVGComponent;
+
+    Object.entries(localComponents.defaultComposition).forEach(([key, id]) => {
+      if (!id) return;
+
+      const component = components[key].components.find(
+        (el: SVGComponent) => el.id === id
+      );
+
+      if (component.type)
+        setCurrentTypes((currentValue) => ({
+          ...currentValue,
+          [key]: component.type,
+        }));
+
+      if (component.subcomponent) {
+        if (key === "body") avatar["shadowHead"] = component.subcomponent;
+        if (key === "hair") avatar["backHair"] = component.subcomponent;
+      }
+      avatar[key] = component;
+    });
+
+    setSelectedComponents({ ...avatar });
+  };
 
   const getFirstCompatibleComponent = (key: string, type) => {
     const result = components[key].components.find(
@@ -46,41 +54,27 @@ const Avatar = () => {
     return result || "";
   };
 
-  const getComposition = () => {
-    const avatar = {} as SVGComponent;
-    let shadowHead = {} as SVGComponent;
-    let backHair = {} as SVGComponent;
-
-    Object.entries(suggestedComposition).forEach(([key, id]) => {
-      if (!id) return;
-
-      const component = components[key].components.find(
-        (el: SVGComponent) => el.id === id
-      );
-      if (component.shadow) {
-        shadowHead = component.shadow;
+  const validateMatchComponents = (
+    componentsToCheck: string[],
+    newComponent: SVGComponent
+  ) => {
+    componentsToCheck.forEach((keyComponent) => {
+      if (
+        selectedComponents[keyComponent] &&
+        !selectedComponents[keyComponent]?.types.includes(newComponent.type)
+      ) {
+        selectedComponents[keyComponent] = ["eyebrow", "eyes"].includes(
+          keyComponent
+        )
+          ? getFirstCompatibleComponent(keyComponent, newComponent.type)
+          : "";
       }
-      if (component.type) {
-        setCurrentTypes((currentValue) => ({
-          ...currentValue,
-          [key]: component.type,
-        }));
-      }
-      if (component.backHair) {
-        backHair = component.backHair;
-      }
-      avatar[key] = component;
-      if (key === "body" && shadowHead) avatar["shadowHead"] = shadowHead;
-      if (key === "hair" && backHair) avatar["backHair"] = backHair;
     });
-
-    setSelectedComponents({ ...avatar });
   };
 
   const handleChangeComposition =
     ({ key, id }: Record<"key" | "id", string>) =>
     () => {
-      console.info("called", { key, id });
       const changedComponents = {};
 
       const newComponent = components[key].components.find(
@@ -88,69 +82,31 @@ const Avatar = () => {
       );
 
       if (key === "body") {
-        changedComponents["shadowHead"] = newComponent.shadow;
-        if (
-          selectedComponents["clothes"] &&
-          !selectedComponents["clothes"]?.types.includes(newComponent.type)
-        )
-          selectedComponents["clothes"] = "";
+        changedComponents["shadowHead"] = newComponent.subcomponent;
+        validateMatchComponents(["clothes"], newComponent);
       }
 
-      if (key === "head") {
-        if (
-          selectedComponents["eyebrow"] &&
-          !selectedComponents["eyebrow"]?.types.includes(newComponent.type)
-        ) {
-          selectedComponents["eyebrow"] = getFirstCompatibleComponent(
-            "eyebrow",
-            newComponent.type
-          );
-        }
+      if (key === "head")
+        validateMatchComponents(
+          ["hair", "eyebrow", "eyes", "beard"],
+          newComponent
+        );
 
-        if (
-          selectedComponents["hair"] &&
-          !selectedComponents["hair"]?.types.includes(newComponent.type)
-        ) {
-          selectedComponents["hair"] = "";
-        }
+      if (key === "hair")
+        changedComponents["backHair"] = newComponent.subcomponent;
 
-        if (
-          selectedComponents["beard"] &&
-          !selectedComponents["beard"]?.types.includes(newComponent.type)
-        ) {
-          selectedComponents["beard"] = "";
-        }
-
-        if (
-          selectedComponents["eyes"] &&
-          !selectedComponents["eyes"]?.types.includes(newComponent.type)
-        ) {
-          selectedComponents["eyes"] = getFirstCompatibleComponent(
-            "eyes",
-            newComponent.type
-          );
-        }
-      }
-
-      if (key === "hair") {
-        changedComponents["backHair"] = newComponent
-          ? newComponent.backHair
-          : "";
-      }
+      if (newComponent?.type)
+        setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
 
       changedComponents[key] = newComponent;
-
       setSelectedComponents({
         ...selectedComponents,
         ...changedComponents,
       });
-
-      if (newComponent?.type)
-        setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
     };
 
   useEffect(() => {
-    getComposition();
+    assembleSuggestedComposition();
   }, []);
 
   return (
@@ -165,12 +121,3 @@ const Avatar = () => {
 };
 
 export default Avatar;
-
-// sem roupa
-// componentes de acordo com o head e o body 50% (tem sobrancelha, falta olhos)
-// fazer funcionar os cabelos multicamadas 0
-// cabelos troll q n servem em nd 0
-// 6, 7, 8, 10, 12, 13 100%
-// quando trocar de cabeça, remover o cabelo caso n tenha a adaptação
-// testar a ideia de subcomponent ao inves de shadow/backhair
-// adicionar sistema de cores

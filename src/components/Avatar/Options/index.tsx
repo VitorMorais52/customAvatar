@@ -9,7 +9,7 @@ interface SVGComponent {
   coordinates: Record<"x" | "y", number>;
   viewBox: "string";
   shadow?: Record<"svg", string> & Record<"x" | "y", number>;
-  backHair?: Record<"svg", string> &
+  subcomponent?: Record<"svg", string> &
     Record<"x" | "y", number> &
     Record<"viewBox", string> &
     Record<"fullSvg", string>;
@@ -31,13 +31,17 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
 
   const renderOption = (component: SVGComponent) => {
     let svg = component.svg;
+
     if (
       avatarComponents[currentTab].ref &&
       component.types &&
       !component.types.includes(type[avatarComponents[currentTab].ref])
     )
       return;
-    if (component?.backHair) svg = component.backHair?.fullSvg;
+
+    if (currentTab !== "body" && component?.subcomponent)
+      svg = component.subcomponent?.fullSvg;
+
     return (
       <button
         type="button"
@@ -55,8 +59,8 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
           width="100%"
           height="100%"
           viewBox={
-            component?.backHair?.viewBox
-              ? component?.backHair?.viewBox
+            component?.subcomponent?.viewBox
+              ? component?.subcomponent?.viewBox
               : component.viewBox
           }
           fill="none"

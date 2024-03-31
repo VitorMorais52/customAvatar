@@ -41,7 +41,7 @@ const keysOrder = [
 const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
   const orderedValues = keysOrder.map((key) => defaultComposition[key]);
 
-  const elPositioned = (el: SVGComponent) => {
+  const getPositionedElement = (el: SVGComponent) => {
     if (!el) return;
 
     if (el.specificationsBy) {
@@ -55,7 +55,7 @@ const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
   const svgBuilder = () => {
     const concatenatedString = orderedValues.reduce((acc, value) => {
       if (!value || !value?.svg) return acc;
-      return acc + elPositioned(value);
+      return acc + getPositionedElement(value);
     }, "");
     return concatenatedString;
   };
