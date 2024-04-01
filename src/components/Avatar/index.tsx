@@ -10,7 +10,7 @@ interface SVGComponent {
   id: string;
   viewBox: "string";
   type?: string;
-  types?: string[];
+  compatibleTypes?: string[];
   coordinates: Record<"x" | "y", number>;
   shadow?: Record<"svg", string> | Record<"x" | "y", number>;
 }
@@ -49,7 +49,7 @@ const Avatar = () => {
   const getFirstCompatibleComponent = (key: string, type) => {
     const result = components[key].components.find(
       (component: SVGComponent) =>
-        component.types && component.types.includes(type)
+        component.compatibleTypes && component.compatibleTypes.includes(type)
     );
     return result || "";
   };
@@ -61,7 +61,9 @@ const Avatar = () => {
     componentsToCheck.forEach((keyComponent) => {
       if (
         selectedComponents[keyComponent] &&
-        !selectedComponents[keyComponent]?.types.includes(newComponent.type)
+        !selectedComponents[keyComponent]?.compatibleTypes.includes(
+          newComponent.type
+        )
       ) {
         selectedComponents[keyComponent] = ["eyebrow", "eyes"].includes(
           keyComponent

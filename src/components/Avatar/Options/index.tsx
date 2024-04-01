@@ -13,7 +13,7 @@ interface SVGComponent {
     Record<"x" | "y", number> &
     Record<"viewBox", string> &
     Record<"fullSvg", string>;
-  types?: Array<string>;
+  compatibleTypes?: Array<string>;
 }
 
 type ChangeComposition = (
@@ -33,9 +33,11 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
     let svg = component.svg;
 
     if (
-      avatarComponents[currentTab].ref &&
-      component.types &&
-      !component.types.includes(type[avatarComponents[currentTab].ref])
+      avatarComponents[currentTab].validationRequiredBy &&
+      component.compatibleTypes &&
+      !component.compatibleTypes.includes(
+        type[avatarComponents[currentTab].validationRequiredBy]
+      )
     )
       return;
 
@@ -74,7 +76,6 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   };
 
   const renderRemoveOption = () => {
-    console.info("render remove option");
     return (
       <button
         type="button"
