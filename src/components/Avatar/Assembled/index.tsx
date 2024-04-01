@@ -1,6 +1,6 @@
 import React from "react";
 
-type SpecificationBy = {
+type SpecificationsByType = {
   coordinates: Record<"x" | "y", number>;
   scale: number;
 };
@@ -13,7 +13,7 @@ interface SVGComponent {
   svg: string;
   id: string;
   viewBox: string;
-  specificationsBy: SpecificationBy;
+  specificationsByType: SpecificationsByType;
   coordinates: Record<"x" | "y", number>;
   shadow?: Shadow;
 }
@@ -44,8 +44,8 @@ const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
   const getPositionedElement = (el: SVGComponent) => {
     if (!el) return;
 
-    if (el.specificationsBy) {
-      const { coordinates, scale } = el.specificationsBy[type["head"]];
+    if (el.specificationsByType) {
+      const { coordinates, scale } = el.specificationsByType[type["head"]];
       return `<g transform="translate(${coordinates.x}, ${coordinates.y}), scale(${scale})">${el.svg}</g>`;
     }
 
