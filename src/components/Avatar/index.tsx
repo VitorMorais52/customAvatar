@@ -70,6 +70,8 @@ const Avatar = () => {
         )
           ? getFirstCompatibleComponent(keyComponent, newComponent.type)
           : "";
+
+        if (keyComponent === "hair") selectedComponents["backHair"] = "";
       }
     });
   };
