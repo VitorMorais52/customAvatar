@@ -16,9 +16,7 @@ interface SVGComponent {
   compatibleTypes?: Array<string>;
 }
 
-type ChangeComposition = (
-  params: Record<"key" | "id", string>
-) => (event: React.MouseEvent<HTMLButtonElement>) => void;
+type ChangeComposition = (params: Record<"key" | "id", string>) => void;
 
 interface CustomOptionsProps {
   changeComposition: ChangeComposition;
@@ -28,6 +26,12 @@ interface CustomOptionsProps {
 const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
 const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
+
+  const handleChangeComposition =
+    ({ key, id }: Record<"key" | "id", string>) =>
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      changeComposition({ key, id });
+    };
 
   const renderOption = (component: SVGComponent) => {
     let svg = component.svg;
@@ -55,7 +59,7 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
         }}
         key={currentTab + component.id}
         id={component.id}
-        onClick={changeComposition({ key: currentTab, id: component.id })}
+        onClick={handleChangeComposition({ key: currentTab, id: component.id })}
       >
         <svg
           width="100%"
@@ -87,7 +91,7 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
         }}
         key="remove selected option"
         id="zero"
-        onClick={changeComposition({ key: currentTab, id: "" })}
+        onClick={handleChangeComposition({ key: currentTab, id: "" })}
       >
         <svg
           width="125"
