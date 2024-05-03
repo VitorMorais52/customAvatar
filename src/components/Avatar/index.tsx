@@ -5,16 +5,9 @@ import Options from "./Options";
 import localComponents from "./localComponents.json";
 
 import "./Avatar.css";
+import { deepClone } from "../../utils/functions";
 
-interface IColors {
-  index: number;
-  currentColor: string;
-  originalColor: string;
-}
-
-type TypeElementsColor = Record<"primary" | "secondary", IColors[]>;
-type TypeElements = Record<"primary" | "secondary", string[]>;
-
+const components = deepClone(localComponents.pieces);
 interface SVGComponent {
   svg: string;
   id: string;
@@ -30,9 +23,30 @@ interface SVGComponent {
 }
 
 const Avatar = () => {
-  const components = localComponents.pieces;
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentTypes, setCurrentTypes] = useState({});
+
+  const [colorByKeys, setColorByKeys] = useState({
+    background: "",
+    backHair: "#000",
+    body: "",
+    shadowHead: "",
+    head: "",
+    eyebrow: "",
+    hair: "#000",
+    eyes: "",
+    mouth: "",
+    nose: "",
+    beard: "",
+    glasses: "",
+  });
+
+  const handleChangeColor = (colorKey: string, value: string) => {
+    const newColorByKeys = { ...colorByKeys, [colorKey]: value };
+    if (colorKey === "hair") newColorByKeys["backHair"] = value;
+
+    setColorByKeys(newColorByKeys);
+  };
 
   const validateMatchComponents = (
     componentsToCheck: string[],
@@ -56,97 +70,11 @@ const Avatar = () => {
     });
   };
 
-  function splitSvg(svg: string) {
-    const splitedSvg = svg.split(">").map((v) => v + ">");
-
-    const regex = /fill="([^"]+)"/;
-    const colorfulElements: Array<IColors> = [];
-
-    splitedSvg.forEach((el: string, index: number) => {
-      if (!el.includes("fill")) return;
-
-      const match = el.match(regex);
-      if (!match) return;
-
-      colorfulElements.push({
-        index: index,
-        currentColor: match[1],
-        originalColor: match[1],
-      });
-    });
-
-    return { splitedSvg, colorfulElements };
-  }
-
-  function turnSvgIntoElements(component: SVGComponent): {
-    elements: TypeElements;
-    elementsColor: TypeElementsColor;
-  } {
-    const { splitedSvg, colorfulElements } = splitSvg(component.svg);
-
-    const secondaryElements: string[] = [];
-    const secondaryColorElements: IColors[] = [];
-    if (component.subcomponent) {
-      const { splitedSvg, colorfulElements } = splitSvg(
-        component.subcomponent.svg
-      );
-      secondaryElements.push(...splitedSvg);
-      secondaryColorElements.push(...colorfulElements);
-    }
-
-    return {
-      elements: { primary: splitedSvg, secondary: secondaryElements },
-      elementsColor: {
-        primary: colorfulElements,
-        secondary: secondaryColorElements,
-      },
-    };
-  }
-
-  function changeColor(
-    elements: TypeElements,
-    index: number,
-    newColor: string,
-    key: "primary" | "secondary"
-  ) {
-    const newElement = elements[key][index].replace(
-      /fill="([^"]+)"/,
-      `fill="${newColor}"`
-    );
-
-    elements[key][index] = newElement;
-
-    return newElement;
-  }
-
-  function makesTheMagic(component: SVGComponent) {
-    if (!component) return;
-    const { elements, elementsColor } = turnSvgIntoElements(component);
-    console.info("elements, elementsColor", elements, elementsColor);
-
-    elementsColor.primary.forEach((elementColor: IColors) => {
-      changeColor(elements, elementColor.index, "#000", "primary");
-    });
-    elementsColor.secondary.forEach((elementColor: IColors) => {
-      changeColor(elements, elementColor.index, "#000", "secondary");
-    });
-
-    component.svg = elements.primary.join("");
-    if (component.subcomponent)
-      component.subcomponent.svg = elements.secondary.join("");
-
-    return component;
-  }
-
   const changeComposition = ({ key, id }: Record<"key" | "id", string>) => {
     const changedComponents = {};
-    let newComponent = components[key].components.find(
+    const newComponent = components[key].components.find(
       (el: SVGComponent) => el.id === id
     );
-
-    console.info("before component", newComponent);
-    // newComponent = makesTheMagic(newComponent);
-    console.info("after component", newComponent);
 
     if (key === "body") {
       changedComponents["shadowHead"] = newComponent.subcomponent;
@@ -212,8 +140,17 @@ const Avatar = () => {
 
   return (
     <div>
-      <Assembled defaultComposition={selectedComponents} type={currentTypes} />
-      <Options changeComposition={changeComposition} type={currentTypes} />
+      <Assembled
+        defaultComposition={selectedComponents}
+        colorByKeys={colorByKeys}
+        type={currentTypes}
+      />
+      <Options
+        changeComposition={changeComposition}
+        type={currentTypes}
+        colorByKeys={colorByKeys}
+        changeComponentsColor={handleChangeColor}
+      />
     </div>
   );
 };

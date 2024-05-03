@@ -1,4 +1,5 @@
 import React from "react";
+import { turnSvgIntoElements } from "../../../utils/functions";
 
 type SpecificationsByType = {
   coordinates: Record<"x" | "y", number>;
@@ -15,12 +16,22 @@ interface SVGComponent {
   viewBox: string;
   specificationsByType: SpecificationsByType;
   coordinates: Record<"x" | "y", number>;
-  shadow?: Shadow;
+  backHair?: Shadow;
+  shadowHead?: Shadow;
 }
 interface NewBodyProps {
   defaultComposition: Record<string, SVGComponent>;
   type: Record<string, string>;
+  colorByKeys: Record<string, string>;
 }
+
+interface IColors {
+  index: number;
+  currentColor: string;
+  originalColor: string;
+}
+
+type TypeElements = Record<"primary" | "secondary", string[]>;
 
 const keysOrder = [
   "background",
@@ -38,8 +49,47 @@ const keysOrder = [
   "glasses",
 ];
 
-const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
-  const orderedValues = keysOrder.map((key) => defaultComposition[key]);
+const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
+  const orderedValues = keysOrder.map((key) => {
+    if (colorByKeys[key]) makesTheMagic(key, defaultComposition[key]);
+
+    return defaultComposition[key];
+  });
+
+  function changeColor(
+    elements: TypeElements,
+    index: number,
+    newColor: string,
+    key: "primary" | "secondary"
+  ) {
+    const newElement = elements[key][index].replace(
+      /fill="([^"]+)"/,
+      `fill="${newColor}"`
+    );
+
+    elements[key][index] = newElement;
+
+    return newElement;
+  }
+
+  function makesTheMagic(key: string, component: SVGComponent) {
+    if (!component) return;
+
+    const { elements, elementsColor } = turnSvgIntoElements(component);
+
+    elementsColor.primary.forEach((elementColor: IColors) => {
+      changeColor(elements, elementColor.index, colorByKeys[key], "primary");
+    });
+    elementsColor.secondary.forEach((elementColor: IColors) => {
+      changeColor(elements, elementColor.index, colorByKeys[key], "secondary");
+    });
+
+    component.svg = elements.primary.join("");
+    if (component.backHair)
+      component.backHair.svg = elements.secondary.join("");
+
+    return component;
+  }
 
   const getPositionedElement = (el: SVGComponent) => {
     if (!el) return;
@@ -76,4 +126,4 @@ const NewBody = ({ defaultComposition, type }: NewBodyProps) => {
   );
 };
 
-export default NewBody;
+export default Assembled;

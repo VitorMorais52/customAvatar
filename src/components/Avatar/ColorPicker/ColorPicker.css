@@ -1,0 +1,12 @@
+.githubPickerReplace {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 auto;
+  padding: 0 !important;
+  width: auto !important;
+}
+
+.githubPickerReplace > div {
+  display: none;
+}

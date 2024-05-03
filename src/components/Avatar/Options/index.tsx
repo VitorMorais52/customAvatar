@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import localComponents from "../localComponents.json";
+import ColorPicker from "../../BetaCustom/AssembledBody/ColorPicker";
 
 const avatarComponents = localComponents.pieces;
 const tabList = Object.keys(avatarComponents);
@@ -17,14 +18,22 @@ interface SVGComponent {
 }
 
 type ChangeComposition = (params: Record<"key" | "id", string>) => void;
+type ChangeComponentsColor = (colorKey: string, value: string) => void;
 
 interface CustomOptionsProps {
   changeComposition: ChangeComposition;
+  changeComponentsColor: ChangeComponentsColor;
   type: Record<string, string>;
+  colorByKeys: Record<string, string>;
 }
 
 const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
-const Options = ({ changeComposition, type }: CustomOptionsProps) => {
+const Options = ({
+  changeComposition,
+  type,
+  changeComponentsColor,
+  colorByKeys,
+}: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
 
   const handleChangeComposition =
@@ -117,27 +126,40 @@ const Options = ({ changeComposition, type }: CustomOptionsProps) => {
   };
 
   return (
-    <div className="containerCustomOptions">
-      current tab: {currentTab}
-      <div className="tabs" style={{ display: "flex", width: "650px" }}>
-        {tabList.map((tabTitle) => (
-          <button
-            style={{ margin: "4px" }}
-            key={tabTitle}
-            onClick={() => setCurrentTab(tabTitle)}
-          >
-            {tabTitle}
-          </button>
-        ))}
+    <>
+      {["body", "clothes", "hair"].includes(currentTab) && (
+        <div className="colorPickerWrapper">
+          <ColorPicker
+            type={currentTab === "hair" ? "slider" : ""}
+            colorKey={currentTab}
+            currentColor={colorByKeys.hair}
+            changeCurrentColor={(value: string) =>
+              changeComponentsColor(currentTab, value)
+            }
+          />
+        </div>
+      )}
+      <div className="containerCustomOptions">
+        <div className="tabs" style={{ display: "flex", width: "650px" }}>
+          {tabList.map((tabTitle) => (
+            <button
+              style={{ margin: "4px" }}
+              key={tabTitle}
+              onClick={() => setCurrentTab(tabTitle)}
+            >
+              {tabTitle}
+            </button>
+          ))}
+        </div>
+        <div className="options" style={{ width: "650px" }}>
+          {withRemoveOption.includes(currentTab) && renderRemoveOption()}
+          {avatarComponents[currentTab].components &&
+            avatarComponents[currentTab].components.map(
+              (component: SVGComponent) => renderOption(component)
+            )}
+        </div>
       </div>
-      <div className="options" style={{ width: "650px" }}>
-        {withRemoveOption.includes(currentTab) && renderRemoveOption()}
-        {avatarComponents[currentTab].components &&
-          avatarComponents[currentTab].components.map(
-            (component: SVGComponent) => renderOption(component)
-          )}
-      </div>
-    </div>
+    </>
   );
 };
 
