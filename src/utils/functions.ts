@@ -1,35 +1,9 @@
-type SpecificationsByType = {
-  coordinates: Record<"x" | "y", number>;
-  scale: number;
-};
-
-type Shadow = {
-  svg: string;
-  coordinates: Record<"x" | "y", number>;
-};
-interface SVGComponent {
-  svg: string;
-  id: string;
-  viewBox: string;
-  specificationsByType: SpecificationsByType;
-  coordinates: Record<"x" | "y", number>;
-  backHair?: Shadow;
-  shadowHead?: Shadow;
-}
-interface NewBodyProps {
-  defaultComposition: Record<string, SVGComponent>;
-  type: Record<string, string>;
-  colorByKeys: Record<string, string>;
-}
-
-interface IColors {
-  index: number;
-  currentColor: string;
-  originalColor: string;
-}
-
-type TypeElementsColor = Record<"primary" | "secondary", IColors[]>;
-type TypeElements = Record<"primary" | "secondary", string[]>;
+import {
+  IColors,
+  SVGComponent,
+  TypeElements,
+  TypeElementsColor,
+} from "./models";
 
 function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== "object") {
@@ -98,4 +72,39 @@ function turnSvgIntoElements(component: SVGComponent): {
   };
 }
 
-export { splitSvg, turnSvgIntoElements, deepClone };
+function reduceBrightness(color: string, decreaseValue: number) {
+  let r = parseInt(color.substring(1, 3), 16);
+  let g = parseInt(color.substring(3, 5), 16);
+  let b = parseInt(color.substring(5, 7), 16);
+
+  r = Math.floor(r * (1 - decreaseValue));
+  g = Math.floor(g * (1 - decreaseValue));
+  b = Math.floor(b * (1 - decreaseValue));
+
+  return `#${(r < 16 ? "0" : "") + r.toString(16)}${
+    (g < 16 ? "0" : "") + g.toString(16)
+  }${(b < 16 ? "0" : "") + b.toString(16)}`;
+}
+function darkenColor(color: string, decreaseValue: number) {
+  let r = parseInt(color.substring(1, 3), 16);
+  let g = parseInt(color.substring(3, 5), 16);
+  let b = parseInt(color.substring(5, 7), 16);
+
+  // Escurece os componentes R, G e B
+  r = Math.max(0, r - decreaseValue);
+  g = Math.max(0, g - decreaseValue);
+  b = Math.max(0, b - decreaseValue);
+
+  // Converte de volta para uma cor hexadecimal
+  return `#${(r < 16 ? "0" : "") + r.toString(16)}${
+    (g < 16 ? "0" : "") + g.toString(16)
+  }${(b < 16 ? "0" : "") + b.toString(16)}`;
+}
+
+export {
+  splitSvg,
+  turnSvgIntoElements,
+  deepClone,
+  reduceBrightness,
+  darkenColor,
+};

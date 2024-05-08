@@ -5,22 +5,10 @@ import Options from "./Options";
 import localComponents from "./localComponents.json";
 
 import "./Avatar.css";
-import { deepClone } from "../../utils/functions";
+import { darkenColor, deepClone } from "../../utils/functions";
+import { SVGComponent } from "../../utils/models";
 
 const components = deepClone(localComponents.pieces);
-interface SVGComponent {
-  svg: string;
-  id: string;
-  viewBox: "string";
-  type?: string;
-  compatibleTypes?: string[];
-  coordinates: Record<"x" | "y", number>;
-  shadow?: Record<"svg", string> & Record<"x" | "y", number>;
-  subcomponent?: Record<"svg", string> &
-    Record<"x" | "y", number> &
-    Record<"viewBox", string> &
-    Record<"fullSvg", string>;
-}
 
 const Avatar = () => {
   const [selectedComponents, setSelectedComponents] = useState({});
@@ -28,12 +16,12 @@ const Avatar = () => {
 
   const [colorByKeys, setColorByKeys] = useState({
     background: "",
-    backHair: "#000",
+    backHair: "#1A1A1A",
     body: "",
     shadowHead: "",
     head: "",
     eyebrow: "",
-    hair: "#000",
+    hair: "#1A1A1A",
     eyes: "",
     mouth: "",
     nose: "",
@@ -44,6 +32,13 @@ const Avatar = () => {
   const handleChangeColor = (colorKey: string, value: string) => {
     const newColorByKeys = { ...colorByKeys, [colorKey]: value };
     if (colorKey === "hair") newColorByKeys["backHair"] = value;
+    if (colorKey === "body") {
+      newColorByKeys["head"] = value;
+      newColorByKeys["nose"] = darkenColor(value, 50);
+      newColorByKeys["shadowHead"] = darkenColor(value, 30);
+      // newColorByKeys["nose"] = reduceBrightness(value, 0.2);
+      // newColorByKeys["shadowHead"] = reduceBrightness(value, 0.2);
+    }
 
     setColorByKeys(newColorByKeys);
   };

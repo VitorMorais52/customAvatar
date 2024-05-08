@@ -1,37 +1,6 @@
 import React from "react";
 import { turnSvgIntoElements } from "../../../utils/functions";
-
-type SpecificationsByType = {
-  coordinates: Record<"x" | "y", number>;
-  scale: number;
-};
-
-type Shadow = {
-  svg: string;
-  coordinates: Record<"x" | "y", number>;
-};
-interface SVGComponent {
-  svg: string;
-  id: string;
-  viewBox: string;
-  specificationsByType: SpecificationsByType;
-  coordinates: Record<"x" | "y", number>;
-  backHair?: Shadow;
-  shadowHead?: Shadow;
-}
-interface NewBodyProps {
-  defaultComposition: Record<string, SVGComponent>;
-  type: Record<string, string>;
-  colorByKeys: Record<string, string>;
-}
-
-interface IColors {
-  index: number;
-  currentColor: string;
-  originalColor: string;
-}
-
-type TypeElements = Record<"primary" | "secondary", string[]>;
+import { IColors, SVGComponent, TypeElements } from "../../../utils/models";
 
 const keysOrder = [
   "background",
@@ -48,6 +17,12 @@ const keysOrder = [
   "beard",
   "glasses",
 ];
+
+interface NewBodyProps {
+  defaultComposition: Record<string, SVGComponent>;
+  type: Record<string, string>;
+  colorByKeys: Record<string, string>;
+}
 
 const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
   const orderedValues = keysOrder.map((key) => {

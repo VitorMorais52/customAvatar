@@ -1,31 +1,10 @@
 import React, { useState } from "react";
 import localComponents from "../localComponents.json";
 import ColorPicker from "../../BetaCustom/AssembledBody/ColorPicker";
+import { CustomOptionsProps, SVGComponent } from "../../../utils/models";
 
 const avatarComponents = localComponents.pieces;
 const tabList = Object.keys(avatarComponents);
-interface SVGComponent {
-  svg: string;
-  id: string;
-  coordinates: Record<"x" | "y", number>;
-  viewBox: "string";
-  shadow?: Record<"svg", string> & Record<"x" | "y", number>;
-  subcomponent?: Record<"svg", string> &
-    Record<"x" | "y", number> &
-    Record<"viewBox", string> &
-    Record<"fullSvg", string>;
-  compatibleTypes?: Array<string>;
-}
-
-type ChangeComposition = (params: Record<"key" | "id", string>) => void;
-type ChangeComponentsColor = (colorKey: string, value: string) => void;
-
-interface CustomOptionsProps {
-  changeComposition: ChangeComposition;
-  changeComponentsColor: ChangeComponentsColor;
-  type: Record<string, string>;
-  colorByKeys: Record<string, string>;
-}
 
 const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
 const Options = ({
@@ -41,6 +20,26 @@ const Options = ({
     (event: React.MouseEvent<HTMLButtonElement>) => {
       changeComposition({ key, id });
     };
+
+  const renderColorPicker = () => {
+    console.info("color");
+
+    if (!["hair", "body", "clothes", "hair", "beard"].includes(currentTab))
+      return <></>;
+
+    return (
+      <div className="colorPickerWrapper">
+        <ColorPicker
+          type={["hair", "beard"].includes(currentTab) ? "slider" : ""}
+          colorKey={currentTab}
+          currentColor={colorByKeys.hair}
+          changeCurrentColor={(value: string) =>
+            changeComponentsColor(currentTab, value)
+          }
+        />
+      </div>
+    );
+  };
 
   const renderOption = (component: SVGComponent) => {
     let svg = component.svg;
@@ -127,18 +126,7 @@ const Options = ({
 
   return (
     <>
-      {["body", "clothes", "hair"].includes(currentTab) && (
-        <div className="colorPickerWrapper">
-          <ColorPicker
-            type={currentTab === "hair" ? "slider" : ""}
-            colorKey={currentTab}
-            currentColor={colorByKeys.hair}
-            changeCurrentColor={(value: string) =>
-              changeComponentsColor(currentTab, value)
-            }
-          />
-        </div>
-      )}
+      {renderColorPicker()}
       <div className="containerCustomOptions">
         <div className="tabs" style={{ display: "flex", width: "650px" }}>
           {tabList.map((tabTitle) => (
