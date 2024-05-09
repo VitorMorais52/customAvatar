@@ -1,6 +1,6 @@
 import React from "react";
-import { turnSvgIntoElements } from "../../../utils/functions";
-import { IColors, SVGComponent, TypeElements } from "../../../utils/models";
+import { paintTheComponent } from "../../../utils/functions";
+import { SVGComponent } from "../../../utils/models";
 
 const keysOrder = [
   "background",
@@ -21,52 +21,18 @@ const keysOrder = [
 interface NewBodyProps {
   defaultComposition: Record<string, SVGComponent>;
   type: Record<string, string>;
-  colorByKeys: Record<string, string>;
+  colorByKeys: Record<string, string[]>;
 }
 
 const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
   const orderedValues = keysOrder.map((key) => {
-    if (colorByKeys[key]) makesTheMagic(key, defaultComposition[key]);
+    if (colorByKeys[key] && colorByKeys[key].length)
+      paintTheComponent(key, defaultComposition[key], colorByKeys);
 
     return defaultComposition[key];
   });
 
-  function changeColor(
-    elements: TypeElements,
-    index: number,
-    newColor: string,
-    key: "primary" | "secondary"
-  ) {
-    const newElement = elements[key][index].replace(
-      /fill="([^"]+)"/,
-      `fill="${newColor}"`
-    );
-
-    elements[key][index] = newElement;
-
-    return newElement;
-  }
-
-  function makesTheMagic(key: string, component: SVGComponent) {
-    if (!component) return;
-
-    const { elements, elementsColor } = turnSvgIntoElements(component);
-
-    elementsColor.primary.forEach((elementColor: IColors) => {
-      changeColor(elements, elementColor.index, colorByKeys[key], "primary");
-    });
-    elementsColor.secondary.forEach((elementColor: IColors) => {
-      changeColor(elements, elementColor.index, colorByKeys[key], "secondary");
-    });
-
-    component.svg = elements.primary.join("");
-    if (component.backHair)
-      component.backHair.svg = elements.secondary.join("");
-
-    return component;
-  }
-
-  const getPositionedElement = (el: SVGComponent) => {
+  const setPropertiesInComponent = (el: SVGComponent) => {
     if (!el) return;
 
     if (el.specificationsByType) {
@@ -80,7 +46,7 @@ const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
   const svgBuilder = () => {
     const concatenatedString = orderedValues.reduce((acc, value) => {
       if (!value || !value?.svg) return acc;
-      return acc + getPositionedElement(value);
+      return acc + setPropertiesInComponent(value);
     }, "");
     return concatenatedString;
   };

@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import localComponents from "../localComponents.json";
 import ColorPicker from "../../BetaCustom/AssembledBody/ColorPicker";
 import { CustomOptionsProps, SVGComponent } from "../../../utils/models";
+import { splitSvg } from "../../../utils/functions";
 
 const avatarComponents = localComponents.pieces;
 const tabList = Object.keys(avatarComponents);
 
 const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
+
 const Options = ({
   changeComposition,
   type,
   changeComponentsColor,
   colorByKeys,
+  currentComponents,
 }: CustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("background");
 
@@ -22,23 +25,34 @@ const Options = ({
     };
 
   const renderColorPicker = () => {
-    console.info("color");
-
-    if (!["hair", "body", "clothes", "hair", "beard"].includes(currentTab))
+    if (
+      !["hair", "body", "clothes", "hair", "beard"].includes(currentTab) ||
+      !currentComponents[currentTab]?.svg
+    )
       return <></>;
 
-    return (
+    const { colorfulElements } = splitSvg(currentComponents[currentTab].svg);
+
+    return colorfulElements.map((elementColor) => (
       <div className="colorPickerWrapper">
         <ColorPicker
-          type={["hair", "beard"].includes(currentTab) ? "slider" : ""}
+          type={
+            ["hair", "beard", "clothes"].includes(currentTab) ? "slider" : ""
+          }
           colorKey={currentTab}
           currentColor={colorByKeys.hair}
-          changeCurrentColor={(value: string) =>
-            changeComponentsColor(currentTab, value)
-          }
+          changeCurrentColor={(value: string) => {
+            if (value === "#000000") return;
+
+            const newSetColors = colorByKeys[currentTab] || [];
+
+            newSetColors[elementColor.index] = value;
+
+            changeComponentsColor(currentTab, newSetColors);
+          }}
         />
       </div>
-    );
+    ));
   };
 
   const renderOption = (component: SVGComponent) => {
