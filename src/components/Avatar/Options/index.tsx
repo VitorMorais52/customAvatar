@@ -41,15 +41,9 @@ const Options = ({
           }
           colorKey={currentTab}
           currentColor={colorByKeys.hair}
-          changeCurrentColor={(value: string) => {
-            if (value === "#000000") return;
-
-            const newSetColors = colorByKeys[currentTab] || [];
-
-            newSetColors[elementColor.index] = value;
-
-            changeComponentsColor(currentTab, newSetColors);
-          }}
+          changeCurrentColor={(value: string) =>
+            changeComponentsColor(currentTab, elementColor.index, value)
+          }
         />
       </div>
     ));

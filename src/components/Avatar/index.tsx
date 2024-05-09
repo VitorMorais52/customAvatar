@@ -33,20 +33,28 @@ const Avatar = () => {
     glasses: [],
   });
 
-  const handleChangeColor = (colorKey: string, colorsValue: string[]) => {
-    const newSetColors = colorByKeys[colorKey] || [];
+  const handleChangeColor = (
+    colorKey: string,
+    indexColor: number,
+    newColor: string
+  ) => {
+    if (newColor === "#000000") return;
+
+    const newColors = colorByKeys[colorKey] || [];
+
+    newColors[indexColor] = newColor;
 
     const newColorByKeys: Record<string, string[]> = {
       ...colorByKeys,
-      [colorKey]: colorsValue,
+      [colorKey]: newColors,
     };
 
-    if (colorKey === "hair") newColorByKeys["backHair"] = colorsValue;
+    if (colorKey === "hair") newColorByKeys["backHair"] = newColors;
     if (colorKey === "body") {
-      newColorByKeys["head"] = colorsValue;
+      newColorByKeys["head"] = newColors;
 
-      newColorByKeys["nose"] = [darkenColor(colorsValue[0], 50)];
-      newColorByKeys["shadowHead"] = [darkenColor(colorsValue[0], 30)];
+      newColorByKeys["nose"] = [darkenColor(newColors[0], 50)];
+      newColorByKeys["shadowHead"] = [darkenColor(newColors[0], 30)];
     }
     setColorByKeys(newColorByKeys);
   };

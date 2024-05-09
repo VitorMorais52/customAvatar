@@ -29,7 +29,11 @@ interface SVGComponent {
 }
 
 type ChangeComposition = (params: Record<"key" | "id", string>) => void;
-type ChangeComponentsColor = (colorKey: string, newValue: string[]) => void;
+type ChangeComponentsColor = (
+  colorKey: string,
+  indexColor: number,
+  newColor: string
+) => void;
 
 interface CustomOptionsProps {
   changeComposition: ChangeComposition;

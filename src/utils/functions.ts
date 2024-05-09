@@ -77,6 +77,7 @@ function paintTheComponent(key: string, component: SVGComponent, colorByKeys) {
 
   const { elements, elementsColor } = turnSvgIntoElements(component);
   elementsColor.primary.forEach((elementColor: IColors) => {
+    if (!colorByKeys[key][elementColor.index]) return;
     replaceColor(
       elements,
       elementColor.index,
@@ -85,6 +86,7 @@ function paintTheComponent(key: string, component: SVGComponent, colorByKeys) {
     );
   });
   elementsColor.secondary.forEach((elementColor: IColors) => {
+    if (!colorByKeys[key][elementColor.index]) return;
     replaceColor(
       elements,
       elementColor.index,
