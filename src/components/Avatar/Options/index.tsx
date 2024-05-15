@@ -26,7 +26,7 @@ const Options = ({
 
   const renderColorPicker = () => {
     if (
-      !["hair", "body", "clothes", "hair", "beard"].includes(currentTab) ||
+      ["nose", "mouth", "head"].includes(currentTab) ||
       !currentComponents[currentTab]?.svg
     )
       return <></>;
@@ -137,15 +137,18 @@ const Options = ({
       {renderColorPicker()}
       <div className="containerCustomOptions">
         <div className="tabs" style={{ display: "flex", width: "650px" }}>
-          {tabList.map((tabTitle) => (
-            <button
-              style={{ margin: "4px" }}
-              key={tabTitle}
-              onClick={() => setCurrentTab(tabTitle)}
-            >
-              {tabTitle}
-            </button>
-          ))}
+          {tabList.map((tabTitle) => {
+            if (!avatarComponents[tabTitle].components.length) return <></>;
+            return (
+              <button
+                style={{ margin: "4px" }}
+                key={tabTitle}
+                onClick={() => setCurrentTab(tabTitle)}
+              >
+                {tabTitle}
+              </button>
+            );
+          })}
         </div>
         <div className="options" style={{ width: "650px" }}>
           {withRemoveOption.includes(currentTab) && renderRemoveOption()}
