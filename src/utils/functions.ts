@@ -5,6 +5,32 @@ import {
   TypeElementsColor,
 } from "./models";
 
+type SVGElement = {
+  t: string;
+  props: Record<string, string>;
+};
+
+type SVGProperty = SVGElement[];
+
+interface IComponent {
+  id: string;
+  compatibleTypes: string[];
+  svg: SVGProperty;
+  transform: string;
+  viewBox: string;
+  specificationsByType: {
+    string: string;
+  };
+  subcomponent: {
+    svg: SVGProperty;
+    fullSvg: SVGProperty;
+    viewBox: string;
+    specificationsByType: {
+      string: string;
+    };
+  };
+}
+
 function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== "object") {
     return obj;
@@ -166,6 +192,7 @@ function reduceBrightness(color: string, decreaseValue: number) {
     (g < 16 ? "0" : "") + g.toString(16)
   }${(b < 16 ? "0" : "") + b.toString(16)}`;
 }
+
 function darkenColor(color: string, decreaseValue: number) {
   let r = parseInt(color.substring(1, 3), 16);
   let g = parseInt(color.substring(3, 5), 16);
@@ -182,6 +209,47 @@ function darkenColor(color: string, decreaseValue: number) {
   }${(b < 16 ? "0" : "") + b.toString(16)}`;
 }
 
+function transformSVGObject(svgProp: IComponent) {
+  const { svg, subcomponent } = svgProp;
+
+  let fullsvgString = "";
+  const svgString = svg
+    .map((element) => {
+      const { t, props } = element;
+      const attributes = Object.entries(props)
+        .map(([key, value]) => `${key}="${value}"`)
+        .join(" ");
+      return `<${t} ${attributes} />`;
+    })
+    .join(" ");
+
+  if (subcomponent && subcomponent.fullSvg?.length) {
+    fullsvgString = subcomponent.fullSvg
+      .map((element) => {
+        const { t, props } = element;
+        const attributes = Object.entries(props)
+          .map(([key, value]) => `${key}="${value}"`)
+          .join(" ");
+        return `<${t} ${attributes} />`;
+      })
+      .join(" ");
+
+    return {
+      ...svgProp,
+      svg: svgString,
+      subcomponent: {
+        ...svgProp.subcomponent,
+        fullSvg: fullsvgString,
+      },
+    };
+  }
+
+  return {
+    ...svgProp,
+    svg: svgString,
+  };
+}
+
 export {
   splitSvg,
   deepClone,
@@ -189,4 +257,5 @@ export {
   darkenColor,
   validateMatchComponents,
   paintTheComponent,
+  transformSVGObject,
 };

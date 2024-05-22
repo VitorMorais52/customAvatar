@@ -1,5 +1,8 @@
 import React from "react";
-import { paintTheComponent } from "../../../utils/functions";
+import {
+  paintTheComponent,
+  transformSVGObject,
+} from "../../../utils/functions";
 import { SVGComponent } from "../../../utils/models";
 
 const keysOrder = [
@@ -19,33 +22,61 @@ const keysOrder = [
 ];
 
 interface NewBodyProps {
-  defaultComposition: Record<string, SVGComponent>;
+  defaultComposition: Record<string, IComponent>;
   type: Record<string, string>;
   colorByKeys: Record<string, string[]>;
 }
 
+type SVGElement = {
+  t: string;
+  props: Record<string, string>;
+};
+
+type SVGProperty = SVGElement[];
+
+interface IComponent {
+  id: string;
+  compatibleTypes: string[];
+  svg: SVGProperty;
+  transform: string;
+  viewBox: string;
+  specificationsByType: {
+    string: string;
+  };
+  subcomponent: {
+    svg: SVGProperty;
+    fullSvg: SVGProperty;
+    viewBox: string;
+    specificationsByType: {
+      string: string;
+    };
+  };
+}
+
 const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
   const orderedValues = keysOrder.map((key) => {
-    if (colorByKeys[key] && colorByKeys[key].length)
-      paintTheComponent(key, defaultComposition[key], colorByKeys);
+    // if (colorByKeys[key] && colorByKeys[key].length)
+    //   paintTheComponent(key, defaultComposition[key], colorByKeys);
 
     return defaultComposition[key];
   });
 
-  const setPropertiesInComponent = (el: SVGComponent) => {
+  const setPropertiesInComponent = (el: IComponent) => {
     if (!el) return;
 
-    if (el.specificationsByType) {
-      const { coordinates, scale } = el.specificationsByType[type["head"]];
-      return `<g transform="translate(${coordinates.x}, ${coordinates.y}), scale(${scale})">${el.svg}</g>`;
-    }
+    const assembledComponent = transformSVGObject(el);
 
-    return `<g transform="translate(${el.coordinates.x}, ${el.coordinates.y})">${el.svg}</g>`;
+    const transformValue =
+      assembledComponent.transform ||
+      assembledComponent.specificationsByType[type["head"]] ||
+      "";
+
+    return `<g transform="${transformValue}">${assembledComponent.svg}</g>`;
   };
 
   const svgBuilder = () => {
     const concatenatedString = orderedValues.reduce((acc, value) => {
-      if (!value || !value?.svg) return acc;
+      if (!value || !value.svg) return acc;
       return acc + setPropertiesInComponent(value);
     }, "");
     return concatenatedString;

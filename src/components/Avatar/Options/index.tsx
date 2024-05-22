@@ -1,13 +1,41 @@
 import React, { useState } from "react";
-import localComponents from "../localComponents.json";
-import ColorPicker from "../../BetaCustom/AssembledBody/ColorPicker";
-import { CustomOptionsProps, SVGComponent } from "../../../utils/models";
-import { splitSvg } from "../../../utils/functions";
 
+import ColorPicker from "../ColorPicker";
+
+import { CustomOptionsProps, SVGComponent } from "../../../utils/models";
+import { splitSvg, transformSVGObject } from "../../../utils/functions";
+
+import localComponents from "../newLocalComponents.json";
 const avatarComponents = localComponents.pieces;
 const tabList = Object.keys(avatarComponents);
 
 const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
+
+type SVGElement = {
+  t: string;
+  props: Record<string, string>;
+};
+
+type SVGProperty = SVGElement[];
+
+interface IComponent {
+  id: string;
+  compatibleTypes: string[];
+  svg: SVGProperty;
+  transform: string;
+  viewBox: string;
+  specificationsByType: {
+    string: string;
+  };
+  subcomponent: {
+    svg: SVGProperty;
+    fullSvg: SVGProperty;
+    viewBox: string;
+    specificationsByType: {
+      string: string;
+    };
+  };
+}
 
 const Options = ({
   changeComposition,
@@ -16,7 +44,7 @@ const Options = ({
   colorByKeys,
   currentComponents,
 }: CustomOptionsProps) => {
-  const [currentTab, setCurrentTab] = useState("background");
+  const [currentTab, setCurrentTab] = useState("head");
 
   const handleChangeComposition =
     ({ key, id }: Record<"key" | "id", string>) =>
@@ -49,20 +77,23 @@ const Options = ({
     ));
   };
 
-  const renderOption = (component: SVGComponent) => {
-    let svg = component.svg;
+  const renderOption = (component: IComponent) => {
+    const assembledComponent = transformSVGObject(component);
+    let svg = assembledComponent.svg;
 
     if (
       avatarComponents[currentTab].validationRequiredBy &&
-      component.compatibleTypes &&
-      !component.compatibleTypes.includes(
+      assembledComponent.compatibleTypes &&
+      !assembledComponent.compatibleTypes.includes(
         type[avatarComponents[currentTab].validationRequiredBy]
       )
     )
       return;
 
-    if (currentTab !== "body" && component?.subcomponent)
-      svg = component.subcomponent?.fullSvg;
+    if (currentTab !== "body" && assembledComponent?.subcomponent) {
+      if (typeof assembledComponent.subcomponent?.fullSvg === "string")
+        svg = assembledComponent.subcomponent?.fullSvg;
+    }
 
     return (
       <button
@@ -134,11 +165,18 @@ const Options = ({
 
   return (
     <>
-      {renderColorPicker()}
-      <div className="containerCustomOptions">
-        <div className="tabs" style={{ display: "flex", width: "650px" }}>
+      {/* {renderColorPicker()} */}
+      <div
+        className="containerCustomOptions"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <div className="tabs" style={{ display: "flex", margin: "0.5rem 0" }}>
           {tabList.map((tabTitle) => {
-            if (!avatarComponents[tabTitle].components.length) return <></>;
+            if (avatarComponents[tabTitle].components.length <= 1) return <></>;
             return (
               <button
                 style={{ margin: "4px" }}
@@ -154,7 +192,7 @@ const Options = ({
           {withRemoveOption.includes(currentTab) && renderRemoveOption()}
           {avatarComponents[currentTab].components &&
             avatarComponents[currentTab].components.map(
-              (component: SVGComponent) => renderOption(component)
+              (component: IComponent) => renderOption(component)
             )}
         </div>
       </div>

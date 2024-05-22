@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Assembled from "./Assembled";
 import Options from "./Options";
 
-import localComponents from "./localComponents.json";
+import localComponents from "./newLocalComponents.json";
 
 import "./Avatar.css";
 import {
