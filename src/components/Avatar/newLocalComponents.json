@@ -58,9 +58,7 @@
       "components": [
         {
           "id": "three",
-          "compatibleTypes": [
-            "rounded"
-          ],
+          "compatibleTypes": ["rounded"],
           "svg": [
             {
               "t": "path",
@@ -77,11 +75,7 @@
         },
         {
           "id": "six",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -100,11 +94,7 @@
         },
         {
           "id": "two",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -123,9 +113,7 @@
         },
         {
           "id": "four",
-          "compatibleTypes": [
-            "classic"
-          ],
+          "compatibleTypes": ["classic"],
           "svg": [
             {
               "t": "path",
@@ -142,11 +130,7 @@
         },
         {
           "id": "one",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -165,9 +149,7 @@
         },
         {
           "id": "five",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -211,7 +193,7 @@
                 }
               }
             ],
-            "viewBox": "0 0 299.84 122",
+            "viewBox": "0 0 762 389.95",
             "transform": "translate(370,663)"
           },
           "type": "thinner"
@@ -223,9 +205,7 @@
       "components": [
         {
           "id": "three",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -247,9 +227,7 @@
         },
         {
           "id": "two",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -271,9 +249,7 @@
         },
         {
           "id": "four",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -304,9 +280,7 @@
         },
         {
           "id": "one",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -333,9 +307,7 @@
       "components": [
         {
           "id": "three",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -350,11 +322,7 @@
         },
         {
           "id": "seven",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -373,11 +341,7 @@
         },
         {
           "id": "six",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -396,9 +360,7 @@
         },
         {
           "id": "two",
-          "compatibleTypes": [
-            "classic"
-          ],
+          "compatibleTypes": ["classic"],
           "svg": [
             {
               "t": "path",
@@ -413,11 +375,7 @@
         },
         {
           "id": "four",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -436,9 +394,7 @@
         },
         {
           "id": "one",
-          "compatibleTypes": [
-            "rounded"
-          ],
+          "compatibleTypes": ["rounded"],
           "svg": [
             {
               "t": "path",
@@ -453,11 +409,7 @@
         },
         {
           "id": "five",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -481,9 +433,7 @@
       "components": [
         {
           "id": "three",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -508,11 +458,7 @@
         },
         {
           "id": "six",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -541,9 +487,7 @@
         },
         {
           "id": "two",
-          "compatibleTypes": [
-            "classic"
-          ],
+          "compatibleTypes": ["classic"],
           "svg": [
             {
               "t": "path",
@@ -568,11 +512,7 @@
         },
         {
           "id": "four",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -591,9 +531,7 @@
         },
         {
           "id": "one",
-          "compatibleTypes": [
-            "rounded"
-          ],
+          "compatibleTypes": ["rounded"],
           "svg": [
             {
               "t": "path",
@@ -618,11 +556,7 @@
         },
         {
           "id": "five",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -725,11 +659,7 @@
       "components": [
         {
           "id": "nineteen",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -781,11 +711,7 @@
         },
         {
           "id": "three",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -804,11 +730,7 @@
         },
         {
           "id": "seventeen",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -853,16 +775,14 @@
             "viewBox": "0 0 584 800",
             "specificationsByType": {
               "classic": "translate(245,225) scale(0.87)",
-              "rounded": "translate(208,200)",
+              "rounded": "translate(208,180)",
               "thinner": "translate(244,224) scale(0.88)"
             }
           }
         },
         {
           "id": "twelve",
-          "compatibleTypes": [
-            "thinner"
-          ],
+          "compatibleTypes": ["thinner"],
           "svg": [
             {
               "t": "path",
@@ -877,11 +797,7 @@
         },
         {
           "id": "seven",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -900,11 +816,7 @@
         },
         {
           "id": "six",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -957,11 +869,7 @@
         },
         {
           "id": "eighteen",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -983,7 +891,7 @@
                 "t": "path",
                 "props": {
                   "d": "M284 0C321.295 -1.01028e-05 358.226 7.34359 392.682 21.6116C427.139 35.8797 458.446 56.7927 484.818\n        83.1566C511.19 109.521 532.11 140.819 546.382 175.265C560.654 209.711 568 246.63 568 283.915V660.056C568 671.999\n        565.647 683.825 561.075 694.859C556.504 705.893 549.803 715.918 541.356 724.363C532.908 732.808 522.879 739.507\n        511.842 744.078C500.805 748.648 488.975 751 477.029 751H90.9713C79.0247 751 67.1953 748.648 56.1581\n        744.078C45.1209 739.507 35.092 732.808 26.6445 724.363C18.197 715.918 11.4964 705.893 6.92465 694.859C2.3529\n        683.825 -2.59973e-06 671.999 0 660.056V283.915C0 208.616 29.9214 136.401 83.1817 83.1568C136.442 29.9124 208.678\n        8.74439e-06 284 0Z",
-                  "fill": "#393C54"
+                  "fill": "#1a1a1a"
                 }
               }
             ],
@@ -1013,11 +921,7 @@
         },
         {
           "id": "two",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1036,11 +940,7 @@
         },
         {
           "id": "twenty",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1093,9 +993,7 @@
         },
         {
           "id": "eleven",
-          "compatibleTypes": [
-            "classic"
-          ],
+          "compatibleTypes": ["classic"],
           "svg": [
             {
               "t": "path",
@@ -1110,11 +1008,7 @@
         },
         {
           "id": "fifteen",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1133,9 +1027,7 @@
         },
         {
           "id": "eight",
-          "compatibleTypes": [
-            "rounded"
-          ],
+          "compatibleTypes": ["rounded"],
           "svg": [
             {
               "t": "path",
@@ -1150,11 +1042,7 @@
         },
         {
           "id": "thirteen",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1235,11 +1123,7 @@
         },
         {
           "id": "fourteen",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1258,11 +1142,7 @@
         },
         {
           "id": "ten",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1281,11 +1161,7 @@
         },
         {
           "id": "sixteen",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1359,11 +1235,7 @@
         },
         {
           "id": "nine",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1382,11 +1254,7 @@
         },
         {
           "id": "four",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1405,11 +1273,7 @@
         },
         {
           "id": "one",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
@@ -1428,11 +1292,7 @@
         },
         {
           "id": "five",
-          "compatibleTypes": [
-            "rounded",
-            "classic",
-            "thinner"
-          ],
+          "compatibleTypes": ["rounded", "classic", "thinner"],
           "svg": [
             {
               "t": "path",
