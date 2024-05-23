@@ -14,6 +14,7 @@ type SVGProperty = SVGElement[];
 
 interface IComponent {
   id: string;
+  isNotEditable?: boolean;
   compatibleTypes: string[];
   svg: SVGProperty;
   transform: string;

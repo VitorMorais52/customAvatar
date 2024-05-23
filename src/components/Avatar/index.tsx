@@ -14,23 +14,29 @@ import { SVGComponent } from "../../utils/models";
 
 const components = deepClone(localComponents.pieces);
 
+type SVGElement = {
+  t: string;
+  props: Record<string, string>;
+};
+
 const Avatar = () => {
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentTypes, setCurrentTypes] = useState({});
 
   const [colorByKeys, setColorByKeys] = useState<Record<string, string[]>>({
     background: [],
-    backHair: ["#1A1A1A"],
+    backHair: [],
     body: [],
     shadowHead: [],
     head: [],
     eyebrow: [],
-    hair: ["#1A1A1A"],
+    hair: [],
     eyes: [],
     mouth: [],
     nose: [],
     beard: [],
     glasses: [],
+    clothes: [],
   });
 
   const handleChangeColor = (
@@ -91,6 +97,14 @@ const Avatar = () => {
       setCurrentTypes({ ...currentTypes, [key]: newComponent.type });
 
     changedComponents[key] = newComponent;
+
+    const colorsFromThisComponent: string[] = [];
+
+    newComponent.svg.forEach((element: SVGElement) => {
+      if (element.props.fill) colorsFromThisComponent.push(element.props.fill);
+    });
+    setColorByKeys((c) => ({ ...c, [key]: colorsFromThisComponent }));
+
     setSelectedComponents({
       ...selectedComponents,
       ...changedComponents,
@@ -99,6 +113,7 @@ const Avatar = () => {
 
   const assembleSuggestedComposition = () => {
     const avatar = {} as SVGComponent;
+    const colorsFromComponent = deepClone(colorByKeys);
 
     Object.entries(localComponents.defaultComposition).forEach(([key, id]) => {
       if (!id) return;
@@ -117,9 +132,17 @@ const Avatar = () => {
         if (key === "body") avatar["shadowHead"] = component.subcomponent;
         if (key === "hair") avatar["backHair"] = component.subcomponent;
       }
+
+      colorsFromComponent[key] = [];
+      component.svg.forEach((element: SVGElement) => {
+        if (element.props.fill)
+          colorsFromComponent[key].push(element.props.fill);
+      });
+
       avatar[key] = component;
     });
 
+    setColorByKeys(colorsFromComponent);
     setSelectedComponents({ ...avatar });
   };
 

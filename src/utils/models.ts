@@ -1,3 +1,31 @@
+type SVGElement = {
+  t: string;
+  props: Record<string, string>;
+  isNotEditable?: boolean;
+};
+
+type SVGProperty = SVGElement[];
+
+interface IComponent {
+  id: string;
+  isNotEditable?: boolean;
+  compatibleTypes: string[];
+  svg: SVGProperty;
+  transform: string;
+  viewBox: string;
+  specificationsByType: {
+    string: string;
+  };
+  subcomponent: {
+    svg: SVGProperty;
+    fullSvg: SVGProperty;
+    viewBox: string;
+    specificationsByType: {
+      string: string;
+    };
+  };
+}
+
 type SpecificationsByType = {
   coordinates: Record<"x" | "y", number>;
   scale: number;
@@ -40,7 +68,7 @@ interface CustomOptionsProps {
   changeComponentsColor: ChangeComponentsColor;
   type: Record<string, string>;
   colorByKeys: Record<string, string[]>;
-  currentComponents: Record<string, SVGComponent>;
+  currentComponents: Record<string, IComponent>;
 }
 
 export {

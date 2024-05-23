@@ -14,12 +14,14 @@ const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
 type SVGElement = {
   t: string;
   props: Record<string, string>;
+  isNotEditable?: boolean;
 };
 
 type SVGProperty = SVGElement[];
 
 interface IComponent {
   id: string;
+  isNotEditable?: boolean;
   compatibleTypes: string[];
   svg: SVGProperty;
   transform: string;
@@ -53,28 +55,29 @@ const Options = ({
     };
 
   const renderColorPicker = () => {
-    if (
-      ["nose", "mouth", "head"].includes(currentTab) ||
-      !currentComponents[currentTab]?.svg
-    )
-      return <></>;
+    const currentComponent = currentComponents[currentTab];
 
-    const { colorfulElements } = splitSvg(currentComponents[currentTab].svg);
+    if (currentComponent?.isNotEditable) return <></>;
 
-    return colorfulElements.map((elementColor) => (
-      <div className="colorPickerWrapper">
-        <ColorPicker
-          type={
-            ["hair", "beard", "clothes"].includes(currentTab) ? "slider" : ""
-          }
-          colorKey={currentTab}
-          currentColor={colorByKeys.hair}
-          changeCurrentColor={(value: string) =>
-            changeComponentsColor(currentTab, elementColor.index, value)
-          }
-        />
-      </div>
-    ));
+    return colorByKeys[currentTab].map((elementColor, index) => {
+      if (!currentComponent || currentComponent?.svg[index]?.isNotEditable)
+        return <></>;
+
+      return (
+        <div className="colorPickerWrapper">
+          <ColorPicker
+            type={
+              ["hair", "beard", "clothes"].includes(currentTab) ? "slider" : ""
+            }
+            colorKey={currentTab}
+            currentColor={elementColor}
+            changeCurrentColor={(value: string) =>
+              changeComponentsColor(currentTab, index, value)
+            }
+          />
+        </div>
+      );
+    });
   };
 
   const renderOption = (component: IComponent) => {
@@ -165,7 +168,7 @@ const Options = ({
 
   return (
     <>
-      {/* {renderColorPicker()} */}
+      {renderColorPicker()}
       <div
         className="containerCustomOptions"
         style={{

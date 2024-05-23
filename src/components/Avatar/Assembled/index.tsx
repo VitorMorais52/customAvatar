@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  paintTheComponent,
-  transformSVGObject,
-} from "../../../utils/functions";
-import { SVGComponent } from "../../../utils/models";
+import { transformSVGObject } from "../../../utils/functions";
 
 const keysOrder = [
   "background",
@@ -28,6 +24,7 @@ interface NewBodyProps {
 }
 
 type SVGElement = {
+  isNotEditable: boolean;
   t: string;
   props: Record<string, string>;
 };
@@ -36,6 +33,7 @@ type SVGProperty = SVGElement[];
 
 interface IComponent {
   id: string;
+  isNotEditable: boolean;
   compatibleTypes: string[];
   svg: SVGProperty;
   transform: string;
@@ -55,12 +53,12 @@ interface IComponent {
 
 const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
   const orderedValues = keysOrder.map((key) => {
-    // if (colorByKeys[key] && colorByKeys[key].length)
-    //   paintTheComponent(key, defaultComposition[key], colorByKeys);
-
+    defaultComposition[key]?.svg?.forEach((element, index) => {
+      if (colorByKeys[key][index] && element.props.fill)
+        element.props.fill = colorByKeys[key][index];
+    });
     return defaultComposition[key];
   });
-
   const setPropertiesInComponent = (el: IComponent) => {
     if (!el) return;
 
