@@ -10,7 +10,7 @@ import {
   deepClone,
   validateMatchComponents,
 } from "../../utils/functions";
-import { SVGComponent } from "../../utils/models";
+import { IComponent } from "../../utils/models";
 
 const components = deepClone(localComponents.pieces);
 
@@ -69,7 +69,7 @@ const Avatar = () => {
     const changedComponents = {};
 
     const newComponent = components[key].components.find(
-      (el: SVGComponent) => el.id === id
+      (el: IComponent) => el.id === id
     );
 
     if (key === "body") {
@@ -112,14 +112,14 @@ const Avatar = () => {
   };
 
   const assembleSuggestedComposition = () => {
-    const avatar = {} as SVGComponent;
+    const avatar = {} as IComponent;
     const colorsFromComponent = deepClone(colorByKeys);
 
     Object.entries(localComponents.defaultComposition).forEach(([key, id]) => {
       if (!id) return;
 
       const component = components[key].components.find(
-        (el: SVGComponent) => el.id === id
+        (el: IComponent) => el.id === id
       );
 
       if (component.type)

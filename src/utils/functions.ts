@@ -1,36 +1,4 @@
-import {
-  IColors,
-  SVGComponent,
-  TypeElements,
-  TypeElementsColor,
-} from "./models";
-
-type SVGElement = {
-  t: string;
-  props: Record<string, string>;
-};
-
-type SVGProperty = SVGElement[];
-
-interface IComponent {
-  id: string;
-  isNotEditable?: boolean;
-  compatibleTypes: string[];
-  svg: SVGProperty;
-  transform: string;
-  viewBox: string;
-  specificationsByType: {
-    string: string;
-  };
-  subcomponent: {
-    svg: SVGProperty;
-    fullSvg: SVGProperty;
-    viewBox: string;
-    specificationsByType: {
-      string: string;
-    };
-  };
-}
+import { IComponent } from "./models";
 
 function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== "object") {
@@ -54,99 +22,9 @@ function deepClone<T>(obj: T): T {
   return clone;
 }
 
-function splitSvg(svg: string) {
-  const splitedSvg = svg.split(">").map((v) => v + ">");
-
-  const regex = /fill="([^"]+)"/;
-  const colorfulElements: Array<IColors> = [];
-
-  splitedSvg.forEach((el: string, index: number) => {
-    if (!el.includes("fill")) return;
-
-    const match = el.match(regex);
-    if (!match) return;
-
-    colorfulElements.push({
-      index: index,
-      currentColor: match[1],
-      originalColor: match[1],
-    });
-  });
-
-  return { splitedSvg, colorfulElements };
-}
-
-function turnSvgIntoElements(component: SVGComponent): {
-  elements: TypeElements;
-  elementsColor: TypeElementsColor;
-} {
-  const { splitedSvg, colorfulElements } = splitSvg(component.svg);
-
-  const secondaryElements: string[] = [];
-  const secondaryColorElements: IColors[] = [];
-  if (component.backHair) {
-    const { splitedSvg, colorfulElements } = splitSvg(component.backHair.svg);
-    secondaryElements.push(...splitedSvg);
-    secondaryColorElements.push(...colorfulElements);
-  }
-
-  return {
-    elements: { primary: splitedSvg, secondary: secondaryElements },
-    elementsColor: {
-      primary: colorfulElements,
-      secondary: secondaryColorElements,
-    },
-  };
-}
-
-function paintTheComponent(key: string, component: SVGComponent, colorByKeys) {
-  if (!component) return;
-
-  const { elements, elementsColor } = turnSvgIntoElements(component);
-  elementsColor.primary.forEach((elementColor: IColors) => {
-    if (!colorByKeys[key][elementColor.index]) return;
-    replaceColor(
-      elements,
-      elementColor.index,
-      colorByKeys[key][elementColor.index],
-      "primary"
-    );
-  });
-  elementsColor.secondary.forEach((elementColor: IColors) => {
-    if (!colorByKeys[key][elementColor.index]) return;
-    replaceColor(
-      elements,
-      elementColor.index,
-      colorByKeys[key][elementColor.index],
-      "secondary"
-    );
-  });
-
-  component.svg = elements.primary.join("");
-  if (component.backHair) component.backHair.svg = elements.secondary.join("");
-
-  return component;
-}
-
-function replaceColor(
-  elements: TypeElements,
-  index: number,
-  newColor: string,
-  key: "primary" | "secondary"
-) {
-  const newElement = elements[key][index].replace(
-    /fill="([^"]+)"/,
-    `fill="${newColor}"`
-  );
-
-  elements[key][index] = newElement;
-
-  return newElement;
-}
-
 const getFirstCompatibleComponent = (components, key: string, type) => {
   const result = components[key].components.find(
-    (component: SVGComponent) =>
+    (component: IComponent) =>
       component.compatibleTypes && component.compatibleTypes.includes(type)
   );
   return result || "";
@@ -156,7 +34,7 @@ const validateMatchComponents = (
   components,
   selectedComponents,
   componentsToCheck: string[],
-  newComponent: SVGComponent
+  newComponent: IComponent
 ) => {
   componentsToCheck.forEach((keyComponent) => {
     if (
@@ -252,11 +130,9 @@ function transformSVGObject(svgProp: IComponent) {
 }
 
 export {
-  splitSvg,
   deepClone,
   reduceBrightness,
   darkenColor,
   validateMatchComponents,
-  paintTheComponent,
   transformSVGObject,
 };

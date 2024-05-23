@@ -2,42 +2,14 @@ import React, { useState } from "react";
 
 import ColorPicker from "../ColorPicker";
 
-import { CustomOptionsProps, SVGComponent } from "../../../utils/models";
-import { splitSvg, transformSVGObject } from "../../../utils/functions";
+import { CustomOptionsProps, IComponent } from "../../../utils/models";
+import { transformSVGObject } from "../../../utils/functions";
 
 import localComponents from "../newLocalComponents.json";
 const avatarComponents = localComponents.pieces;
 const tabList = Object.keys(avatarComponents);
 
 const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
-
-type SVGElement = {
-  t: string;
-  props: Record<string, string>;
-  isNotEditable?: boolean;
-};
-
-type SVGProperty = SVGElement[];
-
-interface IComponent {
-  id: string;
-  isNotEditable?: boolean;
-  compatibleTypes: string[];
-  svg: SVGProperty;
-  transform: string;
-  viewBox: string;
-  specificationsByType: {
-    string: string;
-  };
-  subcomponent: {
-    svg: SVGProperty;
-    fullSvg: SVGProperty;
-    viewBox: string;
-    specificationsByType: {
-      string: string;
-    };
-  };
-}
 
 const Options = ({
   changeComposition,
@@ -64,7 +36,7 @@ const Options = ({
         return <></>;
 
       return (
-        <div className="colorPickerWrapper">
+        <div className="colorPickerWrapper" key={elementColor}>
           <ColorPicker
             type={
               ["hair", "beard", "clothes"].includes(currentTab) ? "slider" : ""

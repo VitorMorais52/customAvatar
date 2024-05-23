@@ -1,5 +1,6 @@
 import React from "react";
 import { transformSVGObject } from "../../../utils/functions";
+import { IComponent } from "../../../utils/models";
 
 const keysOrder = [
   "background",
@@ -21,34 +22,6 @@ interface NewBodyProps {
   defaultComposition: Record<string, IComponent>;
   type: Record<string, string>;
   colorByKeys: Record<string, string[]>;
-}
-
-type SVGElement = {
-  isNotEditable: boolean;
-  t: string;
-  props: Record<string, string>;
-};
-
-type SVGProperty = SVGElement[];
-
-interface IComponent {
-  id: string;
-  isNotEditable: boolean;
-  compatibleTypes: string[];
-  svg: SVGProperty;
-  transform: string;
-  viewBox: string;
-  specificationsByType: {
-    string: string;
-  };
-  subcomponent: {
-    svg: SVGProperty;
-    fullSvg: SVGProperty;
-    viewBox: string;
-    specificationsByType: {
-      string: string;
-    };
-  };
 }
 
 const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
