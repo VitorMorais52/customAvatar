@@ -1,5 +1,5 @@
 import React from "react";
-import { transformSVGObject } from "../../../utils/functions";
+import { transformSvgPropToStr } from "../../../utils/functions";
 import { IComponent } from "../../../utils/models";
 
 const keysOrder = [
@@ -19,34 +19,38 @@ const keysOrder = [
 ];
 
 interface NewBodyProps {
-  defaultComposition: Record<string, IComponent>;
-  type: Record<string, string>;
+  avatarComposition: Record<string, IComponent>;
+  currentTypes: Record<string, string>;
   colorByKeys: Record<string, string[]>;
 }
 
-const Assembled = ({ defaultComposition, type, colorByKeys }: NewBodyProps) => {
-  const orderedValues = keysOrder.map((key) => {
-    defaultComposition[key]?.svg?.forEach((element, index) => {
+const Assembled = ({
+  avatarComposition,
+  currentTypes,
+  colorByKeys,
+}: NewBodyProps) => {
+  const orderedComposition = keysOrder.map((key) => {
+    avatarComposition[key]?.svg?.forEach((element, index) => {
       if (colorByKeys[key][index] && element.props.fill)
         element.props.fill = colorByKeys[key][index];
     });
-    return defaultComposition[key];
+    return avatarComposition[key];
   });
-  const setPropertiesInComponent = (el: IComponent) => {
-    if (!el) return;
 
-    const assembledComponent = transformSVGObject(el);
+  const setPropertiesInComponent = (component: IComponent) => {
+    if (!component) return;
+
+    const { transform, specificationsByType, svg } =
+      transformSvgPropToStr(component);
 
     const transformValue =
-      assembledComponent.transform ||
-      assembledComponent.specificationsByType[type["head"]] ||
-      "";
+      transform || specificationsByType[currentTypes["head"]] || "";
 
-    return `<g transform="${transformValue}">${assembledComponent.svg}</g>`;
+    return `<g transform="${transformValue}">${svg}</g>`;
   };
 
   const svgBuilder = () => {
-    const concatenatedString = orderedValues.reduce((acc, value) => {
+    const concatenatedString = orderedComposition.reduce((acc, value) => {
       if (!value || !value.svg) return acc;
       return acc + setPropertiesInComponent(value);
     }, "");

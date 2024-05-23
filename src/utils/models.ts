@@ -33,19 +33,21 @@ interface IColors {
   originalColor: string;
 }
 
-type ChangeComposition = (params: Record<"key" | "id", string>) => void;
+type ChangeComposition = (
+  params: Record<"componentKey" | "componentId", string>
+) => void;
 type ChangeComponentsColor = (
   colorKey: string,
   indexColor: number,
   newColor: string
 ) => void;
 
-interface CustomOptionsProps {
+interface ICustomOptionsProps {
   changeComposition: ChangeComposition;
   changeComponentsColor: ChangeComponentsColor;
-  type: Record<string, string>;
+  currentTypes: Record<string, string>;
   colorByKeys: Record<string, string[]>;
   currentComponents: Record<string, IComponent>;
 }
 
-export { CustomOptionsProps, IColors, IComponent };
+export { ICustomOptionsProps, IColors, IComponent, SVGElement };

@@ -88,8 +88,8 @@ function darkenColor(color: string, decreaseValue: number) {
   }${(b < 16 ? "0" : "") + b.toString(16)}`;
 }
 
-function transformSVGObject(svgProp: IComponent) {
-  const { svg, subcomponent } = svgProp;
+function transformSvgPropToStr(component: IComponent) {
+  const { svg, subcomponent } = component;
 
   let fullsvgString = "";
   const svgString = svg
@@ -114,17 +114,17 @@ function transformSVGObject(svgProp: IComponent) {
       .join(" ");
 
     return {
-      ...svgProp,
+      ...component,
       svg: svgString,
       subcomponent: {
-        ...svgProp.subcomponent,
+        ...component.subcomponent,
         fullSvg: fullsvgString,
       },
     };
   }
 
   return {
-    ...svgProp,
+    ...component,
     svg: svgString,
   };
 }
@@ -134,5 +134,5 @@ export {
   reduceBrightness,
   darkenColor,
   validateMatchComponents,
-  transformSVGObject,
+  transformSvgPropToStr,
 };

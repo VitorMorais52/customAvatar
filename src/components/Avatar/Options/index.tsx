@@ -2,44 +2,50 @@ import React, { useState } from "react";
 
 import ColorPicker from "../ColorPicker";
 
-import { CustomOptionsProps, IComponent } from "../../../utils/models";
-import { transformSVGObject } from "../../../utils/functions";
+import { transformSvgPropToStr } from "../../../utils/functions";
 
-import localComponents from "../newLocalComponents.json";
-const avatarComponents = localComponents.pieces;
+import { ICustomOptionsProps, IComponent } from "../../../utils/models";
+
+import { pieces as avatarComponents } from "../newLocalComponents.json";
 const tabList = Object.keys(avatarComponents);
-
-const withRemoveOption = ["hair", "clothes", "beard", "glasses"];
 
 const Options = ({
   changeComposition,
-  type,
+  currentTypes,
   changeComponentsColor,
   colorByKeys,
   currentComponents,
-}: CustomOptionsProps) => {
+}: ICustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("head");
+
+  const { components, validationRequiredBy, hasRemoveOption } =
+    avatarComponents[currentTab];
 
   const handleChangeComposition =
     ({ key, id }: Record<"key" | "id", string>) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      changeComposition({ key, id });
+    () => {
+      changeComposition({ componentKey: key, componentId: id });
     };
 
   const renderColorPicker = () => {
-    const currentComponent = currentComponents[currentTab];
+    const currentSelectedComponent = currentComponents[currentTab];
 
-    if (currentComponent?.isNotEditable) return <></>;
+    if (currentSelectedComponent?.isNotEditable) return;
 
     return colorByKeys[currentTab].map((elementColor, index) => {
-      if (!currentComponent || currentComponent?.svg[index]?.isNotEditable)
-        return <></>;
+      if (
+        !currentSelectedComponent ||
+        currentSelectedComponent?.svg[index]?.isNotEditable
+      )
+        return;
 
       return (
         <div className="colorPickerWrapper" key={elementColor}>
           <ColorPicker
             type={
-              ["hair", "beard", "clothes"].includes(currentTab) ? "slider" : ""
+              ["hair", "beard", "clothes", "eyes"].includes(currentTab)
+                ? "slider"
+                : ""
             }
             colorKey={currentTab}
             currentColor={elementColor}
@@ -53,22 +59,17 @@ const Options = ({
   };
 
   const renderOption = (component: IComponent) => {
-    const assembledComponent = transformSVGObject(component);
-    let svg = assembledComponent.svg;
+    const transformedComponent = transformSvgPropToStr(component);
+
+    let { svg, compatibleTypes, subcomponent } = transformedComponent;
 
     if (
-      avatarComponents[currentTab].validationRequiredBy &&
-      assembledComponent.compatibleTypes &&
-      !assembledComponent.compatibleTypes.includes(
-        type[avatarComponents[currentTab].validationRequiredBy]
-      )
+      compatibleTypes &&
+      !compatibleTypes.includes(currentTypes[validationRequiredBy])
     )
       return;
 
-    if (currentTab !== "body" && assembledComponent?.subcomponent) {
-      if (typeof assembledComponent.subcomponent?.fullSvg === "string")
-        svg = assembledComponent.subcomponent?.fullSvg;
-    }
+    if (typeof subcomponent?.fullSvg === "string") svg = subcomponent?.fullSvg;
 
     return (
       <button
@@ -86,11 +87,7 @@ const Options = ({
         <svg
           width="100%"
           height="100%"
-          viewBox={
-            component?.subcomponent?.viewBox
-              ? component?.subcomponent?.viewBox
-              : component.viewBox
-          }
+          viewBox={subcomponent?.viewBox || component.viewBox}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           dangerouslySetInnerHTML={{
@@ -151,7 +148,7 @@ const Options = ({
       >
         <div className="tabs" style={{ display: "flex", margin: "0.5rem 0" }}>
           {tabList.map((tabTitle) => {
-            if (avatarComponents[tabTitle].components.length <= 1) return <></>;
+            if (avatarComponents[tabTitle].components.length <= 1) return;
             return (
               <button
                 style={{ margin: "4px" }}
@@ -164,11 +161,8 @@ const Options = ({
           })}
         </div>
         <div className="options" style={{ width: "650px" }}>
-          {withRemoveOption.includes(currentTab) && renderRemoveOption()}
-          {avatarComponents[currentTab].components &&
-            avatarComponents[currentTab].components.map(
-              (component: IComponent) => renderOption(component)
-            )}
+          {hasRemoveOption && renderRemoveOption()}
+          {components.map((component: IComponent) => renderOption(component))}
         </div>
       </div>
     </>

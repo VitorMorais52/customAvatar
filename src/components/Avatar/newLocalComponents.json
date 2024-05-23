@@ -795,6 +795,7 @@
           }
         }
       ],
+      "hasRemoveOption": true,
       "removeIfNotCompatible": true,
       "validationRequiredBy": "head",
       "subcomponentKey": "backHair"
@@ -1176,7 +1177,7 @@
               "t": "path",
               "props": {
                 "d": "M174.652 50.0927C144.551 87.169 136.861 96.5315 90.032 96.5315C43.2034 96.5315 14.9592\n        64.4004 5.41159 50.0927C-17.7549 15.3763 46.1609 -7.80878 90.032 3.80087C132.424 -8.9845 200.959 17.6908 174.652\n        50.0927Z",
-                "fill": "#F85565" 
+                "fill": "#F85565"
               }
             },
             {
@@ -1343,6 +1344,7 @@
           }
         }
       ],
+      "hasRemoveOption": true,
       "removeIfNotCompatible": true,
       "validationRequiredBy": "head"
     },
@@ -1451,6 +1453,7 @@
           "transform": "translate(117.5,734)"
         }
       ],
+      "hasRemoveOption": true,
       "validationRequiredBy": "body"
     },
     "glasses": {
@@ -1532,6 +1535,7 @@
           }
         }
       ],
+      "hasRemoveOption": true,
       "validationRequiredBy": "head"
     }
   }
