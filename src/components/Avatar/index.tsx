@@ -102,14 +102,22 @@ const Avatar = () => {
 
       changedComponents[key] = newComponent;
 
-      const colorsFromThisComponent: string[] = [];
+      const colorsFromThisComponent: Record<string, string[]> = {};
 
+      colorsFromThisComponent[key] = [];
       newComponent.svg.forEach((element: SVGElement) => {
         if (element.props.fill)
-          colorsFromThisComponent.push(element.props.fill);
+          colorsFromThisComponent[key].push(element.props.fill);
       });
+      if (key === "hair") {
+        colorsFromThisComponent.backHair = [];
+        newComponent?.subcomponent?.svg.forEach((element: SVGElement) => {
+          if (element.props.fill)
+            colorsFromThisComponent.backHair.push(element.props.fill);
+        });
+      }
 
-      setColorByKeys((c) => ({ ...c, [key]: colorsFromThisComponent }));
+      setColorByKeys((c) => ({ ...c, ...colorsFromThisComponent }));
     } else changedComponents[key] = "";
 
     setSelectedComponents({
@@ -146,6 +154,14 @@ const Avatar = () => {
           colorsFromComponent[key].push(element.props.fill);
       });
 
+      if (key === "hair") {
+        colorsFromComponent.backHair = [];
+        component?.subcomponent?.svg.forEach((element: SVGElement) => {
+          if (element.props.fill)
+            colorsFromComponent.backHair.push(element.props.fill);
+        });
+      }
+
       avatar[key] = component;
     });
 
@@ -156,6 +172,10 @@ const Avatar = () => {
   useEffect(() => {
     assembleDefaultAvatarComposition();
   }, []);
+
+  useEffect(() => {
+    console.info(colorByKeys);
+  }, [colorByKeys]);
 
   return (
     <div>
