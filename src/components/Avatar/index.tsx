@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import AssembledAvatar from "./Assembled";
 import ComponentOptions from "./Options";
 
-import {
-  darkenColor,
-  deepClone,
-  validateMatchComponents,
-} from "../../utils/functions";
+import { deepClone, validateMatchComponents } from "../../utils/functions";
 
 import { IComponent, SVGElement } from "../../utils/models";
 
@@ -22,17 +18,15 @@ const Avatar = () => {
   const [colorByKeys, setColorByKeys] = useState<Record<string, string[]>>({
     background: [],
     backHair: [],
-    body: [],
     shadowHead: [],
-    head: [],
     eyebrow: [],
     hair: [],
     eyes: [],
     mouth: [],
-    nose: [],
     beard: [],
     glasses: [],
     clothes: [],
+    skin: [],
   });
 
   const changeComponentColor = (
@@ -41,7 +35,6 @@ const Avatar = () => {
     newColor: string
   ) => {
     if (newColor === "#000000") return;
-
     const newColors = colorByKeys[colorKey] || [];
 
     newColors[indexColor] = newColor;
@@ -51,14 +44,8 @@ const Avatar = () => {
       [colorKey]: newColors,
     };
 
-    if (colorKey === "hair") newColorByKeys["backHair"] = newColors;
-    if (colorKey === "body") {
-      newColorByKeys["head"] = newColors;
-
-      newColorByKeys["nose"] = [darkenColor(newColors[0], 50)];
-      newColorByKeys["shadowHead"] = [darkenColor(newColors[0], 30)];
-    }
-
+    if (components[colorKey]?.subcomponentKey)
+      newColorByKeys[components[colorKey].subcomponentKey] = newColors;
     setColorByKeys(newColorByKeys);
   };
 
@@ -67,56 +54,53 @@ const Avatar = () => {
     componentId: id,
   }: Record<"componentKey" | "componentId", string>) => {
     const changedComponents = {};
+    const {
+      components: componentList,
+      subcomponentKey,
+      validateMatchComponents: arrMatchComponents,
+    } = components[key];
 
     if (id) {
-      const newComponent = components[key].components.find(
-        (el: IComponent) => el.id === id
-      );
+      const newComponent = componentList.find((el: IComponent) => el.id === id);
 
-      if (key === "body") {
-        changedComponents["shadowHead"] = newComponent.subcomponent;
+      if (subcomponentKey) {
+        changedComponents[components[key].subcomponentKey] =
+          newComponent.subcomponent;
+      }
+
+      if (arrMatchComponents) {
         validateMatchComponents(
           components,
           selectedComponents,
-          ["clothes"],
+          arrMatchComponents,
           newComponent
         );
       }
 
-      if (key === "head")
-        validateMatchComponents(
-          components,
-          selectedComponents,
-          ["hair", "eyebrow", "eyes", "beard"],
-          newComponent
-        );
-
-      if (key === "hair")
-        changedComponents["backHair"] = newComponent.subcomponent;
-
-      if (newComponent?.type)
+      if (newComponent?.type) {
         setCurrentComponentsType({
           ...currentComponentsType,
           [key]: newComponent.type,
         });
-
-      changedComponents[key] = newComponent;
+      }
 
       const colorsFromThisComponent: Record<string, string[]> = {};
 
       colorsFromThisComponent[key] = [];
-      newComponent.svg.forEach((element: SVGElement) => {
+      newComponent.svg.forEach((element: SVGElement, index: number) => {
         if (element.props.fill)
           colorsFromThisComponent[key].push(element.props.fill);
       });
-      if (key === "hair") {
-        colorsFromThisComponent.backHair = [];
+
+      if (subcomponentKey) {
+        colorsFromThisComponent[subcomponentKey] = [];
         newComponent?.subcomponent?.svg.forEach((element: SVGElement) => {
           if (element.props.fill)
-            colorsFromThisComponent.backHair.push(element.props.fill);
+            colorsFromThisComponent[subcomponentKey].push(element.props.fill);
         });
       }
 
+      changedComponents[key] = newComponent;
       setColorByKeys((c) => ({ ...c, ...colorsFromThisComponent }));
     } else changedComponents[key] = "";
 
@@ -129,6 +113,7 @@ const Avatar = () => {
   const assembleDefaultAvatarComposition = () => {
     const avatar = {} as IComponent;
     const colorsFromComponent = deepClone(colorByKeys);
+    colorsFromComponent.skin = [localComponents.skin.color];
 
     Object.entries(localComponents.defaultComposition).forEach(([key, id]) => {
       if (!id) return;
@@ -144,8 +129,7 @@ const Avatar = () => {
         }));
 
       if (component.subcomponent) {
-        if (key === "body") avatar["shadowHead"] = component.subcomponent;
-        if (key === "hair") avatar["backHair"] = component.subcomponent;
+        avatar[components[key].subcomponentKey] = component.subcomponent;
       }
 
       colorsFromComponent[key] = [];
@@ -154,11 +138,13 @@ const Avatar = () => {
           colorsFromComponent[key].push(element.props.fill);
       });
 
-      if (key === "hair") {
-        colorsFromComponent.backHair = [];
+      if (component.subcomponent) {
+        colorsFromComponent[components[key].subcomponentKey] = [];
         component?.subcomponent?.svg.forEach((element: SVGElement) => {
           if (element.props.fill)
-            colorsFromComponent.backHair.push(element.props.fill);
+            colorsFromComponent[components[key].subcomponentKey].push(
+              element.props.fill
+            );
         });
       }
 
@@ -172,10 +158,6 @@ const Avatar = () => {
   useEffect(() => {
     assembleDefaultAvatarComposition();
   }, []);
-
-  useEffect(() => {
-    console.info(colorByKeys);
-  }, [colorByKeys]);
 
   return (
     <div>

@@ -72,15 +72,15 @@ function reduceBrightness(color: string, decreaseValue: number) {
   }${(b < 16 ? "0" : "") + b.toString(16)}`;
 }
 
-function darkenColor(color: string, decreaseValue: number) {
+function darkenColor(color: string, increase: number[]) {
   let r = parseInt(color.substring(1, 3), 16);
   let g = parseInt(color.substring(3, 5), 16);
   let b = parseInt(color.substring(5, 7), 16);
 
   // Escurece os componentes R, G e B
-  r = Math.max(0, r - decreaseValue);
-  g = Math.max(0, g - decreaseValue);
-  b = Math.max(0, b - decreaseValue);
+  r = Math.max(0, r + increase[0]);
+  g = Math.max(0, g + increase[1]);
+  b = Math.max(0, b + increase[2]);
 
   // Converte de volta para uma cor hexadecimal
   return `#${(r < 16 ? "0" : "") + r.toString(16)}${

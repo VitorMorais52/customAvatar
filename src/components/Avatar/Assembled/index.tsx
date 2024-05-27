@@ -1,5 +1,5 @@
 import React from "react";
-import { transformSvgPropToStr } from "../../../utils/functions";
+import { darkenColor, transformSvgPropToStr } from "../../../utils/functions";
 import { IComponent } from "../../../utils/models";
 
 const keysOrder = [
@@ -18,6 +18,8 @@ const keysOrder = [
   "glasses",
 ];
 
+import { skin } from "../newLocalComponents.json";
+
 interface NewBodyProps {
   avatarComposition: Record<string, IComponent>;
   currentTypes: Record<string, string>;
@@ -29,10 +31,22 @@ const Assembled = ({
   currentTypes,
   colorByKeys,
 }: NewBodyProps) => {
-  const orderedComposition = keysOrder.map((key) => {
+  const orderedAndPaintedComponents = keysOrder.map((key) => {
     avatarComposition[key]?.svg?.forEach((element, index) => {
-      if (colorByKeys[key][index] && element.props.fill)
-        element.props.fill = colorByKeys[key][index];
+      if (
+        colorByKeys[key][index] &&
+        element.props.fill &&
+        !skin.relatedComponents[key]
+      )
+        return (element.props.fill = colorByKeys[key][index]);
+
+      if (skin.relatedComponents[key]) {
+        const { increase: increaseValues } = skin.relatedComponents[key];
+
+        if (increaseValues)
+          element.props.fill = darkenColor(colorByKeys.skin[0], increaseValues);
+        else element.props.fill = colorByKeys.skin[0];
+      }
     });
     return avatarComposition[key];
   });
@@ -50,10 +64,13 @@ const Assembled = ({
   };
 
   const svgBuilder = () => {
-    const concatenatedString = orderedComposition.reduce((acc, value) => {
-      if (!value || !value.svg) return acc;
-      return acc + setPropertiesInComponent(value);
-    }, "");
+    const concatenatedString = orderedAndPaintedComponents.reduce(
+      (acc, value) => {
+        if (!value || !value.svg) return acc;
+        return acc + setPropertiesInComponent(value);
+      },
+      ""
+    );
     return concatenatedString;
   };
 

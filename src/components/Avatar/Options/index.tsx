@@ -19,7 +19,11 @@ const Options = ({
   const [currentTab, setCurrentTab] = useState("head");
 
   const { components, validationRequiredBy, hasRemoveOption } =
-    avatarComponents[currentTab];
+    avatarComponents[currentTab] || {
+      components: [],
+      validationRequiredBy: undefined,
+      hasRemoveOption: undefined,
+    };
 
   const handleChangeComposition =
     ({ key, id }: Record<"key" | "id", string>) =>
@@ -28,9 +32,29 @@ const Options = ({
     };
 
   const renderColorPicker = () => {
+    if (currentTab === "skin") {
+      return (
+        <div className="colorPickerWrapper" key={currentTab}>
+          <ColorPicker
+            type={
+              ["hair", "beard", "clothes", "eyes"].includes(currentTab)
+                ? "slider"
+                : ""
+            }
+            colorKey={currentTab}
+            currentColor={colorByKeys.skin[0]}
+            changeCurrentColor={(value: string) =>
+              changeComponentsColor(currentTab, 0, value)
+            }
+          />
+        </div>
+      );
+    }
+
     const currentSelectedComponent = currentComponents[currentTab];
 
-    if (currentSelectedComponent?.isNotEditable) return;
+    if (currentSelectedComponent?.isNotEditable || !colorByKeys[currentTab])
+      return;
 
     return colorByKeys[currentTab].map((elementColor, index) => {
       if (
@@ -147,6 +171,13 @@ const Options = ({
         }}
       >
         <div className="tabs" style={{ display: "flex", margin: "0.5rem 0" }}>
+          <button
+            style={{ margin: "4px" }}
+            key={"skin"}
+            onClick={() => setCurrentTab("skin")}
+          >
+            {"skin"}
+          </button>
           {tabList.map((tabTitle) => {
             if (avatarComponents[tabTitle].components.length <= 1) return;
             return (
@@ -161,8 +192,12 @@ const Options = ({
           })}
         </div>
         <div className="options" style={{ width: "650px" }}>
-          {hasRemoveOption && renderRemoveOption()}
-          {components.map((component: IComponent) => renderOption(component))}
+          {hasRemoveOption && currentTab !== "skin" && renderRemoveOption()}
+          {currentTab === "skin" ? (
+            <div>skin</div>
+          ) : (
+            components.map((component: IComponent) => renderOption(component))
+          )}
         </div>
       </div>
     </>

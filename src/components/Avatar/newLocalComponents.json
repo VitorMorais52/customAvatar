@@ -28,7 +28,15 @@
     "beard",
     "glasses"
   ],
-  "skin": "#fad0c3",
+  "skin": {
+    "color": "#fad0c3",
+    "relatedComponents": {
+      "body": { "increase": null },
+      "head": { "increase": null },
+      "nose": { "increase": [-14, -38, -46] },
+      "shadowHead": { "increase": [-42, -51, -54] }
+    }
+  },
   "pieces": {
     "background": {
       "components": [
@@ -86,7 +94,8 @@
           "type": "thinner"
         }
       ],
-      "subcomponentKey": "shadowHead"
+      "subcomponentKey": "shadowHead",
+      "validateMatchComponents": ["clothes"]
     },
     "head": {
       "components": [
@@ -138,7 +147,8 @@
           "transform": "translate(261,180)",
           "type": "thinner"
         }
-      ]
+      ],
+      "validateMatchComponents": ["hair", "eyebrow", "eyes", "beard"]
     },
     "hair": {
       "components": [
