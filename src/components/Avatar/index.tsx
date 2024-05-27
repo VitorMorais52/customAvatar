@@ -6,8 +6,8 @@ import { deepClone, validateMatchComponents } from "../../utils/functions";
 
 import { IComponent, SVGElement } from "../../utils/models";
 
-import localComponents from "./newLocalComponents.json";
-const components = deepClone(localComponents.pieces);
+import { defaultComposition, pieces, skin } from "./newLocalComponents.json";
+const components = deepClone(pieces);
 
 import "./Avatar.css";
 
@@ -29,23 +29,19 @@ const Avatar = () => {
     skin: [],
   });
 
-  const changeComponentColor = (
-    colorKey: string,
-    indexColor: number,
-    newColor: string
-  ) => {
-    if (newColor === "#000000") return;
-    const newColors = colorByKeys[colorKey] || [];
+  const changeComponentColor = (key: string, index: number, color: string) => {
+    if (color === "#000000") return;
+    const newColors = colorByKeys[color] || [];
 
-    newColors[indexColor] = newColor;
+    newColors[index] = color;
 
     const newColorByKeys: Record<string, string[]> = {
       ...colorByKeys,
-      [colorKey]: newColors,
+      [color]: newColors,
     };
 
-    if (components[colorKey]?.subcomponentKey)
-      newColorByKeys[components[colorKey].subcomponentKey] = newColors;
+    if (components[color]?.subcomponentKey)
+      newColorByKeys[components[key].subcomponentKey] = newColors;
     setColorByKeys(newColorByKeys);
   };
 
@@ -112,46 +108,44 @@ const Avatar = () => {
 
   const assembleDefaultAvatarComposition = () => {
     const avatar = {} as IComponent;
-    const colorsFromComponent = deepClone(colorByKeys);
-    colorsFromComponent.skin = [localComponents.skin.color];
+    const colors = deepClone(colorByKeys);
 
-    Object.entries(localComponents.defaultComposition).forEach(([key, id]) => {
+    colors.skin = [skin.color];
+
+    Object.entries(defaultComposition).forEach(([key, id]) => {
       if (!id) return;
 
-      const component = components[key].components.find(
-        (el: IComponent) => el.id === id
-      );
+      const { components: componentList, subcomponentKey } = components[key];
 
-      if (component.type)
-        setCurrentComponentsType((currentValue) => ({
-          ...currentValue,
-          [key]: component.type,
-        }));
+      const component = componentList.find((el: IComponent) => el.id === id);
+      const { subcomponent, type } = component;
 
-      if (component.subcomponent) {
-        avatar[components[key].subcomponentKey] = component.subcomponent;
-      }
+      if (subcomponent) {
+        avatar[subcomponentKey] = subcomponent;
 
-      colorsFromComponent[key] = [];
-      component.svg.forEach((element: SVGElement) => {
-        if (element.props.fill)
-          colorsFromComponent[key].push(element.props.fill);
-      });
+        colors[subcomponentKey] = [];
 
-      if (component.subcomponent) {
-        colorsFromComponent[components[key].subcomponentKey] = [];
-        component?.subcomponent?.svg.forEach((element: SVGElement) => {
+        subcomponent?.svg.forEach((element: SVGElement) => {
           if (element.props.fill)
-            colorsFromComponent[components[key].subcomponentKey].push(
-              element.props.fill
-            );
+            colors[subcomponentKey].push(element.props.fill);
         });
       }
+
+      colors[key] = [];
+      component.svg.forEach((element: SVGElement) => {
+        if (element.props.fill) colors[key].push(element.props.fill);
+      });
+
+      if (type)
+        setCurrentComponentsType((currentValue) => ({
+          ...currentValue,
+          [key]: type,
+        }));
 
       avatar[key] = component;
     });
 
-    setColorByKeys(colorsFromComponent);
+    setColorByKeys(colors);
     setSelectedComponents({ ...avatar });
   };
 
