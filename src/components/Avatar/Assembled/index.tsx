@@ -23,33 +23,12 @@ import { skin } from "../newLocalComponents.json";
 interface NewBodyProps {
   avatarComposition: Record<string, IComponent>;
   currentTypes: Record<string, string>;
-  colorByKeys: Record<string, string[]>;
 }
 
-const Assembled = ({
-  avatarComposition,
-  currentTypes,
-  colorByKeys,
-}: NewBodyProps) => {
-  const orderedAndPaintedComponents = keysOrder.map((key) => {
-    avatarComposition[key]?.svg?.forEach((element, index) => {
-      if (
-        colorByKeys[key][index] &&
-        element.props.fill &&
-        !skin.relatedComponents[key]
-      )
-        return (element.props.fill = colorByKeys[key][index]);
-
-      if (skin.relatedComponents[key]) {
-        const { increase: increaseValues } = skin.relatedComponents[key];
-
-        if (increaseValues)
-          element.props.fill = darkenColor(colorByKeys.skin[0], increaseValues);
-        else element.props.fill = colorByKeys.skin[0];
-      }
-    });
-    return avatarComposition[key];
-  });
+const Assembled = ({ avatarComposition, currentTypes }: NewBodyProps) => {
+  const orderedAndPaintedComponents = keysOrder.map(
+    (key) => avatarComposition[key]
+  );
 
   const setPropertiesInComponent = (component: IComponent) => {
     if (!component) return;

@@ -13,7 +13,6 @@ const Options = ({
   changeComposition,
   currentTypes,
   changeComponentsColor,
-  colorByKeys,
   currentComponents,
 }: ICustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("head");
@@ -34,7 +33,11 @@ const Options = ({
   const renderColorPicker = () => {
     if (currentTab === "skin") {
       return (
-        <div className="colorPickerWrapper" key={currentTab}>
+        <div
+          className="colorPickerWrapper"
+          key={currentTab}
+          id={currentComponents.body.svg[0].props.fill.toUpperCase()}
+        >
           <ColorPicker
             type={
               ["hair", "beard", "clothes", "eyes"].includes(currentTab)
@@ -42,7 +45,7 @@ const Options = ({
                 : ""
             }
             colorKey={currentTab}
-            currentColor={colorByKeys.skin[0]}
+            currentColor={currentComponents.body.svg[0].props.fill.toUpperCase()}
             changeCurrentColor={(value: string) =>
               changeComponentsColor(currentTab, 0, value)
             }
@@ -53,33 +56,30 @@ const Options = ({
 
     const currentSelectedComponent = currentComponents[currentTab];
 
-    if (currentSelectedComponent?.isNotEditable || !colorByKeys[currentTab])
-      return;
+    if (currentSelectedComponent?.isNotEditable) return;
 
-    return colorByKeys[currentTab].map((elementColor, index) => {
-      if (
-        !currentSelectedComponent ||
-        currentSelectedComponent?.svg[index]?.isNotEditable
-      )
-        return;
+    return currentSelectedComponent?.svg?.map(
+      ({ isNotEditable, props }, index) => {
+        if (isNotEditable || !props.fill) return;
 
-      return (
-        <div className="colorPickerWrapper" key={elementColor}>
-          <ColorPicker
-            type={
-              ["hair", "beard", "clothes", "eyes"].includes(currentTab)
-                ? "slider"
-                : ""
-            }
-            colorKey={currentTab}
-            currentColor={elementColor}
-            changeCurrentColor={(value: string) =>
-              changeComponentsColor(currentTab, index, value)
-            }
-          />
-        </div>
-      );
-    });
+        return (
+          <div className="colorPickerWrapper" key={props.fill}>
+            <ColorPicker
+              type={
+                ["hair", "beard", "clothes", "eyes"].includes(currentTab)
+                  ? "slider"
+                  : ""
+              }
+              colorKey={currentTab}
+              currentColor={props.fill}
+              changeCurrentColor={(value: string) =>
+                changeComponentsColor(currentTab, index, value)
+              }
+            />
+          </div>
+        );
+      }
+    );
   };
 
   const renderOption = (component: IComponent) => {

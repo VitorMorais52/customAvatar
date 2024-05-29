@@ -36,17 +36,17 @@ interface IColors {
 type ChangeComposition = (
   params: Record<"componentKey" | "componentId", string>
 ) => void;
+
 type ChangeComponentsColor = (
-  colorKey: string,
-  indexColor: number,
-  newColor: string
+  key: string,
+  index: number,
+  color: string
 ) => void;
 
 interface ICustomOptionsProps {
   changeComposition: ChangeComposition;
   changeComponentsColor: ChangeComponentsColor;
   currentTypes: Record<string, string>;
-  colorByKeys: Record<string, string[]>;
   currentComponents: Record<string, IComponent>;
 }
 

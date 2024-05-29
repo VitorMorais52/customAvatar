@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import AssembledAvatar from "./Assembled";
 import ComponentOptions from "./Options";
 
-import { deepClone, validateMatchComponents } from "../../utils/functions";
+import {
+  darkenColor,
+  deepClone,
+  validateMatchComponents,
+} from "../../utils/functions";
 
 import { IComponent, SVGElement } from "../../utils/models";
 
@@ -15,34 +19,29 @@ const Avatar = () => {
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentComponentsType, setCurrentComponentsType] = useState({});
 
-  const [colorByKeys, setColorByKeys] = useState<Record<string, string[]>>({
-    background: [],
-    backHair: [],
-    shadowHead: [],
-    eyebrow: [],
-    hair: [],
-    eyes: [],
-    mouth: [],
-    beard: [],
-    glasses: [],
-    clothes: [],
-    skin: [],
-  });
-
   const changeComponentColor = (key: string, index: number, color: string) => {
     if (color === "#000000") return;
-    const newColors = colorByKeys[color] || [];
 
-    newColors[index] = color;
+    if (key === "skin") {
+      Object.entries(skin.relatedComponents).forEach(([relatedKey, value]) => {
+        const { increase } = value;
 
-    const newColorByKeys: Record<string, string[]> = {
-      ...colorByKeys,
-      [color]: newColors,
-    };
+        selectedComponents[relatedKey].svg[0].props.fill = increase
+          ? darkenColor(color, increase)
+          : color;
+      });
+    } else {
+      selectedComponents[key].svg[index].props.fill = color;
 
-    if (components[color]?.subcomponentKey)
-      newColorByKeys[components[key].subcomponentKey] = newColors;
-    setColorByKeys(newColorByKeys);
+      if (selectedComponents[key].subcomponent) {
+        const { subcomponentKey } = pieces[key];
+        selectedComponents[subcomponentKey].svg[index].props.fill = color;
+      }
+    }
+
+    setSelectedComponents({
+      ...selectedComponents,
+    });
   };
 
   const changeAvatarComposition = ({
@@ -58,6 +57,21 @@ const Avatar = () => {
 
     if (id) {
       const newComponent = componentList.find((el: IComponent) => el.id === id);
+      const currentComponent = selectedComponents[key];
+
+      //maintain last hair color. Should it be in json?
+      if (currentComponent && key === "hair") {
+        newComponent.svg.forEach((element, index) => {
+          if (currentComponent.svg[index])
+            element.props.fill = currentComponent.svg[index].props.fill;
+        });
+        if (newComponent.subcomponent) {
+          newComponent.subcomponent.svg.forEach((element, index) => {
+            if (currentComponent.svg[index])
+              element.props.fill = currentComponent.svg[index].props.fill;
+          });
+        }
+      }
 
       if (subcomponentKey) {
         changedComponents[components[key].subcomponentKey] =
@@ -80,24 +94,7 @@ const Avatar = () => {
         });
       }
 
-      const colorsFromThisComponent: Record<string, string[]> = {};
-
-      colorsFromThisComponent[key] = [];
-      newComponent.svg.forEach((element: SVGElement, index: number) => {
-        if (element.props.fill)
-          colorsFromThisComponent[key].push(element.props.fill);
-      });
-
-      if (subcomponentKey) {
-        colorsFromThisComponent[subcomponentKey] = [];
-        newComponent?.subcomponent?.svg.forEach((element: SVGElement) => {
-          if (element.props.fill)
-            colorsFromThisComponent[subcomponentKey].push(element.props.fill);
-        });
-      }
-
       changedComponents[key] = newComponent;
-      setColorByKeys((c) => ({ ...c, ...colorsFromThisComponent }));
     } else changedComponents[key] = "";
 
     setSelectedComponents({
@@ -108,9 +105,6 @@ const Avatar = () => {
 
   const assembleDefaultAvatarComposition = () => {
     const avatar = {} as IComponent;
-    const colors = deepClone(colorByKeys);
-
-    colors.skin = [skin.color];
 
     Object.entries(defaultComposition).forEach(([key, id]) => {
       if (!id) return;
@@ -122,19 +116,7 @@ const Avatar = () => {
 
       if (subcomponent) {
         avatar[subcomponentKey] = subcomponent;
-
-        colors[subcomponentKey] = [];
-
-        subcomponent?.svg.forEach((element: SVGElement) => {
-          if (element.props.fill)
-            colors[subcomponentKey].push(element.props.fill);
-        });
       }
-
-      colors[key] = [];
-      component.svg.forEach((element: SVGElement) => {
-        if (element.props.fill) colors[key].push(element.props.fill);
-      });
 
       if (type)
         setCurrentComponentsType((currentValue) => ({
@@ -145,7 +127,6 @@ const Avatar = () => {
       avatar[key] = component;
     });
 
-    setColorByKeys(colors);
     setSelectedComponents({ ...avatar });
   };
 
@@ -157,13 +138,11 @@ const Avatar = () => {
     <div>
       <AssembledAvatar
         avatarComposition={selectedComponents}
-        colorByKeys={colorByKeys}
         currentTypes={currentComponentsType}
       />
       <ComponentOptions
         changeComposition={changeAvatarComposition}
         currentTypes={currentComponentsType}
-        colorByKeys={colorByKeys}
         currentComponents={selectedComponents}
         changeComponentsColor={changeComponentColor}
       />
