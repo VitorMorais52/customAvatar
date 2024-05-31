@@ -8,7 +8,7 @@ import {
   validateMatchComponents,
 } from "../../utils/functions";
 
-import { IComponent, SVGElement } from "../../utils/models";
+import { IComponent } from "../../utils/models";
 
 import { dataReceived, pieces, skin } from "./newLocalComponents.json";
 dataReceived.shift();
@@ -24,6 +24,7 @@ const Avatar = () => {
   const [inputDataReceive, setInputDataReceive] = useState("");
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const changeComponentColor = (key: string, index: number, color: string) => {
     if (color === "#000000") return;
@@ -123,7 +124,6 @@ const Avatar = () => {
       "beard",
       "glasses",
     ];
-
     let defaultComposition = {};
 
     const recipe = inputRef?.current?.value
@@ -172,6 +172,46 @@ const Avatar = () => {
     setSelectedComponents({ ...avatar });
   };
 
+  const getOutpatData = () => {
+    const keysOrder = [
+      "background",
+      "body",
+      "head",
+      "eyebrow",
+      "hair",
+      "eyes",
+      "mouth",
+      "nose",
+      "clothes",
+      "beard",
+      "glasses",
+    ];
+
+    const result = keysOrder.map((key) => {
+      const item = selectedComponents[key];
+      if (!item || !item.id) {
+        return null;
+      }
+      const componentIndex = components[key].components.findIndex(
+        (component) => component.id === item.id
+      );
+      return [componentIndex + ""];
+    });
+
+    return JSON.stringify(result || []);
+  };
+
+  const handleCopy = async () => {
+    if (textareaRef.current) {
+      try {
+        await navigator.clipboard.writeText(textareaRef.current.value);
+        alert("Texto copiado!");
+      } catch (err) {
+        console.error("Falha ao copiar texto: ", err);
+      }
+    }
+  };
+
   useEffect(() => {
     if (!startComposition || inputDataReceive) createDefaultComposition();
 
@@ -210,6 +250,23 @@ const Avatar = () => {
         currentComponents={selectedComponents}
         changeComponentsColor={changeComponentColor}
       />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "16px",
+        }}
+      >
+        <textarea
+          ref={textareaRef}
+          style={{ width: "800px", height: "16px" }}
+          value={getOutpatData()}
+          readOnly
+        />
+        <button style={{ height: "fit-content" }} onClick={handleCopy}>
+          Copiar
+        </button>
+      </div>
     </div>
   );
 };
