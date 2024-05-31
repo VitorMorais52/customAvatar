@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AssembledAvatar from "./Assembled";
 import ComponentOptions from "./Options";
 
@@ -10,7 +10,8 @@ import {
 
 import { IComponent, SVGElement } from "../../utils/models";
 
-import { defaultComposition, pieces, skin } from "./newLocalComponents.json";
+import { dataReceived, pieces, skin } from "./newLocalComponents.json";
+dataReceived.shift();
 const components = deepClone(pieces);
 
 import "./Avatar.css";
@@ -18,6 +19,11 @@ import "./Avatar.css";
 const Avatar = () => {
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentComponentsType, setCurrentComponentsType] = useState({});
+  const [startComposition, setStartComposition] =
+    useState<Record<string, string>>();
+  const [inputDataReceive, setInputDataReceive] = useState("");
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const changeComponentColor = (key: string, index: number, color: string) => {
     if (color === "#000000") return;
@@ -103,15 +109,51 @@ const Avatar = () => {
     });
   };
 
+  function createDefaultComposition() {
+    const keysOrder = [
+      "background",
+      "body",
+      "head",
+      "eyebrow",
+      "hair",
+      "eyes",
+      "mouth",
+      "nose",
+      "clothes",
+      "beard",
+      "glasses",
+    ];
+
+    let defaultComposition = {};
+
+    const recipe = inputRef?.current?.value
+      ? JSON.parse(inputRef?.current?.value)
+      : dataReceived;
+
+    keysOrder.forEach((key, index) => {
+      if (recipe[index] === null) {
+        defaultComposition[key] = "";
+      } else {
+        defaultComposition[key] = recipe[index]?.[0] || "";
+      }
+    });
+
+    setStartComposition(defaultComposition);
+    return defaultComposition;
+  }
+
   const assembleDefaultAvatarComposition = () => {
     const avatar = {} as IComponent;
 
-    Object.entries(defaultComposition).forEach(([key, id]) => {
+    if (!startComposition) return;
+
+    Object.entries(startComposition).forEach(([key, id]) => {
       if (!id) return;
 
       const { components: componentList, subcomponentKey } = components[key];
 
-      const component = componentList.find((el: IComponent) => el.id === id);
+      const component = componentList[+id];
+
       const { subcomponent, type } = component;
 
       if (subcomponent) {
@@ -131,11 +173,33 @@ const Avatar = () => {
   };
 
   useEffect(() => {
-    assembleDefaultAvatarComposition();
-  }, []);
+    if (!startComposition || inputDataReceive) createDefaultComposition();
+
+    if (inputRef.current && !inputRef.current.value)
+      inputRef.current.value = JSON.stringify(dataReceived);
+  }, [inputDataReceive]);
+
+  useEffect(() => {
+    if (startComposition && Object.values(startComposition).length)
+      assembleDefaultAvatarComposition();
+  }, [startComposition]);
 
   return (
     <div>
+      <input
+        type="text"
+        ref={inputRef}
+        style={{ width: "800px", marginBottom: "16px" }}
+      />
+      <button
+        type="submit"
+        onClick={() => {
+          if (!inputRef.current) return;
+          setInputDataReceive(inputRef.current.value);
+        }}
+      >
+        save
+      </button>
       <AssembledAvatar
         avatarComposition={selectedComponents}
         currentTypes={currentComponentsType}
