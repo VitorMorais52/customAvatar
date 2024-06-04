@@ -10,7 +10,7 @@ import {
 
 import { IComponent } from "../../utils/models";
 
-import { dataReceived, pieces, skin } from "./newLocalComponents.json";
+import { defaultComposition, pieces, skin } from "./newLocalComponents.json";
 
 const components = deepClone(pieces);
 
@@ -19,9 +19,10 @@ import "./Avatar.css";
 const Avatar = () => {
   const [selectedComponents, setSelectedComponents] = useState({});
   const [currentComponentsType, setCurrentComponentsType] = useState({});
-  const [startComposition, setStartComposition] =
-    useState<Record<string, string>>();
-  const [inputDataReceive, setInputDataReceive] = useState("");
+  useState<Record<string, string>>();
+  const [inputDataReceive, setInputDataReceive] = useState(
+    '[["0"],["0"],["0"],["1"],["3"],["17"],["1"],["0"],["0"],null,null,null]'
+  );
 
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -67,7 +68,7 @@ const Avatar = () => {
       const currentComponent = selectedComponents[key];
 
       //maintain last hair color. Should it be in json?
-      if (currentComponent && key === "hair") {
+      if (currentComponent) {
         newComponent.svg.forEach((element, index) => {
           if (currentComponent.svg[index])
             element.props.fill = currentComponent.svg[index].props.fill;
@@ -101,6 +102,8 @@ const Avatar = () => {
         });
       }
 
+      //check if the component is in skin domain
+
       changedComponents[key] = newComponent;
     } else changedComponents[key] = "";
 
@@ -109,38 +112,6 @@ const Avatar = () => {
       ...changedComponents,
     });
   };
-
-  function createDefaultComposition() {
-    const keysOrder = [
-      "background",
-      "body",
-      "head",
-      "eyebrow",
-      "hair",
-      "eyes",
-      "mouth",
-      "nose",
-      "clothes",
-      "beard",
-      "glasses",
-    ];
-    let defaultComposition = {};
-
-    const recipe = inputRef?.current?.value
-      ? JSON.parse(inputRef?.current?.value)
-      : dataReceived.slice(1);
-
-    keysOrder.forEach((key, index) => {
-      if (recipe[index] === null) {
-        defaultComposition[key] = "";
-      } else {
-        defaultComposition[key] = recipe[index]?.[0] || "";
-      }
-    });
-
-    setStartComposition(defaultComposition);
-    return defaultComposition;
-  }
 
   const assembleDefaultAvatarComposition = () => {
     const keysOrder = [
@@ -159,9 +130,12 @@ const Avatar = () => {
 
     const avatar = {} as IComponent;
 
-    if (!startComposition) return;
-    if (!dataReceived) return;
-    const shortedReceived = dataReceived.slice(1);
+    if (!defaultComposition) return;
+
+    const shortedReceived = inputDataReceive
+      ? JSON.parse(inputDataReceive).slice(1)
+      : defaultComposition.slice(1);
+
     keysOrder.forEach((key, keyIndex) => {
       const data = shortedReceived[keyIndex];
       if (!data) return;
@@ -186,10 +160,12 @@ const Avatar = () => {
         avatar[components[key].subcomponentKey] = avatar[key].subcomponent;
       }
     });
+
     setSelectedComponents({ ...avatar });
   };
 
   const getOutpatData = () => {
+    console.info("rerender?");
     const keysOrder = [
       "background",
       "body",
@@ -215,7 +191,7 @@ const Avatar = () => {
       return [componentIndex + ""];
     });
 
-    return JSON.stringify(result || []);
+    return JSON.stringify([["0"], ...result] || []);
   };
 
   const handleCopy = async () => {
@@ -230,16 +206,9 @@ const Avatar = () => {
   };
 
   useEffect(() => {
-    if (!startComposition || inputDataReceive) createDefaultComposition();
-
-    if (inputRef.current && !inputRef.current.value)
-      inputRef.current.value = JSON.stringify(dataReceived);
+    assembleDefaultAvatarComposition();
+    if (inputRef.current) inputRef.current.value = inputDataReceive;
   }, [inputDataReceive]);
-
-  useEffect(() => {
-    if (startComposition && Object.values(startComposition).length)
-      assembleDefaultAvatarComposition();
-  }, [startComposition]);
 
   return (
     <div>

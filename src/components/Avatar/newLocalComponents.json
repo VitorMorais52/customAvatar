@@ -1,6 +1,6 @@
 {
   "specificKeys": null,
-  "dataReceived": [
+  "defaultComposition": [
     ["0"],
     ["0", null, "#f80088"],
     ["0", "#ffbb94"],
