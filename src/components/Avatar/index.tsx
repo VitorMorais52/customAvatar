@@ -11,7 +11,7 @@ import {
 import { IComponent } from "../../utils/models";
 
 import { dataReceived, pieces, skin } from "./newLocalComponents.json";
-dataReceived.shift();
+
 const components = deepClone(pieces);
 
 import "./Avatar.css";
@@ -128,7 +128,7 @@ const Avatar = () => {
 
     const recipe = inputRef?.current?.value
       ? JSON.parse(inputRef?.current?.value)
-      : dataReceived;
+      : dataReceived.slice(1);
 
     keysOrder.forEach((key, index) => {
       if (recipe[index] === null) {
@@ -143,32 +143,49 @@ const Avatar = () => {
   }
 
   const assembleDefaultAvatarComposition = () => {
+    const keysOrder = [
+      "background",
+      "body",
+      "head",
+      "eyebrow",
+      "hair",
+      "eyes",
+      "mouth",
+      "nose",
+      "clothes",
+      "beard",
+      "glasses",
+    ];
+
     const avatar = {} as IComponent;
 
     if (!startComposition) return;
+    if (!dataReceived) return;
+    const shortedReceived = dataReceived.slice(1);
+    keysOrder.forEach((key, keyIndex) => {
+      const data = shortedReceived[keyIndex];
+      if (!data) return;
+      const componentIndex = data[0];
 
-    Object.entries(startComposition).forEach(([key, id]) => {
-      if (!id) return;
+      if (!componentIndex) return;
 
-      const { components: componentList, subcomponentKey } = components[key];
+      avatar[key] = components[key].components[componentIndex] || "";
 
-      const component = componentList[+id];
+      data.slice(1).forEach((color, indexColor) => {
+        if (avatar[key] && avatar[key].svg[indexColor] && color)
+          avatar[key].svg[indexColor].props.fill = color;
+      });
 
-      const { subcomponent, type } = component;
-
-      if (subcomponent) {
-        avatar[subcomponentKey] = subcomponent;
-      }
-
-      if (type)
+      if (avatar[key].type)
         setCurrentComponentsType((currentValue) => ({
           ...currentValue,
-          [key]: type,
+          [key]: avatar[key].type,
         }));
 
-      avatar[key] = component;
+      if (avatar[key].subcomponent) {
+        avatar[components[key].subcomponentKey] = avatar[key].subcomponent;
+      }
     });
-
     setSelectedComponents({ ...avatar });
   };
 
