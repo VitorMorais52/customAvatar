@@ -6,13 +6,21 @@ import {
   darkenColor,
   deepClone,
   validateMatchComponents,
+  restoreLastColor,
+  updateFillProp,
 } from "../../utils/functions";
 
 import { IComponent } from "../../utils/models";
 
-import { defaultComposition, pieces, skin } from "./newLocalComponents.json";
+import {
+  defaultComposition,
+  pieces,
+  skin,
+  keysOrder as kO,
+} from "./newLocalComponents.json";
 
 const components = deepClone(pieces);
+const keysOrder = kO.filter((key) => !["backHair", "shadowHead"].includes(key));
 
 import "./Avatar.css";
 
@@ -33,17 +41,16 @@ const Avatar = () => {
     if (key === "skin") {
       Object.entries(skin.relatedComponents).forEach(([relatedKey, value]) => {
         const { increase } = value;
+        const rightColor = increase ? darkenColor(color, increase) : color;
 
-        selectedComponents[relatedKey].svg[0].props.fill = increase
-          ? darkenColor(color, increase)
-          : color;
+        updateFillProp(selectedComponents[relatedKey], 0, rightColor);
       });
     } else {
-      selectedComponents[key].svg[index].props.fill = color;
+      updateFillProp(selectedComponents[key], index, color);
 
       if (selectedComponents[key].subcomponent) {
         const { subcomponentKey } = pieces[key];
-        selectedComponents[subcomponentKey].svg[index].props.fill = color;
+        updateFillProp(selectedComponents[subcomponentKey], index, color);
       }
     }
 
@@ -57,6 +64,7 @@ const Avatar = () => {
     componentId: id,
   }: Record<"componentKey" | "componentId", string>) => {
     const changedComponents = {};
+
     const {
       components: componentList,
       subcomponentKey,
@@ -65,20 +73,13 @@ const Avatar = () => {
 
     if (id) {
       const newComponent = componentList.find((el: IComponent) => el.id === id);
+      const { svg, subcomponent } = newComponent;
+
       const currentComponent = selectedComponents[key];
 
-      //maintain last hair color. Should it be in json?
-      if (currentComponent) {
-        newComponent.svg.forEach((element, index) => {
-          if (currentComponent.svg[index])
-            element.props.fill = currentComponent.svg[index].props.fill;
-        });
-        if (newComponent.subcomponent) {
-          newComponent.subcomponent.svg.forEach((element, index) => {
-            if (currentComponent.svg[index])
-              element.props.fill = currentComponent.svg[index].props.fill;
-          });
-        }
+      if (currentComponent && ["hair", "head", "body", "nose"].includes(key)) {
+        restoreLastColor(svg, currentComponent);
+        if (subcomponent) restoreLastColor(subcomponent.svg, currentComponent);
       }
 
       if (subcomponentKey) {
@@ -102,8 +103,6 @@ const Avatar = () => {
         });
       }
 
-      //check if the component is in skin domain
-
       changedComponents[key] = newComponent;
     } else changedComponents[key] = "";
 
@@ -114,40 +113,27 @@ const Avatar = () => {
   };
 
   const assembleDefaultAvatarComposition = () => {
-    const keysOrder = [
-      "background",
-      "body",
-      "head",
-      "eyebrow",
-      "hair",
-      "eyes",
-      "mouth",
-      "nose",
-      "clothes",
-      "beard",
-      "glasses",
-    ];
+    if (!defaultComposition) return;
 
     const avatar = {} as IComponent;
 
-    if (!defaultComposition) return;
-
-    const shortedReceived = inputDataReceive
+    const recipe = inputDataReceive
       ? JSON.parse(inputDataReceive).slice(1)
       : defaultComposition.slice(1);
 
     keysOrder.forEach((key, keyIndex) => {
-      const data = shortedReceived[keyIndex];
-      if (!data) return;
-      const componentIndex = data[0];
+      const componentInfos = recipe[keyIndex];
+      if (!componentInfos) return;
 
+      const componentIndex = componentInfos[0];
       if (!componentIndex) return;
 
       avatar[key] = components[key].components[componentIndex] || "";
 
-      data.slice(1).forEach((color, indexColor) => {
+      const componentColors = componentInfos.slice(1);
+      componentColors.forEach((color: string, indexColor: number) => {
         if (avatar[key] && avatar[key].svg[indexColor] && color)
-          avatar[key].svg[indexColor].props.fill = color;
+          updateFillProp(avatar[key], indexColor, color);
       });
 
       if (avatar[key].type)
@@ -165,21 +151,6 @@ const Avatar = () => {
   };
 
   const getOutpatData = () => {
-    console.info("rerender?");
-    const keysOrder = [
-      "background",
-      "body",
-      "head",
-      "eyebrow",
-      "hair",
-      "eyes",
-      "mouth",
-      "nose",
-      "clothes",
-      "beard",
-      "glasses",
-    ];
-
     const result = keysOrder.map((key) => {
       const item = selectedComponents[key];
       if (!item || !item.id) {

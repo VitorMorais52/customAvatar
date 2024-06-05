@@ -129,10 +129,23 @@ function transformSvgPropToStr(component: IComponent) {
   };
 }
 
+function restoreLastColor(componentSVG, currentComponent) {
+  componentSVG.forEach((element, index: number) => {
+    if (componentSVG[index])
+      element.props.fill = currentComponent.svg[index].props.fill;
+  });
+}
+
+function updateFillProp(component, index: number, color: string) {
+  component.svg[index].props.fill = color;
+}
+
 export {
   deepClone,
   reduceBrightness,
   darkenColor,
   validateMatchComponents,
   transformSvgPropToStr,
+  restoreLastColor,
+  updateFillProp,
 };
