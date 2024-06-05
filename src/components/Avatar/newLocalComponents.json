@@ -14,20 +14,6 @@
     null,
     null
   ],
-  "dataReceivedOriginal": [
-    ["0"],
-    ["0", "#b4b4b4", "#b4b4b4"],
-    ["0", "#ffbb94"],
-    ["1", "#ffbb94"],
-    ["3", "#ffffff"],
-    null,
-    ["1", "#f80088"],
-    ["0"],
-    ["0"],
-    null,
-    null,
-    null
-  ],
   "keysOrder": [
     "background",
     "backHair",
