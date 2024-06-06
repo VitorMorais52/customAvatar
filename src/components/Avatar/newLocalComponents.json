@@ -14,6 +14,36 @@
     null,
     null
   ],
+  "colors": [
+    "#110505",
+    "#503323",
+    "#894E25",
+    "#7A4B13",
+    "#AE4E0D",
+    "#9D3921",
+    "#F6C578",
+    "#978265",
+    "#B79884",
+    "#7E7C7D",
+    "#7F5390",
+    "#946CCF",
+    "#6D5EC3",
+    "#1A4BA4",
+    "#0465A1",
+    "#409097",
+    "#1D5C4B",
+    "#41AA4B",
+    "#5C9A35",
+    "#5E6B4F",
+    "#DDD34F",
+    "#DA7142",
+    "#B85155",
+    "#AB6959",
+    "#A7313E",
+    "#8C155E",
+    "#E8569C",
+    "#BD8392"
+  ],
   "keysOrder": [
     "background",
     "backHair",
@@ -167,9 +197,9 @@
           ],
           "viewBox": "0 0 516.4 342.99",
           "specificationsByType": {
-            "classic": "translate(270,140), scale(0.89)",
+            "classic": "translate(270,140) scale(0.89)",
             "rounded": "translate(242,104)",
-            "thinner": "translate(254,100), scale(0.955)"
+            "thinner": "translate(254,100) scale(0.955)"
           }
         },
         {
@@ -186,9 +216,9 @@
           ],
           "viewBox": "0 0 525 351",
           "specificationsByType": {
-            "classic": "translate(276,127), scale(0.86)",
+            "classic": "translate(276,127) scale(0.86)",
             "rounded": "translate(237,79)",
-            "thinner": "translate(264,124), scale(0.91)"
+            "thinner": "translate(264,124) scale(0.91)"
           }
         },
         {
@@ -205,9 +235,9 @@
           ],
           "viewBox": "0 0 500 395.83",
           "specificationsByType": {
-            "classic": "translate(261,111), scale(0.95)",
+            "classic": "translate(261,111) scale(0.95)",
             "rounded": "translate(249,73)",
-            "thinner": "translate(253,105), scale(0.99)"
+            "thinner": "translate(253,105) scale(0.99)"
           }
         },
         {
@@ -224,9 +254,9 @@
           ],
           "viewBox": "0 0 588.92 429.96",
           "specificationsByType": {
-            "classic": "translate(250,100), scale(0.85)",
+            "classic": "translate(250,100) scale(0.85)",
             "rounded": "translate(205,59)",
-            "thinner": "translate(234,84), scale(0.9)"
+            "thinner": "translate(234,84) scale(0.9)"
           }
         },
         {
@@ -243,9 +273,9 @@
           ],
           "viewBox": "0 0 570.18 304.87",
           "specificationsByType": {
-            "classic": "translate(256,129), scale(0.86)",
+            "classic": "translate(256,129) scale(0.86)",
             "rounded": "translate(215,100)",
-            "thinner": "translate(238,115), scale(0.92)"
+            "thinner": "translate(238,115) scale(0.92)"
           }
         },
         {
@@ -262,9 +292,9 @@
           ],
           "viewBox": "0 0 588.92 429.96",
           "specificationsByType": {
-            "classic": "translate(250,100), scale(0.85)",
+            "classic": "translate(250,100) scale(0.85)",
             "rounded": "translate(205,59)",
-            "thinner": "translate(250,100), scale(0.85)"
+            "thinner": "translate(250,100) scale(0.85)"
           },
           "subcomponent": {
             "svg": [
@@ -295,9 +325,9 @@
             ],
             "viewBox": "0 0 627.07 652.99",
             "specificationsByType": {
-              "classic": "translate(230,231), scale(0.87)",
+              "classic": "translate(230,231) scale(0.87)",
               "rounded": "translate(185,223)",
-              "thinner": "translate(230,231), scale(0.87)"
+              "thinner": "translate(230,231) scale(0.87)"
             }
           }
         },
@@ -315,9 +345,9 @@
           ],
           "viewBox": "0 0 496 299.46",
           "specificationsByType": {
-            "classic": "translate(291,193), scale(0.84)",
+            "classic": "translate(291,193) scale(0.84)",
             "rounded": "translate(251,209)",
-            "thinner": "translate(282,212), scale(0.88)"
+            "thinner": "translate(282,212) scale(0.88)"
           }
         },
         {
@@ -349,9 +379,9 @@
           ],
           "viewBox": "0 0 512 369.45",
           "specificationsByType": {
-            "classic": "translate(284,115), scale(0.84)",
+            "classic": "translate(284,115) scale(0.84)",
             "rounded": "translate(244,60)",
-            "thinner": "translate(270,90), scale(0.89)"
+            "thinner": "translate(270,90) scale(0.89)"
           }
         },
         {
@@ -368,9 +398,9 @@
           ],
           "viewBox": "0 0 503 379",
           "specificationsByType": {
-            "classic": "translate(270,132), scale(0.87)",
+            "classic": "translate(270,132) scale(0.87)",
             "rounded": "translate(245,121)",
-            "thinner": "translate(259,140), scale(0.92)"
+            "thinner": "translate(259,140) scale(0.92)"
           }
         },
         {
@@ -417,9 +447,9 @@
           ],
           "viewBox": "0 0 505.5 538.08",
           "specificationsByType": {
-            "classic": "translate(296,122.55), scale(0.9)",
+            "classic": "translate(296,122.55) scale(0.9)",
             "rounded": "translate(269.66,150.03)",
-            "thinner": "translate(277,127.1), scale(0.98)"
+            "thinner": "translate(277,127.1) scale(0.98)"
           },
           "subcomponent": {
             "svg": [
@@ -467,9 +497,9 @@
             ],
             "viewBox": "0 0 505.5 538.08",
             "specificationsByType": {
-              "classic": "translate(272,38.13), scale(0.9)",
+              "classic": "translate(272,38.13) scale(0.9)",
               "rounded": "translate(246,39)",
-              "thinner": "translate(253,19.13), scale(0.98)"
+              "thinner": "translate(253,19.13) scale(0.98)"
             }
           }
         },
@@ -487,9 +517,9 @@
           ],
           "viewBox": "0 0 512.8 414.92",
           "specificationsByType": {
-            "classic": "translate(289,91), scale(0.82)",
+            "classic": "translate(289,91) scale(0.82)",
             "rounded": "translate(243,56)",
-            "thinner": "translate(276,105.13), scale(0.85)"
+            "thinner": "translate(276,105.13) scale(0.85)"
           }
         },
         {
@@ -506,9 +536,9 @@
           ],
           "viewBox": "0 0 592 755",
           "specificationsByType": {
-            "classic": "translate(240,58), scale(0.88)",
+            "classic": "translate(240,58) scale(0.88)",
             "rounded": "translate(203,20)",
-            "thinner": "translate(236,70), scale(0.89)"
+            "thinner": "translate(236,70) scale(0.89)"
           }
         },
         {
@@ -525,9 +555,9 @@
           ],
           "viewBox": "0 0 469.91 297",
           "specificationsByType": {
-            "classic": "translate(278.32,123.5), scale(0.94)",
-            "rounded": "translate(247.58,90.95), scale(1.06)",
-            "thinner": "translate(274.93,113.23), scale(0.96)"
+            "classic": "translate(278.32,123.5) scale(0.94)",
+            "rounded": "translate(247.58,90.95) scale(1.06)",
+            "thinner": "translate(274.93,113.23) scale(0.96)"
           },
           "subcomponent": {
             "svg": [
@@ -568,9 +598,9 @@
             ],
             "viewBox": "0 0 547 827.25",
             "specificationsByType": {
-              "classic": "translate(242,79.13), scale(0.94)",
-              "rounded": "translate(210,21.13), scale(1.06)",
-              "thinner": "translate(238,68.13), scale(0.96)"
+              "classic": "translate(242,79.13) scale(0.94)",
+              "rounded": "translate(210,21.13) scale(1.06)",
+              "thinner": "translate(238,68.13) scale(0.96)"
             }
           }
         },
@@ -588,9 +618,9 @@
           ],
           "viewBox": "0 0 584 391",
           "specificationsByType": {
-            "classic": "translate(245,100), scale(0.87)",
+            "classic": "translate(245,100) scale(0.87)",
             "rounded": "translate(208,39)",
-            "thinner": "translate(244,96), scale(0.88)"
+            "thinner": "translate(244,96) scale(0.88)"
           },
           "subcomponent": {
             "svg": [
@@ -620,9 +650,9 @@
             ],
             "viewBox": "0 0 584 800",
             "specificationsByType": {
-              "classic": "translate(245,225), scale(0.87)",
+              "classic": "translate(245,225) scale(0.87)",
               "rounded": "translate(208,180)",
-              "thinner": "translate(244,224), scale(0.88)"
+              "thinner": "translate(244,224) scale(0.88)"
             }
           }
         },
@@ -640,9 +670,9 @@
           ],
           "viewBox": "0 0 503 313",
           "specificationsByType": {
-            "classic": "translate(271.25,128.27), scale(0.91)",
+            "classic": "translate(271.25,128.27) scale(0.91)",
             "rounded": "translate(248,86.13)",
-            "thinner": "translate(271.25,125.27), scale(0.91)"
+            "thinner": "translate(271.25,125.27) scale(0.91)"
           },
           "subcomponent": {
             "svg": [
@@ -672,9 +702,9 @@
             ],
             "viewBox": "0 0 568 751",
             "specificationsByType": {
-              "classic": "translate(242,92.13), scale(0.91)",
+              "classic": "translate(242,92.13) scale(0.91)",
               "rounded": "translate(216,46.13)",
-              "thinner": "translate(242,89.13), scale(0.91)"
+              "thinner": "translate(242,89.13) scale(0.91)"
             }
           }
         },
@@ -692,9 +722,9 @@
           ],
           "viewBox": "0 0 495.68 313.14",
           "specificationsByType": {
-            "classic": "translate(279.16,140.28), scale(0.89)",
+            "classic": "translate(279.16,140.28) scale(0.89)",
             "rounded": "translate(252.66,86.66)",
-            "thinner": "translate(277.44,130.56), scale(0.9)"
+            "thinner": "translate(277.44,130.56) scale(0.9)"
           },
           "subcomponent": {
             "svg": [
@@ -724,9 +754,9 @@
             ],
             "viewBox": "0 0 577 711.64",
             "specificationsByType": {
-              "classic": "translate(243,105.13), scale(0.89)",
+              "classic": "translate(243,105.13) scale(0.89)",
               "rounded": "translate(212,47.13)",
-              "thinner": "translate(241,95.13), scale(0.9)"
+              "thinner": "translate(241,95.13) scale(0.9)"
             }
           }
         },
@@ -880,9 +910,9 @@
           ],
           "viewBox": "0 0 259.09 43",
           "specificationsByType": {
-            "classic": "translate(384,419), scale(0.9)",
+            "classic": "translate(384,419) scale(0.9)",
             "rounded": "translate(370,414)",
-            "thinner": "translate(384,421), scale(0.9)"
+            "thinner": "translate(384,421) scale(0.9)"
           }
         },
         {
@@ -899,9 +929,9 @@
           ],
           "viewBox": "0 0 264.02 32.72",
           "specificationsByType": {
-            "classic": "translate(384,426.61), scale(0.88)",
+            "classic": "translate(384,426.61) scale(0.88)",
             "rounded": "translate(368,414)",
-            "thinner": "translate(384,426.61), scale(0.88)"
+            "thinner": "translate(384,426.61) scale(0.88)"
           }
         },
         {
@@ -928,9 +958,9 @@
           ],
           "viewBox": "0 0 290.08 43.21",
           "specificationsByType": {
-            "classic": "translate(377,425), scale(0.84)",
+            "classic": "translate(377,425) scale(0.84)",
             "rounded": "translate(355,410)",
-            "thinner": "translate(377,425), scale(0.84)"
+            "thinner": "translate(377,425) scale(0.84)"
           }
         }
       ],
@@ -997,9 +1027,9 @@
           ],
           "viewBox": "0 0 376.3 70.19",
           "specificationsByType": {
-            "classic": "translate(335,355.45), scale(0.88)",
+            "classic": "translate(335,355.45) scale(0.88)",
             "rounded": "translate(312,337.16)",
-            "thinner": "translate(335,358.45), scale(0.89)"
+            "thinner": "translate(335,358.45) scale(0.89)"
           }
         },
         {
@@ -1016,9 +1046,9 @@
           ],
           "viewBox": "0 0 281.83 14.27",
           "specificationsByType": {
-            "classic": "translate(370.97,381.02), scale(0.92)",
+            "classic": "translate(370.97,381.02) scale(0.92)",
             "rounded": "translate(359.02,369.99)",
-            "thinner": "translate(370.97,388.02), scale(0.92)"
+            "thinner": "translate(370.97,388.02) scale(0.92)"
           }
         },
         {
@@ -1035,9 +1065,9 @@
           ],
           "viewBox": "0 0 299.67 23.87",
           "specificationsByType": {
-            "classic": "translate(360,370.38), scale(0.93)",
+            "classic": "translate(360,370.38) scale(0.93)",
             "rounded": "translate(350,360)",
-            "thinner": "translate(360,376.38), scale(0.93)"
+            "thinner": "translate(360,376.38) scale(0.93)"
           }
         },
         {
@@ -1054,9 +1084,9 @@
           ],
           "viewBox": "0 0 349.55 29.55",
           "specificationsByType": {
-            "classic": "translate(335.83,370.02), scale(0.94)",
+            "classic": "translate(335.83,370.02) scale(0.94)",
             "rounded": "translate(324.82,357.09)",
-            "thinner": "translate(335.83,376.2), scale(0.94)"
+            "thinner": "translate(335.83,376.2) scale(0.94)"
           }
         }
       ],
@@ -1238,9 +1268,9 @@
           ],
           "viewBox": "0 0 268.2 46.32",
           "specificationsByType": {
-            "classic": "translate(380,559), scale(0.9)",
+            "classic": "translate(380,559) scale(0.9)",
             "rounded": "translate(366,559)",
-            "thinner": "translate(380,576), scale(0.88)"
+            "thinner": "translate(380,576) scale(0.88)"
           }
         },
         {
@@ -1327,9 +1357,9 @@
           ],
           "viewBox": "0 0 316.67 83.35",
           "specificationsByType": {
-            "classic": "translate(362,562), scale(0.87)",
+            "classic": "translate(362,562) scale(0.87)",
             "rounded": "translate(342,563)",
-            "thinner": "translate(369,580), scale(0.83)"
+            "thinner": "translate(369,580) scale(0.83)"
           }
         }
       ],
@@ -1460,9 +1490,9 @@
           ],
           "viewBox": "0 0 437 129",
           "specificationsByType": {
-            "classic": "translate(310,390.13), scale(0.87)",
+            "classic": "translate(310,390.13) scale(0.87)",
             "rounded": "translate(281,375)",
-            "thinner": "translate(295,392.17), scale(0.94)"
+            "thinner": "translate(295,392.17) scale(0.94)"
           }
         },
         {
@@ -1489,9 +1519,9 @@
           ],
           "viewBox": "0 0 400 83.89",
           "specificationsByType": {
-            "classic": "translate(333,408), scale(0.85)",
+            "classic": "translate(333,408) scale(0.85)",
             "rounded": "translate(305,396)",
-            "thinner": "translate(334,408), scale(0.85)"
+            "thinner": "translate(334,408) scale(0.85)"
           }
         },
         {
@@ -1518,9 +1548,9 @@
           ],
           "viewBox": "0 0 386 142",
           "specificationsByType": {
-            "classic": "translate(349,394), scale(0.78)",
-            "rounded": "translate(318,380), scale(0.95)",
-            "thinner": "translate(349,400), scale(0.78)"
+            "classic": "translate(349,394) scale(0.78)",
+            "rounded": "translate(318,380) scale(0.95)",
+            "thinner": "translate(349,400) scale(0.78)"
           }
         }
       ],

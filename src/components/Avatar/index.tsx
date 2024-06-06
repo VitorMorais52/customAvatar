@@ -77,7 +77,10 @@ const Avatar = () => {
 
       const currentComponent = selectedComponents[key];
 
-      if (currentComponent && ["hair", "head", "body", "nose"].includes(key)) {
+      if (
+        currentComponent &&
+        ["hair", "head", "body", "nose", "shadowHead"].includes(key)
+      ) {
         restoreLastColor(svg, currentComponent);
         if (subcomponent) restoreLastColor(subcomponent.svg, currentComponent);
       }
