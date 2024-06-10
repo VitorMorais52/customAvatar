@@ -55,6 +55,7 @@ const Avatar = () => {
       components[key].components.forEach((component) => {
         updateFillProp(component, index, color);
         if (component.subcomponent && component.subcomponent.fullSvg) {
+          updateFillProp(component.subcomponent, index, color);
           component.subcomponent.fullSvg.forEach((element) => {
             element.props.fill = color;
           });
@@ -115,7 +116,12 @@ const Avatar = () => {
       }
 
       changedComponents[key] = newComponent;
-    } else changedComponents[key] = "";
+    } else {
+      changedComponents[key] = "";
+      if (components[key].subcomponentKey) {
+        changedComponents[components[key].subcomponentKey] = "";
+      }
+    }
 
     setSelectedComponents({
       ...selectedComponents,
@@ -143,8 +149,11 @@ const Avatar = () => {
 
       const componentColors = componentInfos.slice(1);
       componentColors.forEach((color: string, indexColor: number) => {
-        if (avatar[key] && avatar[key].svg[indexColor] && color)
+        if (avatar[key] && avatar[key].svg[indexColor] && color) {
           updateFillProp(avatar[key], indexColor, color);
+          if (avatar[key].subcomponent)
+            updateFillProp(avatar[key].subcomponent, indexColor, color);
+        }
       });
 
       if (avatar[key].type)
