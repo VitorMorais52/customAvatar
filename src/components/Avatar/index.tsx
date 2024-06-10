@@ -20,6 +20,7 @@ import {
 } from "./newLocalComponents.json";
 
 const components = deepClone(pieces);
+// const components = pieces;
 const keysOrder = kO.filter((key) => !["backHair", "shadowHead"].includes(key));
 
 import "./Avatar.css";
@@ -185,6 +186,7 @@ const Avatar = () => {
   }, [inputDataReceive]);
 
   return (
+    // <div style={{ display: "none" }}>
     <div>
       <input
         type="text"

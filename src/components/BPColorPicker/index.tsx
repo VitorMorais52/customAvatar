@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import "./BPColorPicker.css";
+import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
 
 const colors = [
   "#110505",
@@ -38,97 +39,75 @@ const colors = [
   "#BD8392",
 ];
 
+const colorsRGB = [
+  [0, 0, 0],
+  [80, 51, 35],
+  [137, 78, 37],
+  [122, 75, 19],
+  [174, 78, 13],
+
+  [157, 57, 33],
+  [246, 197, 120],
+  [151, 130, 101],
+  [151, 130, 101],
+  [126, 124, 125],
+
+  [127, 83, 144],
+  [148, 108, 207],
+  [109, 94, 195],
+  [26, 75, 164],
+  [4, 101, 161],
+
+  [64, 144, 151],
+  [29, 92, 75],
+  [65, 170, 75],
+  [92, 154, 53],
+  [94, 107, 79],
+
+  [221, 211, 79],
+  [218, 113, 66],
+  [184, 81, 85],
+  [171, 105, 89],
+  [167, 49, 62],
+
+  [140, 21, 94],
+  [232, 86, 156],
+  [189, 131, 146],
+];
+
 function BPColorPicker() {
-  const [color, setColor] = useState("rgb(4, 101, 161)");
+  const [currentColor, setCurrentColor] = useState<number[]>([4, 101, 161]);
   const [lightness, setLightness] = useState(0);
 
-  const boxRef = useRef<HTMLDivElement>(null);
+  const [h, s, l] = rgbToHsl(currentColor);
+  console.info("l", l);
 
-  // const handleChangeInput = (inputValue: number) => {
-  //   // rgb(52, 179, 81)
-  //   // rgb(232, 86, 156)
-  //   // rgb(232, 86, 156)
-  //   // rgb(140, 21, 94)
-
-  //   const r = 140,
-  //     g = 21,
-  //     b = 94;
-  //   const maxValue = 255;
-  //   const minValue = 0;
-
-  //   const biggerValue = Math.max(r, g, b);
-
-  //   const currentPorcentValue = (biggerValue * 100) / maxValue;
-  //   if (!inputValue) return setLightness(currentPorcentValue);
-
-  //   const nextValue = maxValue * (inputValue / 100);
-  //   const increaseValue = nextValue - biggerValue;
-
-  //   const nextR = r + increaseValue,
-  //     nextG = g + increaseValue,
-  //     nextB = b + increaseValue;
-
-  //   console.info("atual porcentagem de luz", currentPorcentValue);
-  //   console.info("valor mandante", biggerValue);
-  //   console.info("nextValue", nextValue);
-
-  //   if (boxRef.current)
-  //     boxRef.current.style.backgroundColor = `rgb(${nextR}, ${nextG}, ${nextB})`;
-  // };
-  const handleChangeInput = (inputValue: number) => {
-    // #2498f1 mais claro
-    // rgb(4, 101, 161)
-    // #063452 mais escuro
-
-    // rgb(52, 179, 81)
-    // rgb(232, 86, 156)
-    // rgb(232, 86, 156)
-    // rgb(140, 21, 94)
-    // rgb(4, 101, 161)
-    // linear-gradient(to right,rgb(51, 0, 5) 0%, rgb(140, 21, 94) 54%,rgb(255, 136, 209))
-    // linear-gradient(to right,rgb(51, 8, 34) 0%, rgb(140, 21, 94) 54%,rgb(255, 38, 171))
-    // linear-gradient(to right,rgb(0, 0, 51) 0%, rgb(4, 101, 161) 63%,rgb(98, 195, 255))
-    const r = 4,
-      g = 101,
-      b = 161;
-    const maxValue = 255;
-    const minValue = 0;
-
-    const biggerValue = Math.max(r, g, b);
-
-    const currentPorcentValue = (biggerValue * 100) / maxValue;
-    if (!inputValue) return setLightness(currentPorcentValue);
-
-    const nextValue = maxValue * (inputValue / 100);
-    const increaseValue = nextValue - biggerValue;
-
-    const nextR = r + increaseValue;
-    const proportion = nextR / r;
-
-    console.info("proportion", proportion);
-
-    const nextG = g + increaseValue;
-
-    const nextB = b + increaseValue;
-
-    // console.info("atual porcentagem de luz", currentPorcentValue);
-    // console.info("valor mandante", biggerValue);
-    // console.info("nextValue", nextValue);
-
-    if (boxRef.current)
-      boxRef.current.style.backgroundColor = `rgb(${nextR}, ${nextG}, ${nextB})`;
+  const getInitLightness = () => {
+    if (!currentColor) return;
+    setLightness(l * 100);
   };
 
+  const mountsRGB = (color: number[]) =>
+    `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+
+  const maxCurrentColor = () => mountsRGB(hslToRgb([h, s, 0.9]));
+  const minCurrentColor = () => mountsRGB(hslToRgb([h, s, 0.1]));
+  const boxColor = () => hslToRgb([h, s, lightness / 100]);
+
   useEffect(() => {
-    handleChangeInput(0);
+    getInitLightness();
   }, []);
+
+  useEffect(() => {
+    setLightness(l * 100);
+  }, [currentColor]);
 
   return (
     <div className="containerPicker" style={{ minHeight: "180px" }}>
-      <div>
+      <div className="title">
         <h1>color picker</h1>
       </div>
-      <div className="firstV" style={{ width: "372px" }}>
+      <div className="contentColors" style={{ width: "372px" }}>
         <button
           className="btnFloating"
           type="button"
@@ -167,15 +146,19 @@ function BPColorPicker() {
           className="wrapperColors"
           style={{ display: "flex", flexWrap: "wrap", marginLeft: "8px" }}
         >
-          {colors.map((color) => (
-            <div
+          {colorsRGB.map((color) => (
+            <button
+              type="button"
               className="colorBall"
               style={{
-                backgroundColor: color,
+                backgroundColor: mountsRGB(color),
                 width: "20px",
                 height: "20px",
                 marginRight: "8px",
+                border: "none",
+                cursor: "pointer",
               }}
+              onClick={() => setCurrentColor(color)}
             />
           ))}
         </div>
@@ -188,22 +171,21 @@ function BPColorPicker() {
           height: "100px",
           margin: "0 auto",
           marginTop: "0.5rem",
-          backgroundColor: color,
+          backgroundColor: mountsRGB(boxColor()),
           marginBottom: "20px",
         }}
-      ></div>
+      />{" "}
       <div
         id="color-box"
-        ref={boxRef}
         style={{
           width: "100px",
           height: "100px",
           margin: "0 auto",
           marginTop: "0.5rem",
-          backgroundColor: color,
+          backgroundColor: "rgb(4, 101, 161)",
           marginBottom: "20px",
         }}
-      ></div>
+      />
       <div
         className="divInput"
         style={{
@@ -212,20 +194,18 @@ function BPColorPicker() {
           borderRadius: "8px",
           width: "130px",
           height: "16px",
-          background:
-            "linear-gradient(to right,rgb(0, 0, 51) 0%, rgb(4, 101, 161) 63%,rgb(98, 195, 255))",
+          background: `linear-gradient(to right, ${minCurrentColor()} 0%, ${mountsRGB(
+            currentColor
+          )} 63%,${maxCurrentColor()})`,
         }}
       />
       <input
         type="range"
-        min="20"
-        max="80"
+        min="10"
+        max="90"
         step="1"
         value={lightness}
-        onChange={({ target }) => {
-          setLightness(+target.value);
-          handleChangeInput(+target.value);
-        }}
+        onChange={({ target }) => setLightness(+target.value)}
       />
       <div style={{ marginLeft: "4px" }}>{lightness}</div>
     </div>
