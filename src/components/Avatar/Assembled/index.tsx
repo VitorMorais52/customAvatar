@@ -1,5 +1,5 @@
 import React from "react";
-import { darkenColor, transformSvgPropToStr } from "../../../utils/functions";
+import { transformSvgPropToStr } from "../../../utils/functions";
 import { IComponent } from "../../../utils/models";
 
 const keysOrder = [
@@ -18,8 +18,6 @@ const keysOrder = [
   "glasses",
 ];
 
-import { skin } from "../newLocalComponents.json";
-
 interface NewBodyProps {
   avatarComposition: Record<string, IComponent>;
   currentTypes: Record<string, string>;
@@ -36,8 +34,10 @@ const Assembled = ({ avatarComposition, currentTypes }: NewBodyProps) => {
     const { transform, specificationsByType, svg } =
       transformSvgPropToStr(component);
 
-    const transformValue =
-      transform || specificationsByType[currentTypes["head"]] || "";
+    const fromSpecByType = specificationsByType
+      ? specificationsByType[currentTypes["head"]]
+      : "";
+    const transformValue = transform || fromSpecByType;
 
     return `<g transform="${transformValue}">${svg}</g>`;
   };

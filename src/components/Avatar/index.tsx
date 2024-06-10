@@ -20,7 +20,6 @@ import {
 } from "./newLocalComponents.json";
 
 const components = deepClone(pieces);
-// const components = pieces;
 const keysOrder = kO.filter((key) => !["backHair", "shadowHead"].includes(key));
 
 import "./Avatar.css";
@@ -48,11 +47,19 @@ const Avatar = () => {
       });
     } else {
       updateFillProp(selectedComponents[key], index, color);
-
       if (selectedComponents[key].subcomponent) {
         const { subcomponentKey } = pieces[key];
         updateFillProp(selectedComponents[subcomponentKey], index, color);
       }
+
+      components[key].components.forEach((component) => {
+        updateFillProp(component, index, color);
+        if (component.subcomponent && component.subcomponent.fullSvg) {
+          component.subcomponent.fullSvg.forEach((element) => {
+            element.props.fill = color;
+          });
+        }
+      });
     }
 
     setSelectedComponents({
@@ -207,6 +214,7 @@ const Avatar = () => {
         currentTypes={currentComponentsType}
       />
       <ComponentOptions
+        avatarComponents={components}
         changeComposition={changeAvatarComposition}
         currentTypes={currentComponentsType}
         currentComponents={selectedComponents}

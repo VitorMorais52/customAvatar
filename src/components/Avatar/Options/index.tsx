@@ -6,16 +6,15 @@ import { transformSvgPropToStr } from "../../../utils/functions";
 
 import { ICustomOptionsProps, IComponent } from "../../../utils/models";
 
-import { pieces as avatarComponents } from "../newLocalComponents.json";
-const tabList = Object.keys(avatarComponents);
-
 const Options = ({
   changeComposition,
   currentTypes,
   changeComponentsColor,
   currentComponents,
+  avatarComponents,
 }: ICustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("head");
+  const tabList = Object.keys(avatarComponents);
 
   const { components, validationRequiredBy, hasRemoveOption } =
     avatarComponents[currentTab] || {
@@ -31,7 +30,7 @@ const Options = ({
     };
 
   const renderColorPicker = () => {
-    if (currentTab === "skin") {
+    if (currentTab === "skin" && currentComponents.body.svg[0].props.fill) {
       return (
         <div
           className="colorPickerWrapper"
@@ -89,6 +88,7 @@ const Options = ({
 
     if (
       compatibleTypes &&
+      validationRequiredBy &&
       !compatibleTypes.includes(currentTypes[validationRequiredBy])
     )
       return;

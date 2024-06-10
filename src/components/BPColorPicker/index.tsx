@@ -80,7 +80,6 @@ function BPColorPicker() {
   const [lightness, setLightness] = useState(0);
 
   const [h, s, l] = rgbToHsl(currentColor);
-  console.info("l", l);
 
   const getInitLightness = () => {
     if (!currentColor) return;

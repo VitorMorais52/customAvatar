@@ -1,32 +1,3 @@
-type SVGElement = {
-  t: string;
-  props: Record<string, string>;
-  isNotEditable?: boolean;
-};
-
-type SVGProperty = SVGElement[];
-
-interface IComponent {
-  id: string;
-  type: string;
-  isNotEditable?: boolean;
-  compatibleTypes: string[];
-  svg: SVGProperty;
-  transform: string;
-  viewBox: string;
-  specificationsByType: {
-    string: string;
-  };
-  subcomponent: {
-    svg: SVGProperty;
-    fullSvg: SVGProperty;
-    viewBox: string;
-    specificationsByType: {
-      string: string;
-    };
-  };
-}
-
 interface IColors {
   index: number;
   currentColor: string;
@@ -43,11 +14,56 @@ type ChangeComponentsColor = (
   color: string
 ) => void;
 
+interface SvgProps {
+  d?: string;
+  fill?: string;
+  stroke?: string;
+  isNotEditable?: boolean;
+  "stroke-linecap"?: string;
+  "stroke-linejoin"?: string;
+  "stroke-width"?: string;
+}
+
+interface SVGElement {
+  t: string;
+  props: SvgProps;
+  isNotEditable?: boolean;
+}
+
+interface BaseComponent {
+  id: string;
+  svg: SVGElement[];
+  viewBox: string;
+  transform?: string;
+  specificationsByType?: Record<string, string>;
+  isNotEditable?: boolean;
+  compatibleTypes?: string[];
+  subcomponent?: {
+    id?: string;
+    svg: SVGElement[];
+    fullSvg?: SVGElement[];
+    viewBox?: string;
+    transform?: string;
+    specificationsByType?: Record<string, string>;
+  };
+  type?: string;
+}
+
+type IComponent = BaseComponent;
+
+interface IAvatarComponents {
+  components: IComponent[];
+  validationRequiredBy?: string;
+  hasRemoveOption?: boolean;
+  validateMatchComponents?: string[];
+}
+
 interface ICustomOptionsProps {
   changeComposition: ChangeComposition;
   changeComponentsColor: ChangeComponentsColor;
   currentTypes: Record<string, string>;
   currentComponents: Record<string, IComponent>;
+  avatarComponents: Record<string, IAvatarComponents>;
 }
 
 export { ICustomOptionsProps, IColors, IComponent, SVGElement };
