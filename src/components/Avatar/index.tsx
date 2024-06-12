@@ -43,14 +43,6 @@ const Avatar = () => {
         const rightColor = value ? darkenColor(color, value) : color;
 
         updateFillProp(selectedComponents[relatedKey], index, rightColor);
-
-        //////////// pinta a lista de componentes relacionados a skin
-        if (components[relatedKey])
-          components[relatedKey].components.forEach((component) => {
-            if (component.svg[index])
-              updateFillProp(component, index, rightColor);
-          });
-        ////////////
       });
     } else {
       updateFillProp(selectedComponents[key], index, color);
@@ -59,21 +51,6 @@ const Avatar = () => {
         const { subcomponentKey } = pieces[key];
         updateFillProp(selectedComponents[subcomponentKey], index, color);
       }
-
-      //////////// pinta a lista de componentes
-      components[key].components.forEach((component) => {
-        if (component.isNotEditable) return;
-        if (component.svg[index] && !component.svg[index].isNotEditable)
-          updateFillProp(component, index, color);
-
-        if (component.subcomponent && component.subcomponent.fullSvg) {
-          updateFillProp(component.subcomponent, index, color);
-          component.subcomponent.fullSvg.forEach((element) => {
-            element.props.fill = color;
-          });
-        }
-      });
-      ////////////
     }
 
     setSelectedComponents({
@@ -189,20 +166,6 @@ const Avatar = () => {
             } else updateFillProp(avatar[key].subcomponent, indexColor, color);
           }
         }
-
-        //////////// pinta a lista de componentes
-        components[key].components.forEach((component) => {
-          if (!component.isNotEditable && component.svg[indexColor])
-            updateFillProp(component, indexColor, color);
-
-          if (component.subcomponent && component.subcomponent.fullSvg) {
-            updateFillProp(component.subcomponent, indexColor, color);
-            component.subcomponent.fullSvg.forEach((element) => {
-              element.props.fill = color;
-            });
-          }
-        });
-        ///////////
       });
 
       if (avatar[key].type)
@@ -228,11 +191,9 @@ const Avatar = () => {
       );
 
       const currentComponent = components[key].components[componentIndex];
-      const colors = currentComponent.isNotEditable
-        ? []
-        : currentComponent.svg.map(
-            (svgElement) => svgElement.props.fill || null
-          );
+      const colors = currentComponent.svg.map(
+        (svgElement) => svgElement.props.fill || null
+      );
 
       return [componentIndex + "", ...colors];
     });
@@ -257,7 +218,6 @@ const Avatar = () => {
   }, [inputDataReceive]);
 
   return (
-    // <div style={{ display: "none" }}>
     <div>
       <input
         type="text"
@@ -278,7 +238,7 @@ const Avatar = () => {
         currentTypes={currentComponentsType}
       />
       <ComponentOptions
-        avatarComponents={components}
+        avatarComponents={pieces}
         changeComposition={changeAvatarComposition}
         currentTypes={currentComponentsType}
         currentComponents={selectedComponents}
