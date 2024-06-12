@@ -40,8 +40,7 @@ const Avatar = () => {
 
     if (key === "skin") {
       Object.entries(skin.relatedComponents).forEach(([relatedKey, value]) => {
-        const { increase } = value;
-        const rightColor = increase ? darkenColor(color, increase) : color;
+        const rightColor = value ? darkenColor(color, value) : color;
 
         updateFillProp(selectedComponents[relatedKey], index, rightColor);
 
@@ -176,12 +175,10 @@ const Avatar = () => {
           updateFillProp(avatar[key], indexColor, color);
           if (avatar[key].subcomponent) {
             if (skin.relatedComponents[components[key].subcomponentKey]) {
-              const { increase } =
+              const value =
                 skin.relatedComponents[components[key].subcomponentKey];
 
-              const rightColor = increase
-                ? darkenColor(color, increase)
-                : color;
+              const rightColor = value ? darkenColor(color, value) : color;
 
               if (avatar[components[key].subcomponentKey])
                 updateFillProp(
