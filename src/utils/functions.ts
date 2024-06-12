@@ -131,7 +131,7 @@ function transformSvgPropToStr(component: IComponent) {
 
 function restoreLastColor(componentSVG, currentComponent) {
   componentSVG.forEach((element, index: number) => {
-    if (componentSVG[index])
+    if (componentSVG[index] && currentComponent.svg[index])
       element.props.fill = currentComponent.svg[index].props.fill;
   });
 }

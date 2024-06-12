@@ -78,7 +78,8 @@ const Avatar = () => {
 
       if (
         currentComponent &&
-        ["hair", "head", "body", "nose", "shadowHead"].includes(key)
+        ((!newComponent.isNotEditable && !currentComponent.isNotEditable) ||
+          typeof skin.relatedComponents[key] === "object")
       ) {
         restoreLastColor(svg, currentComponent);
         if (subcomponent) restoreLastColor(subcomponent.svg, currentComponent);
