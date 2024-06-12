@@ -43,17 +43,30 @@ const Avatar = () => {
         const { increase } = value;
         const rightColor = increase ? darkenColor(color, increase) : color;
 
-        updateFillProp(selectedComponents[relatedKey], 0, rightColor);
+        updateFillProp(selectedComponents[relatedKey], index, rightColor);
+
+        //////////// pinta a lista de componentes relacionados a skin
+        if (components[relatedKey])
+          components[relatedKey].components.forEach((component) => {
+            if (component.svg[index])
+              updateFillProp(component, index, rightColor);
+          });
+        ////////////
       });
     } else {
       updateFillProp(selectedComponents[key], index, color);
+
       if (selectedComponents[key].subcomponent) {
         const { subcomponentKey } = pieces[key];
         updateFillProp(selectedComponents[subcomponentKey], index, color);
       }
 
+      //////////// pinta a lista de componentes
       components[key].components.forEach((component) => {
-        updateFillProp(component, index, color);
+        if (component.isNotEditable) return;
+        if (component.svg[index] && !component.svg[index].isNotEditable)
+          updateFillProp(component, index, color);
+
         if (component.subcomponent && component.subcomponent.fullSvg) {
           updateFillProp(component.subcomponent, index, color);
           component.subcomponent.fullSvg.forEach((element) => {
@@ -61,6 +74,7 @@ const Avatar = () => {
           });
         }
       });
+      ////////////
     }
 
     setSelectedComponents({
@@ -147,13 +161,51 @@ const Avatar = () => {
 
       avatar[key] = components[key].components[componentIndex] || "";
 
+      if (avatar[key].subcomponent) {
+        avatar[components[key].subcomponentKey] = avatar[key].subcomponent;
+      }
+
       const componentColors = componentInfos.slice(1);
       componentColors.forEach((color: string, indexColor: number) => {
-        if (avatar[key] && avatar[key].svg[indexColor] && color) {
+        if (
+          avatar[key] &&
+          avatar[key].svg[indexColor] &&
+          !avatar[key].svg[indexColor].isNotEditable &&
+          color
+        ) {
           updateFillProp(avatar[key], indexColor, color);
-          if (avatar[key].subcomponent)
-            updateFillProp(avatar[key].subcomponent, indexColor, color);
+          if (avatar[key].subcomponent) {
+            if (skin.relatedComponents[components[key].subcomponentKey]) {
+              const { increase } =
+                skin.relatedComponents[components[key].subcomponentKey];
+
+              const rightColor = increase
+                ? darkenColor(color, increase)
+                : color;
+
+              if (avatar[components[key].subcomponentKey])
+                updateFillProp(
+                  avatar[components[key].subcomponentKey],
+                  indexColor,
+                  rightColor
+                );
+            } else updateFillProp(avatar[key].subcomponent, indexColor, color);
+          }
         }
+
+        //////////// pinta a lista de componentes
+        components[key].components.forEach((component) => {
+          if (!component.isNotEditable && component.svg[indexColor])
+            updateFillProp(component, indexColor, color);
+
+          if (component.subcomponent && component.subcomponent.fullSvg) {
+            updateFillProp(component.subcomponent, indexColor, color);
+            component.subcomponent.fullSvg.forEach((element) => {
+              element.props.fill = color;
+            });
+          }
+        });
+        ///////////
       });
 
       if (avatar[key].type)
@@ -161,10 +213,6 @@ const Avatar = () => {
           ...currentValue,
           [key]: avatar[key].type,
         }));
-
-      if (avatar[key].subcomponent) {
-        avatar[components[key].subcomponentKey] = avatar[key].subcomponent;
-      }
     });
 
     setSelectedComponents({ ...avatar });
@@ -173,13 +221,23 @@ const Avatar = () => {
   const getOutpatData = () => {
     const result = keysOrder.map((key) => {
       const item = selectedComponents[key];
+
       if (!item || !item.id) {
         return null;
       }
+
       const componentIndex = components[key].components.findIndex(
         (component) => component.id === item.id
       );
-      return [componentIndex + ""];
+
+      const currentComponent = components[key].components[componentIndex];
+      const colors = currentComponent.isNotEditable
+        ? []
+        : currentComponent.svg.map(
+            (svgElement) => svgElement.props.fill || null
+          );
+
+      return [componentIndex + "", ...colors];
     });
 
     return JSON.stringify([["0"], ...result] || []);

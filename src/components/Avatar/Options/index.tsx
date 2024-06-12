@@ -62,7 +62,7 @@ const Options = ({
         if (isNotEditable || !props.fill) return;
 
         return (
-          <div className="colorPickerWrapper" key={props.fill}>
+          <div className="colorPickerWrapper" key={props.fill + "" + index}>
             <ColorPicker
               type={
                 ["hair", "beard", "clothes", "eyes"].includes(currentTab)
