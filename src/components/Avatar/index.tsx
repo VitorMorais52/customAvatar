@@ -16,11 +16,13 @@ import {
   defaultComposition,
   pieces,
   skin,
-  keysOrder as kO,
+  traffictOrder,
 } from "./newLocalComponents.json";
 
 const components = deepClone(pieces);
-const keysOrder = kO.filter((key) => !["backHair", "shadowHead"].includes(key));
+const filteredTraffictOrder = traffictOrder.filter(
+  (key) => !["set"].includes(key)
+);
 
 import "./Avatar.css";
 
@@ -129,7 +131,7 @@ const Avatar = () => {
       ? JSON.parse(inputDataReceive).slice(1)
       : defaultComposition.slice(1);
 
-    keysOrder.forEach((key, keyIndex) => {
+    filteredTraffictOrder.forEach((key, keyIndex) => {
       const componentInfos = recipe[keyIndex];
       if (!componentInfos) return;
 
@@ -180,7 +182,7 @@ const Avatar = () => {
   };
 
   const getOutpatData = () => {
-    const result = keysOrder.map((key) => {
+    const result = filteredTraffictOrder.map((key) => {
       const item = selectedComponents[key];
 
       if (!item || !item.id) {

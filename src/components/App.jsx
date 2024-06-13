@@ -1,12 +1,12 @@
 import Avatar from "./Avatar";
-// import BPColorPicker from "./BPColorPicker";
+import Color from "./Color";
 
 import "./App.css";
 
 function App() {
   return (
     <div className="container">
-      {/* <BPColorPicker /> */}
+      <Color />
       <Avatar />
     </div>
   );

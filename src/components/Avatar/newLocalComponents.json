@@ -59,6 +59,20 @@
     "beard",
     "glasses"
   ],
+  "traffictOrder": [
+    "set",
+    "background",
+    "body",
+    "head",
+    "eyebrow",
+    "hair",
+    "eyes",
+    "mouth",
+    "nose",
+    "clothes",
+    "beard",
+    "glasses"
+  ],
   "skin": {
     "color": "#fad0c3",
     "relatedComponents": {
