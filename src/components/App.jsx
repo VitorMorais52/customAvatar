@@ -1,12 +1,12 @@
 import Avatar from "./Avatar";
-import Color from "./Color";
+// import Color from "./Color";
 
 import "./App.css";
 
 function App() {
   return (
     <div className="container">
-      <Color />
+      {/* <Color /> */}
       <Avatar />
     </div>
   );

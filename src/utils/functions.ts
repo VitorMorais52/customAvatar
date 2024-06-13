@@ -140,6 +140,19 @@ function updateFillProp(component, index: number, color: string) {
   component.svg[index].props.fill = color;
 }
 
+function hexToRgb(hex: string): number[] {
+  // Remove o caractere '#' se estiver presente
+  hex = hex.replace(/^#/, "");
+
+  // Divide o hexadecimal em componentes R, G, B
+  let bigint = parseInt(hex, 16);
+  let r = (bigint >> 16) & 255;
+  let g = (bigint >> 8) & 255;
+  let b = bigint & 255;
+
+  return [r, g, b];
+}
+
 export {
   deepClone,
   reduceBrightness,
@@ -148,4 +161,5 @@ export {
   transformSvgPropToStr,
   restoreLastColor,
   updateFillProp,
+  hexToRgb,
 };

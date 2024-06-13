@@ -1,11 +1,16 @@
 .containerPicker {
   position: relative;
+  margin: 0 auto;
+  margin-top: 1rem;
 }
 
 .contentColors {
+  margin: 0 auto;
   background-color: #1a1a1a;
 
   .item {
+    margin-bottom: 0.5rem;
+    margin-top: 0.25rem;
     border: none;
     border-radius: 8px;
     cursor: pointer;

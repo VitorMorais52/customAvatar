@@ -125,7 +125,6 @@ function BPColorPicker({ colors, title }: BPColorPicker) {
     newColors[currentSelectedIndex] = newColor;
     setCurrentColors(newColors);
   };
-
   useEffect(() => {
     getInitLightness();
   }, []);
@@ -149,9 +148,6 @@ function BPColorPicker({ colors, title }: BPColorPicker) {
             justifyContent: "center",
           }}
         >
-          <button type="button" style={{ position: "absolute", left: "0" }}>
-            back
-          </button>
           <span style={{ fontSize: "18px" }}>{title}</span>
         </div>
         <div
@@ -169,7 +165,10 @@ function BPColorPicker({ colors, title }: BPColorPicker) {
             >
               <div
                 className="colorBall"
-                style={{ backgroundColor: mountsRGB(colorItem) }}
+                style={{
+                  backgroundColor: mountsRGB(colorItem),
+                  marginTop: "0",
+                }}
               />{" "}
               item {index + 1}
             </button>
