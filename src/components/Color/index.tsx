@@ -27,6 +27,8 @@ function Color({
     []
   );
 
+  const currentFillProp = currentComponent?.svg[currentItem].props.fill;
+
   const getNavbarColors = () => {
     if (!currentComponent || currentComponent?.isNotEditable) return null;
 
@@ -82,7 +84,7 @@ function Color({
 
   useEffect(() => {
     getNavbarColors();
-  }, [currentComponent]);
+  }, [currentFillProp]);
 
   return (
     <div className="colorContainer">

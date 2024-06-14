@@ -81,16 +81,14 @@ interface BPColorPicker {
 }
 
 function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
-  const [currentColor, setCurrentColor] = useState<number[]>(color);
   const [lightness, setLightness] = useState(0);
-  const [h, s, l] = rgbToHsl(currentColor);
 
-  const isBlack =
-    currentColor[0] === currentColor[1] && currentColor[0] === currentColor[2];
+  const isBlack = color[0] === color[1] && color[0] === color[2];
   const maxLightness = isBlack ? 1 : 0.9;
   const minLightness = isBlack ? 0 : 0.1;
 
   const getInitLightness = () => {
+    const [, , l] = rgbToHsl(color);
     setLightness(l * 100);
   };
   const isTheSameColor = (a: number[], b: number[]) =>
@@ -99,31 +97,22 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
   const mountsRGB = (color: number[]) =>
     `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 
-  const maxCurrentColor = () => mountsRGB(hslToRgb([h, s, maxLightness]));
-  const minCurrentColor = () => mountsRGB(hslToRgb([h, s, minLightness]));
-  const boxColor = () => hslToRgb([h, s, lightness / 100]);
-
-  const replaceColor = (newColor: number[]) => {
-    setCurrentColor(newColor);
+  const maxCurrentColor = () => {
+    const [h, s] = rgbToHsl(color);
+    mountsRGB(hslToRgb([h, s, maxLightness]));
+  };
+  const minCurrentColor = () => {
+    const [h, s] = rgbToHsl(color);
+    mountsRGB(hslToRgb([h, s, minLightness]));
+  };
+  const boxColor = () => {
+    const [h, s] = rgbToHsl(color);
+    return hslToRgb([h, s, lightness / 100]);
   };
 
   useEffect(() => {
     getInitLightness();
-  }, []);
-
-  useEffect(() => {
-    setLightness(l * 100);
-  }, [currentColor]);
-
-  useEffect(() => {
-    setCurrentColor(color);
   }, [color]);
-
-  useEffect(() => {
-    getUpdateColors(
-      hslToRgb([h, s, lightness / 100]).map((item) => Math.trunc(item))
-    );
-  }, [currentColor, lightness]);
 
   return (
     <div className="containerPicker" style={{ minHeight: "180px" }}>
@@ -132,30 +121,13 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
           className="wrapperColors"
           style={{ display: "flex", flexWrap: "wrap", marginLeft: "8px" }}
         >
-          <button
-            type="button"
-            className={`colorBall ${
-              isTheSameColor(color, currentColor) ? "selectedColor" : ""
-            }`}
-            key={"0"}
-            style={{
-              backgroundColor: mountsRGB(color),
-              width: "20px",
-              height: "20px",
-              marginRight: "8px",
-              cursor: "pointer",
-            }}
-            onClick={() => replaceColor(color)}
-          />
-          {colorListRGB.map((colorItem, index) => {
-            const isTheOriginalColor = isTheSameColor(colorItem, color);
-            if (isTheOriginalColor) return null;
+          {colorListRGB.map((colorItem) => {
             return (
               <button
                 type="button"
                 key={colorItem + ""}
                 className={`colorBall ${
-                  isTheSameColor(colorItem, currentColor) ? "selectedColor" : ""
+                  isTheSameColor(colorItem, color) ? "selectedColor" : ""
                 }`}
                 style={{
                   backgroundColor: mountsRGB(colorItem),
@@ -164,7 +136,10 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
                   marginRight: "8px",
                   cursor: "pointer",
                 }}
-                onClick={() => replaceColor(colorItem)}
+                onClick={() => {
+                  const resultColor = colorItem.map((item) => Math.trunc(item));
+                  getUpdateColors(resultColor);
+                }}
               />
             );
           })}
@@ -191,7 +166,7 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
           width: "130px",
           height: "16px",
           background: `linear-gradient(to right, ${minCurrentColor()} 0%, ${mountsRGB(
-            currentColor
+            color
           )} 63%,${maxCurrentColor()})`,
         }}
       />
@@ -202,6 +177,12 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
         step="1"
         value={lightness}
         onChange={({ target }) => setLightness(+target.value)}
+        onMouseUp={() => {
+          const [h, s] = rgbToHsl(color);
+          getUpdateColors(
+            hslToRgb([h, s, lightness / 100]).map((item) => Math.trunc(item))
+          );
+        }}
       />
       <div style={{ marginLeft: "4px" }}>{lightness}</div>
     </div>
