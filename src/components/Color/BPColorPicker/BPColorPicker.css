@@ -28,7 +28,7 @@
     border: none;
   }
   .selectedColor {
-    border: 4px solid tomato;
+    border: 4px solid white;
     padding: 2px;
   }
 }

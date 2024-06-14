@@ -76,30 +76,21 @@ const colorListRGB = [
 ];
 
 interface BPColorPicker {
-  colors: Array<number[]>;
-  title: string;
+  color: number[];
+  getUpdateColors: (color: number[]) => void;
 }
 
-function BPColorPicker({ colors, title }: BPColorPicker) {
-  const copyColors = colors;
-  const [currentColors, setCurrentColors] =
-    useState<Array<number[]>>(copyColors);
-  const [currentSelectedIndex, setCurrentSelectIndex] = useState(0);
+function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
+  const [currentColor, setCurrentColor] = useState<number[]>(color);
   const [lightness, setLightness] = useState(0);
-  const [h, s, l] = rgbToHsl(
-    currentColors[currentSelectedIndex] || copyColors[0]
-  );
+  const [h, s, l] = rgbToHsl(currentColor);
 
   const isBlack =
-    currentColors[currentSelectedIndex][0] ===
-      currentColors[currentSelectedIndex][1] &&
-    currentColors[currentSelectedIndex][0] ===
-      currentColors[currentSelectedIndex][2];
+    currentColor[0] === currentColor[1] && currentColor[0] === currentColor[2];
   const maxLightness = isBlack ? 1 : 0.9;
   const minLightness = isBlack ? 0 : 0.1;
 
   const getInitLightness = () => {
-    if (!currentColors[currentSelectedIndex]) return;
     setLightness(l * 100);
   };
   const isTheSameColor = (a: number[], b: number[]) =>
@@ -113,67 +104,38 @@ function BPColorPicker({ colors, title }: BPColorPicker) {
   const boxColor = () => hslToRgb([h, s, lightness / 100]);
 
   const outputData = () => {
-    const outputColors = currentColors.map((colorItem) => {
-      const [h, s] = rgbToHsl(colorItem);
-      return hslToRgb([h, s, lightness / 100]).map((v) => Math.trunc(v));
-    });
-    return outputColors;
+    const [h, s] = rgbToHsl(currentColor);
+    const outputColor = hslToRgb([h, s, lightness / 100]).map((v) =>
+      Math.trunc(v)
+    );
+    getUpdateColors(outputColor);
+    return outputColor;
   };
 
   const replaceColor = (newColor: number[]) => {
-    const newColors = [...currentColors];
-    newColors[currentSelectedIndex] = newColor;
-    setCurrentColors(newColors);
+    setCurrentColor(newColor);
   };
   useEffect(() => {
+    console.info("color", color);
+    console.info("currentColor", color);
     getInitLightness();
   }, []);
 
   useEffect(() => {
     setLightness(l * 100);
-  }, [currentColors]);
+  }, [currentColor]);
 
   useEffect(() => {
-    outputData();
-  }, [lightness]);
+    setCurrentColor(color);
+  }, [color]);
+
+  // useEffect(() => {
+  //   if (!isTheSameColor(color, currentColor)) outputData();
+  // }, [lightness]);
 
   return (
     <div className="containerPicker" style={{ minHeight: "180px" }}>
       <div className="contentColors" style={{ width: "372px" }}>
-        <div
-          className="headerPicker"
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <span style={{ fontSize: "18px" }}>{title}</span>
-        </div>
-        <div
-          className="navbarColors"
-          style={{ display: "flex", justifyContent: "center" }}
-        >
-          {currentColors.map((colorItem, index) => (
-            <button
-              type="button"
-              key={colorItem.toString() + index}
-              onClick={() => setCurrentSelectIndex(index)}
-              className={`item ${
-                index == currentSelectedIndex ? "selectedItem" : ""
-              }`}
-            >
-              <div
-                className="colorBall"
-                style={{
-                  backgroundColor: mountsRGB(colorItem),
-                  marginTop: "0",
-                }}
-              />{" "}
-              item {index + 1}
-            </button>
-          ))}
-        </div>
         <div
           className="wrapperColors"
           style={{ display: "flex", flexWrap: "wrap", marginLeft: "8px" }}
@@ -181,35 +143,27 @@ function BPColorPicker({ colors, title }: BPColorPicker) {
           <button
             type="button"
             className={`colorBall ${
-              isTheSameColor(
-                copyColors[currentSelectedIndex],
-                currentColors[currentSelectedIndex]
-              )
-                ? "selectedColor"
-                : ""
+              isTheSameColor(color, currentColor) ? "selectedColor" : ""
             }`}
+            key={"0"}
             style={{
-              backgroundColor: mountsRGB(copyColors[currentSelectedIndex]),
+              backgroundColor: mountsRGB(color),
               width: "20px",
               height: "20px",
               marginRight: "8px",
               cursor: "pointer",
             }}
-            onClick={() => replaceColor(copyColors[currentSelectedIndex])}
+            onClick={() => replaceColor(color)}
           />
-          {colorListRGB.map((colorItem) => {
-            const isTheOriginalColor = isTheSameColor(
-              colorItem,
-              copyColors[currentSelectedIndex]
-            );
-            if (isTheOriginalColor) return <></>;
+          {colorListRGB.map((colorItem, index) => {
+            const isTheOriginalColor = isTheSameColor(colorItem, color);
+            if (isTheOriginalColor) return null;
             return (
               <button
                 type="button"
+                key={colorItem + ""}
                 className={`colorBall ${
-                  isTheSameColor(colorItem, currentColors[currentSelectedIndex])
-                    ? "selectedColor"
-                    : ""
+                  isTheSameColor(colorItem, currentColor) ? "selectedColor" : ""
                 }`}
                 style={{
                   backgroundColor: mountsRGB(colorItem),
@@ -245,7 +199,7 @@ function BPColorPicker({ colors, title }: BPColorPicker) {
           width: "130px",
           height: "16px",
           background: `linear-gradient(to right, ${minCurrentColor()} 0%, ${mountsRGB(
-            currentColors[currentSelectedIndex]
+            currentColor
           )} 63%,${maxCurrentColor()})`,
         }}
       />

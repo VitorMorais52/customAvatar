@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import ColorPicker from "../ColorPicker";
-import BPColorPicker from "../../Color/BPColorPicker";
+import Color from "../../Color/";
 
 import { transformSvgPropToStr, hexToRgb } from "../../../utils/functions";
 
@@ -83,54 +83,50 @@ const Options = ({
   };
 
   const renderBPColorPicker = () => {
-    if (currentTab === "skin" && currentComponents.body.svg[0].props.fill) {
-      return (
-        <div
-          className="colorPickerWrapper"
-          key={currentTab}
-          id={currentComponents.body.svg[0].props.fill.toUpperCase()}
-        >
-          <ColorPicker
-            type={
-              ["hair", "beard", "clothes", "eyes"].includes(currentTab)
-                ? "slider"
-                : ""
-            }
-            colorKey={currentTab}
-            currentColor={currentComponents.body.svg[0].props.fill.toUpperCase()}
-            changeCurrentColor={(value: string) =>
-              changeComponentsColor(currentTab, 0, value)
-            }
-          />
-        </div>
-      );
-    }
+    // if (currentTab === "skin" && currentComponents.body.svg[0].props.fill) {
+    //   return (
+    //     <div
+    //       className="colorPickerWrapper"
+    //       key={currentTab}
+    //       id={currentComponents.body.svg[0].props.fill.toUpperCase()}
+    //     >
+    //       <ColorPicker
+    //         type={
+    //           ["hair", "beard", "clothes", "eyes"].includes(currentTab)
+    //             ? "slider"
+    //             : ""
+    //         }
+    //         colorKey={currentTab}
+    //         currentColor={currentComponents.body.svg[0].props.fill.toUpperCase()}
+    //         changeCurrentColor={(value: string) =>
+    //           changeComponentsColor(currentTab, 0, value)
+    //         }
+    //       />
+    //     </div>
+    //   );
+    // }
 
     const currentSelectedComponent = currentComponents[currentTab];
 
-    if (currentSelectedComponent?.isNotEditable) return;
+    // if (currentSelectedComponent?.isNotEditable) return;
 
-    const componentColors: Array<number[]> = [];
-    currentSelectedComponent?.svg?.forEach(
-      ({ isNotEditable, props }, index) => {
-        if (isNotEditable || !props.fill) return;
+    // const componentColors: Array<number[]> = [];
+    // currentSelectedComponent?.svg?.forEach(
+    //   ({ isNotEditable, props }, index) => {
+    //     if (isNotEditable || !props.fill) return;
 
-        const colorInRGB = hexToRgb(props.fill);
-        componentColors.push(colorInRGB);
-      }
-    );
+    //     const colorInRGB = hexToRgb(props.fill);
+    //     componentColors.push(colorInRGB);
+    //   }
+    // );
 
-    if (!componentColors.length) return;
+    // if (!componentColors.length) return;
 
-    console.info("key and colors", currentTab, componentColors);
     return (
-      <BPColorPicker
-        colors={[
-          [4, 101, 161],
-          [65, 170, 75],
-          [232, 86, 156],
-        ]}
-        title={currentTab}
+      <Color
+        currentComponent={currentSelectedComponent}
+        currentTab={currentTab}
+        changeComponentsColor={changeComponentsColor}
       />
     );
   };

@@ -1,3 +1,11 @@
 .colorContainer {
   border: 1px solid tomato;
+
+  button {
+    border: none;
+    cursor: pointer;
+  }
+  .selectedItem {
+    border: 2px solid blue;
+  }
 }
