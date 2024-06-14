@@ -51,6 +51,7 @@ function Color({
           type="button"
           className={currentItem === index ? "selectedItem" : ""}
           onClick={() => setCurrentItem(index)}
+          key={color.toString()}
           style={{
             margin: "0 auto",
             padding: "0.5rem",
