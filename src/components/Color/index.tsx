@@ -1,37 +1,24 @@
 import React, { useState, useEffect } from "react";
 import BPColorPicker from "./BPColorPicker";
 
-import { IComponent } from "../../utils/models";
+import { IColorProps } from "../../utils/models";
 import { hexToRgb, rgbToHex } from "../../utils/functions";
 
 import "./Color.css";
-type ChangeComponentsColor = (
-  key: string,
-  index: number,
-  color: string
-) => void;
-
-interface IColor {
-  currentComponent: IComponent;
-  currentTab: string;
-  changeComponentsColor: ChangeComponentsColor;
-}
 
 function Color({
   currentComponent,
   currentTab,
   changeComponentsColor,
-}: IColor) {
+}: IColorProps) {
   const [currentItem, setCurrentItem] = useState(0);
   const [currentColors, setCurrentColors] = useState<Array<number[] | null>>(
     []
   );
 
-  const currentFillProp = currentComponent?.svg[currentItem].props.fill;
+  const currentFillProp = currentComponent.svg[currentItem].props.fill;
 
   const getNavbarColors = () => {
-    if (!currentComponent || currentComponent?.isNotEditable) return null;
-
     const componentColors: Array<number[] | null> = [];
     currentComponent.svg?.forEach(({ isNotEditable, props }) => {
       if (isNotEditable || !props.fill) return componentColors.push(null);
@@ -39,7 +26,6 @@ function Color({
       const colorInRGB = hexToRgb(props.fill);
       componentColors.push(colorInRGB);
     });
-    if (!componentColors.length) return;
 
     setCurrentColors([...componentColors]);
   };

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
-import ColorPicker from "../ColorPicker";
 import Color from "../../Color/";
 
-import { transformSvgPropToStr, hexToRgb } from "../../../utils/functions";
+import { transformSvgPropToStr } from "../../../utils/functions";
 
 import { ICustomOptionsProps, IComponent } from "../../../utils/models";
 
@@ -30,97 +29,21 @@ const Options = ({
       changeComposition({ componentKey: key, componentId: id });
     };
 
-  const renderColorPicker = () => {
-    if (currentTab === "skin" && currentComponents.body.svg[0].props.fill) {
+  const renderBPColorPicker = () => {
+    const currentSelectedComponent = currentComponents[currentTab];
+
+    if (currentTab === "skin") {
       return (
-        <div
-          className="colorPickerWrapper"
-          key={currentTab}
-          id={currentComponents.body.svg[0].props.fill.toUpperCase()}
-        >
-          <ColorPicker
-            type={
-              ["hair", "beard", "clothes", "eyes"].includes(currentTab)
-                ? "slider"
-                : ""
-            }
-            colorKey={currentTab}
-            currentColor={currentComponents.body.svg[0].props.fill.toUpperCase()}
-            changeCurrentColor={(value: string) =>
-              changeComponentsColor(currentTab, 0, value)
-            }
-          />
-        </div>
+        <Color
+          currentComponent={currentComponents["body"]}
+          currentTab={currentTab}
+          changeComponentsColor={changeComponentsColor}
+        />
       );
     }
 
-    const currentSelectedComponent = currentComponents[currentTab];
-
-    if (currentSelectedComponent?.isNotEditable) return;
-
-    return currentSelectedComponent?.svg?.map(
-      ({ isNotEditable, props }, index) => {
-        if (isNotEditable || !props.fill) return;
-
-        return (
-          <div className="colorPickerWrapper" key={props.fill + "" + index}>
-            <ColorPicker
-              type={
-                ["hair", "beard", "clothes", "eyes"].includes(currentTab)
-                  ? "slider"
-                  : ""
-              }
-              colorKey={currentTab}
-              currentColor={props.fill}
-              changeCurrentColor={(value: string) =>
-                changeComponentsColor(currentTab, index, value)
-              }
-            />
-          </div>
-        );
-      }
-    );
-  };
-
-  const renderBPColorPicker = () => {
-    // if (currentTab === "skin" && currentComponents.body.svg[0].props.fill) {
-    //   return (
-    //     <div
-    //       className="colorPickerWrapper"
-    //       key={currentTab}
-    //       id={currentComponents.body.svg[0].props.fill.toUpperCase()}
-    //     >
-    //       <ColorPicker
-    //         type={
-    //           ["hair", "beard", "clothes", "eyes"].includes(currentTab)
-    //             ? "slider"
-    //             : ""
-    //         }
-    //         colorKey={currentTab}
-    //         currentColor={currentComponents.body.svg[0].props.fill.toUpperCase()}
-    //         changeCurrentColor={(value: string) =>
-    //           changeComponentsColor(currentTab, 0, value)
-    //         }
-    //       />
-    //     </div>
-    //   );
-    // }
-
-    const currentSelectedComponent = currentComponents[currentTab];
-
-    // if (currentSelectedComponent?.isNotEditable) return;
-
-    // const componentColors: Array<number[]> = [];
-    // currentSelectedComponent?.svg?.forEach(
-    //   ({ isNotEditable, props }, index) => {
-    //     if (isNotEditable || !props.fill) return;
-
-    //     const colorInRGB = hexToRgb(props.fill);
-    //     componentColors.push(colorInRGB);
-    //   }
-    // );
-
-    // if (!componentColors.length) return;
+    if (!currentSelectedComponent || currentSelectedComponent?.isNotEditable)
+      return;
 
     return (
       <Color
@@ -211,7 +134,6 @@ const Options = ({
 
   return (
     <>
-      {/* {renderColorPicker()} */}
       {renderBPColorPicker()}
       <div
         className="containerCustomOptions"

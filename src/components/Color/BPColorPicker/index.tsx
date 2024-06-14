@@ -2,42 +2,7 @@ import React from "react";
 
 import "./BPColorPicker.css";
 import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
-
-// const colors = [
-//   "#110505",
-//   "#503323",
-//   "#894E25",
-//   "#7A4B13",
-//   "#AE4E0D",
-
-//   "#9D3921",
-//   "#F6C578",
-//   "#978265",
-//   "#B79884",
-//   "#7E7C7D",
-
-//   "#7F5390",
-//   "#946CCF",
-//   "#6D5EC3",
-//   "#1A4BA4",
-//   "#0465A1",
-
-//   "#409097",
-//   "#1D5C4B",
-//   "#41AA4B",
-//   "#5C9A35",
-//   "#5E6B4F",
-
-//   "#DDD34F",
-//   "#DA7142",
-//   "#B85155",
-//   "#AB6959",
-//   "#A7313E",
-
-//   "#8C155E",
-//   "#E8569C",
-//   "#BD8392",
-// ];
+import { IBPColorPicker } from "../../../utils/models";
 
 const colorListRGB = [
   [0, 0, 0],
@@ -75,12 +40,7 @@ const colorListRGB = [
   [189, 131, 146],
 ];
 
-interface BPColorPicker {
-  color: number[];
-  getUpdateColors: (color: number[]) => void;
-}
-
-function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
+function BPColorPicker({ color, getUpdateColors }: IBPColorPicker) {
   const isBlack = color[0] === color[1] && color[0] === color[2];
   const maxLightness = isBlack ? 1 : 0.9;
   const minLightness = isBlack ? 0 : 0.1;
@@ -172,8 +132,6 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
         value={getLightness()}
         onChange={({ target }) => {
           const [h, s] = rgbToHsl(color);
-          console.info("target", +target.value);
-          console.info("target getLightness()", getLightness());
           getUpdateColors(
             hslToRgb([h, s, +target.value / 100]).map((item) =>
               Math.round(item)
