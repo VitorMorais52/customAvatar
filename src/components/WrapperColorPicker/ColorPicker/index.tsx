@@ -1,8 +1,8 @@
 import React from "react";
 
-import "./BPColorPicker.css";
+import "./ColorPicker.css";
 import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
-import { IBPColorPicker } from "../../../utils/models";
+import { IColorPicker } from "../../../utils/models";
 
 const colorListRGB = [
   [0, 0, 0],
@@ -40,7 +40,7 @@ const colorListRGB = [
   [189, 131, 146],
 ];
 
-function BPColorPicker({ color, getUpdateColors }: IBPColorPicker) {
+function ColorPicker({ color, getUpdateColors }: IColorPicker) {
   const isBlack = color[0] === color[1] && color[0] === color[2];
   const maxLightness = isBlack ? 1 : 0.9;
   const minLightness = isBlack ? 0 : 0.1;
@@ -154,4 +154,4 @@ function BPColorPicker({ color, getUpdateColors }: IBPColorPicker) {
   );
 }
 
-export default BPColorPicker;
+export default ColorPicker;

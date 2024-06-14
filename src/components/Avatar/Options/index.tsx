@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Color from "../../Color/";
+import Color from "../../WrapperColorPicker/";
 
 import { transformSvgPropToStr } from "../../../utils/functions";
 
@@ -29,7 +29,7 @@ const Options = ({
       changeComposition({ componentKey: key, componentId: id });
     };
 
-  const renderBPColorPicker = () => {
+  const renderColorPicker = () => {
     const currentSelectedComponent = currentComponents[currentTab];
 
     if (currentTab === "skin") {
@@ -134,7 +134,7 @@ const Options = ({
 
   return (
     <>
-      {renderBPColorPicker()}
+      {renderColorPicker()}
       <div
         className="containerCustomOptions"
         style={{

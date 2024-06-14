@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import BPColorPicker from "./BPColorPicker";
+import ColorPicker from "./ColorPicker";
 
 import { IColorProps } from "../../utils/models";
 import { hexToRgb, rgbToHex } from "../../utils/functions";
 
-import "./Color.css";
+import "./WrapperColorPicker.css";
 
 function Color({
   currentComponent,
@@ -58,7 +58,7 @@ function Color({
     if (!theColor) return null;
 
     return (
-      <BPColorPicker
+      <ColorPicker
         color={theColor}
         getUpdateColors={(newValue) => {
           const hexColor = rgbToHex(newValue);

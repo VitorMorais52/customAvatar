@@ -66,7 +66,7 @@ interface ICustomOptionsProps {
   avatarComponents: Record<string, IAvatarComponents>;
 }
 
-interface IBPColorPicker {
+interface IColorPicker {
   color: number[];
   getUpdateColors: (color: number[]) => void;
 }
@@ -82,6 +82,6 @@ export {
   IColors,
   IComponent,
   SVGElement,
-  IBPColorPicker,
+  IColorPicker,
   IColorProps,
 };
