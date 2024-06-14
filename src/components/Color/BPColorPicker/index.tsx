@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import "./BPColorPicker.css";
 import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
@@ -81,16 +81,10 @@ interface BPColorPicker {
 }
 
 function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
-  const [lightness, setLightness] = useState(0);
-
   const isBlack = color[0] === color[1] && color[0] === color[2];
   const maxLightness = isBlack ? 1 : 0.9;
   const minLightness = isBlack ? 0 : 0.1;
 
-  const getInitLightness = () => {
-    const [, , l] = rgbToHsl(color);
-    setLightness(l * 100);
-  };
   const isTheSameColor = (a: number[], b: number[]) =>
     a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 
@@ -105,14 +99,14 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
     const [h, s] = rgbToHsl(color);
     mountsRGB(hslToRgb([h, s, minLightness]));
   };
+  const getLightness = () => {
+    const [h, s, l] = rgbToHsl(color);
+    return Math.round(l * 100);
+  };
   const boxColor = () => {
     const [h, s] = rgbToHsl(color);
-    return hslToRgb([h, s, lightness / 100]);
+    return hslToRgb([h, s, getLightness() / 100]);
   };
-
-  useEffect(() => {
-    getInitLightness();
-  }, [color]);
 
   return (
     <div className="containerPicker" style={{ minHeight: "180px" }}>
@@ -137,7 +131,7 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  const resultColor = colorItem.map((item) => Math.trunc(item));
+                  const resultColor = colorItem.map((item) => Math.round(item));
                   getUpdateColors(resultColor);
                 }}
               />
@@ -175,16 +169,29 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
         min={minLightness * 100}
         max={maxLightness * 100}
         step="1"
-        value={lightness}
-        onChange={({ target }) => setLightness(+target.value)}
+        value={getLightness()}
+        onChange={({ target }) => {
+          const [h, s] = rgbToHsl(color);
+          console.info("target", +target.value);
+          console.info("target getLightness()", getLightness());
+          getUpdateColors(
+            hslToRgb([h, s, +target.value / 100]).map((item) =>
+              Math.round(item)
+            )
+          );
+        }}
         onMouseUp={() => {
           const [h, s] = rgbToHsl(color);
           getUpdateColors(
-            hslToRgb([h, s, lightness / 100]).map((item) => Math.trunc(item))
+            hslToRgb([h, s, getLightness() / 100]).map((item) =>
+              Math.round(item)
+            )
           );
         }}
       />
-      <div style={{ marginLeft: "4px" }}>{lightness}</div>
+      <div style={{ marginLeft: "4px" }}>min {minLightness * 100}</div>
+      <div style={{ marginLeft: "4px" }}>{getLightness()}</div>
+      <div style={{ marginLeft: "4px" }}>max {maxLightness * 100}</div>
     </div>
   );
 }
