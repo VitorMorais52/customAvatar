@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./BPColorPicker.css";
 import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
@@ -103,21 +103,11 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
   const minCurrentColor = () => mountsRGB(hslToRgb([h, s, minLightness]));
   const boxColor = () => hslToRgb([h, s, lightness / 100]);
 
-  const outputData = () => {
-    const [h, s] = rgbToHsl(currentColor);
-    const outputColor = hslToRgb([h, s, lightness / 100]).map((v) =>
-      Math.trunc(v)
-    );
-    getUpdateColors(outputColor);
-    return outputColor;
-  };
-
   const replaceColor = (newColor: number[]) => {
     setCurrentColor(newColor);
   };
+
   useEffect(() => {
-    console.info("color", color);
-    console.info("currentColor", color);
     getInitLightness();
   }, []);
 
@@ -129,9 +119,11 @@ function BPColorPicker({ color, getUpdateColors }: BPColorPicker) {
     setCurrentColor(color);
   }, [color]);
 
-  // useEffect(() => {
-  //   if (!isTheSameColor(color, currentColor)) outputData();
-  // }, [lightness]);
+  useEffect(() => {
+    getUpdateColors(
+      hslToRgb([h, s, lightness / 100]).map((item) => Math.trunc(item))
+    );
+  }, [currentColor, lightness]);
 
   return (
     <div className="containerPicker" style={{ minHeight: "180px" }}>

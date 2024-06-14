@@ -153,6 +153,16 @@ function hexToRgb(hex: string): number[] {
   return [r, g, b];
 }
 
+function rgbToHex(rgb: number[]): string {
+  const toHex = (color: number): string => {
+    const hex = color.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+  };
+
+  const [r, g, b] = rgb;
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
 export {
   deepClone,
   reduceBrightness,
@@ -162,4 +172,5 @@ export {
   restoreLastColor,
   updateFillProp,
   hexToRgb,
+  rgbToHex,
 };

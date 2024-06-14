@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BPColorPicker from "./BPColorPicker";
 
 import { IComponent } from "../../utils/models";
-import { hexToRgb } from "../../utils/functions";
+import { hexToRgb, rgbToHex } from "../../utils/functions";
 
 import "./Color.css";
 type ChangeComponentsColor = (
@@ -22,29 +22,28 @@ function Color({
   currentTab,
   changeComponentsColor,
 }: IColor) {
-  const fixedColors = [4, 101, 161];
-
   const [currentItem, setCurrentItem] = useState(0);
+  const [currentColors, setCurrentColors] = useState<Array<number[] | null>>(
+    []
+  );
 
-  if (!currentComponent || currentComponent?.isNotEditable) return null;
+  const getNavbarColors = () => {
+    if (!currentComponent || currentComponent?.isNotEditable) return null;
 
-  const componentColors: Array<number[] | null> = [];
-  currentComponent.svg?.forEach(({ isNotEditable, props }) => {
-    if (isNotEditable || !props.fill) return componentColors.push(null);
+    const componentColors: Array<number[] | null> = [];
+    currentComponent.svg?.forEach(({ isNotEditable, props }) => {
+      if (isNotEditable || !props.fill) return componentColors.push(null);
 
-    const colorInRGB = hexToRgb(props.fill);
-    componentColors.push(colorInRGB);
-  });
-  if (!componentColors.length) return;
+      const colorInRGB = hexToRgb(props.fill);
+      componentColors.push(colorInRGB);
+    });
+    if (!componentColors.length) return;
 
-  // console.info("color rerender", componentColors[currentItem]);
-  // console.info("currentItem rerender", currentItem);
-
-  // console.info("component colors", componentColors);
-  // console.info("currentComponent ", currentComponent);
+    setCurrentColors([...componentColors]);
+  };
 
   const renderNavbarItems = () => {
-    return componentColors.map((color, index) => {
+    return currentColors.map((color, index) => {
       if (!color) return null;
       return (
         <button
@@ -66,7 +65,7 @@ function Color({
   };
 
   const renderThePicker = () => {
-    const theColor = componentColors[currentItem];
+    const theColor = currentColors[currentItem];
 
     if (!theColor) return null;
 
@@ -74,12 +73,16 @@ function Color({
       <BPColorPicker
         color={theColor}
         getUpdateColors={(newValue) => {
-          const rgbColor = `rgb(${newValue[0]},${newValue[1]},${newValue[2]})`;
-          changeComponentsColor(currentTab, currentItem, rgbColor);
+          const hexColor = rgbToHex(newValue);
+          changeComponentsColor(currentTab, currentItem, hexColor);
         }}
       />
     );
   };
+
+  useEffect(() => {
+    getNavbarColors();
+  }, [currentComponent]);
 
   return (
     <div className="colorContainer">
