@@ -2,6 +2,10 @@
   position: relative;
   margin: 0 auto;
   margin-top: 1rem;
+
+  input[type="range"] {
+    background-color: transparent;
+  }
 }
 
 .contentColors {
@@ -39,4 +43,31 @@
     display: flex;
     align-items: center;
   }
+}
+
+input[type="range"] {
+  -webkit-appearance: none; /* Remover o estilo padrão do navegador */
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Remover o estilo padrão do navegador */
+  appearance: none;
+  width: 8px;
+  height: 37px;
+  background: #838383; /* Cor do thumb */
+  border: 2px solid white;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 8px;
+  height: 37px;
+  background: #838383; /* Cor do thumb */
+  border: 2px solid white;
+  cursor: pointer;
+}
+input[type="range"]::-ms-thumb {
+  width: 8px;
+  height: 37px;
+  background: #838383; /* Cor do thumb */
+  border: 2px solid white;
+  cursor: pointer;
 }

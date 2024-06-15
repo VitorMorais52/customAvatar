@@ -53,11 +53,11 @@ function ColorPicker({ color, getUpdateColors }: IColorPicker) {
 
   const maxCurrentColor = () => {
     const [h, s] = rgbToHsl(color);
-    mountsRGB(hslToRgb([h, s, maxLightness]));
+    return mountsRGB(hslToRgb([h, s, maxLightness]));
   };
   const minCurrentColor = () => {
     const [h, s] = rgbToHsl(color);
-    mountsRGB(hslToRgb([h, s, minLightness]));
+    return mountsRGB(hslToRgb([h, s, minLightness]));
   };
   const getLightness = () => {
     const [h, s, l] = rgbToHsl(color);
@@ -111,42 +111,45 @@ function ColorPicker({ color, getUpdateColors }: IColorPicker) {
           marginBottom: "20px",
         }}
       />
-      <div
-        className="divInput"
-        style={{
-          margin: "0 auto",
-          marginBottom: "0.5rem",
-          borderRadius: "8px",
-          width: "130px",
-          height: "16px",
-          background: `linear-gradient(to right, ${minCurrentColor()} 0%, ${mountsRGB(
-            color
-          )} 63%,${maxCurrentColor()})`,
-        }}
-      />
-      <input
-        type="range"
-        min={minLightness * 100}
-        max={maxLightness * 100}
-        step="1"
-        value={getLightness()}
-        onChange={({ target }) => {
-          const [h, s] = rgbToHsl(color);
-          getUpdateColors(
-            hslToRgb([h, s, +target.value / 100]).map((item) =>
-              Math.round(item)
-            )
-          );
-        }}
-        onMouseUp={() => {
-          const [h, s] = rgbToHsl(color);
-          getUpdateColors(
-            hslToRgb([h, s, getLightness() / 100]).map((item) =>
-              Math.round(item)
-            )
-          );
-        }}
-      />
+      <div className="containerInputLightness" style={{ position: "relative" }}>
+        <div
+          className="divInput"
+          style={{
+            margin: "0 auto",
+            marginBottom: "0.5rem",
+            borderRadius: "8px",
+            width: "272px",
+            height: "24px",
+            background: `linear-gradient(to right, ${minCurrentColor()} 0%, ${mountsRGB(
+              color
+            )} 63%,${maxCurrentColor()})`,
+          }}
+        />
+        <input
+          type="range"
+          min={minLightness * 100}
+          max={maxLightness * 100}
+          step="1"
+          value={getLightness()}
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            margin: "0",
+            width: "272px",
+            height: "24px",
+          }}
+          onChange={({ target }) => {
+            const [h, s] = rgbToHsl(color);
+            getUpdateColors(
+              hslToRgb([h, s, +target.value / 100]).map((item) =>
+                Math.round(item)
+              )
+            );
+          }}
+        />
+      </div>
       <div style={{ marginLeft: "4px" }}>min {minLightness * 100}</div>
       <div style={{ marginLeft: "4px" }}>{getLightness()}</div>
       <div style={{ marginLeft: "4px" }}>max {maxLightness * 100}</div>
