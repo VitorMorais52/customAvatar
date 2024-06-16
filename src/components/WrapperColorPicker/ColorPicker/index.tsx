@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./ColorPicker.css";
 import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
@@ -41,9 +41,12 @@ const colorListRGB = [
 ];
 
 function ColorPicker({ color, getUpdateColors }: IColorPicker) {
+  const [copyOriginalColor, setCopyOriginalColor] = useState(color);
   const isBlack = color[0] === color[1] && color[0] === color[2];
   const maxLightness = isBlack ? 1 : 0.9;
   const minLightness = isBlack ? 0 : 0.1;
+
+  console.info("copyOriginalColor", copyOriginalColor);
 
   const isTheSameColor = (a: number[], b: number[]) =>
     a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
@@ -52,15 +55,15 @@ function ColorPicker({ color, getUpdateColors }: IColorPicker) {
     `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 
   const maxCurrentColor = () => {
-    const [h, s] = rgbToHsl(color);
+    const [h, s] = rgbToHsl(copyOriginalColor);
     return mountsRGB(hslToRgb([h, s, maxLightness]));
   };
   const minCurrentColor = () => {
-    const [h, s] = rgbToHsl(color);
+    const [h, s] = rgbToHsl(copyOriginalColor);
     return mountsRGB(hslToRgb([h, s, minLightness]));
   };
-  const getLightness = () => {
-    const [h, s, l] = rgbToHsl(color);
+  const getLightness = (rgb?: number[]) => {
+    const [h, s, l] = rgbToHsl(rgb || color);
     return Math.round(l * 100);
   };
   const boxColor = () => {
@@ -92,6 +95,7 @@ function ColorPicker({ color, getUpdateColors }: IColorPicker) {
                 }}
                 onClick={() => {
                   const resultColor = colorItem.map((item) => Math.round(item));
+                  setCopyOriginalColor(colorItem);
                   getUpdateColors(resultColor);
                 }}
               />
@@ -121,8 +125,8 @@ function ColorPicker({ color, getUpdateColors }: IColorPicker) {
             width: "272px",
             height: "24px",
             background: `linear-gradient(to right, ${minCurrentColor()} 0%, ${mountsRGB(
-              color
-            )} 63%,${maxCurrentColor()})`,
+              copyOriginalColor
+            )} ${getLightness(copyOriginalColor)}%,${maxCurrentColor()})`,
           }}
         />
         <input
