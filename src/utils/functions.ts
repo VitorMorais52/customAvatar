@@ -1,4 +1,4 @@
-import { IComponent } from "./models";
+import { IComponent, SVGElement } from "./models";
 
 function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== "object") {
@@ -163,6 +163,26 @@ function rgbToHex(rgb: number[]): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
+function saveOriginalColors(component: IComponent) {
+  if (component?.isNotEditable) return;
+
+  const componentColors = component.svg.map(({ props }: SVGElement) => {
+    if (props.isNotEditable || !props.fill) return null;
+    return props.fill;
+  });
+  component["originalColors"] = componentColors;
+
+  if (component.subcomponent) {
+    const subcomponentColors = component.subcomponent.svg.map(
+      ({ props }: SVGElement) => {
+        if (props.isNotEditable || !props.fill) return null;
+        return props.fill;
+      }
+    );
+    component.subcomponent["originalColors"] = subcomponentColors;
+  }
+}
+
 export {
   deepClone,
   reduceBrightness,
@@ -173,4 +193,5 @@ export {
   updateFillProp,
   hexToRgb,
   rgbToHex,
+  saveOriginalColors,
 };

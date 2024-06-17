@@ -8,6 +8,7 @@ import {
   validateMatchComponents,
   restoreLastColor,
   updateFillProp,
+  saveOriginalColors,
 } from "../../utils/functions";
 
 import { IComponent } from "../../utils/models";
@@ -40,8 +41,6 @@ const Avatar = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const changeComponentColor = (key: string, index: number, color: string) => {
-    if (color === "#000000") return;
-
     if (key === "skin") {
       Object.entries(skin.relatedComponents).forEach(([relatedKey, value]) => {
         const rightColor = value ? darkenColor(color, value) : color;
@@ -85,8 +84,12 @@ const Avatar = () => {
         ((!newComponent.isNotEditable && !currentComponent.isNotEditable) ||
           typeof skin.relatedComponents[key] === "object")
       ) {
+        saveOriginalColors(newComponent);
         restoreLastColor(svg, currentComponent);
-        if (subcomponent) restoreLastColor(subcomponent.svg, currentComponent);
+        if (subcomponent) {
+          saveOriginalColors(subcomponent);
+          restoreLastColor(subcomponent.svg, currentComponent);
+        }
       }
 
       if (subcomponentKey) {
@@ -111,6 +114,12 @@ const Avatar = () => {
       }
 
       changedComponents[key] = newComponent;
+
+      // Object.entries(changedComponents).forEach(
+      //   ([_, component]: [string, any]) => {
+      //     saveOriginalColors(component);
+      //   }
+      // );
     } else {
       changedComponents[key] = "";
       if (components[key].subcomponentKey) {
@@ -145,6 +154,8 @@ const Avatar = () => {
       if (avatar[key].subcomponent) {
         avatar[components[key].subcomponentKey] = avatar[key].subcomponent;
       }
+
+      saveOriginalColors(avatar[key]);
 
       const componentColors = componentInfos.slice(1);
       componentColors.forEach((color: string, indexColor: number) => {

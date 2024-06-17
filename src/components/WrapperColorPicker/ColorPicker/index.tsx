@@ -40,11 +40,12 @@ function ColorPicker({ color, getUpdateColors, colorList }: IColorPicker) {
           className="wrapperColors"
           style={{ display: "flex", flexWrap: "wrap", marginLeft: "8px" }}
         >
-          {colorList.map((colorItem) => {
+          {colorList.map((colorItem, index) => {
             return (
               <button
                 type="button"
-                key={colorItem + ""}
+                id={colorItem + "" + index}
+                key={colorItem + "" + index}
                 className={`colorBall ${
                   isTheSameColor(colorItem, color) ? "selectedColor" : ""
                 }`}
