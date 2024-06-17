@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Color from "../../WrapperColorPicker/";
+import WrapperColorPicker from "../../WrapperColorPicker/";
 
 import { transformSvgPropToStr } from "../../../utils/functions";
 
@@ -12,6 +12,7 @@ const Options = ({
   changeComponentsColor,
   currentComponents,
   avatarComponents,
+  availableColors,
 }: ICustomOptionsProps) => {
   const [currentTab, setCurrentTab] = useState("head");
   const tabList = Object.keys(avatarComponents);
@@ -34,10 +35,11 @@ const Options = ({
 
     if (currentTab === "skin") {
       return (
-        <Color
+        <WrapperColorPicker
           currentComponent={currentComponents["body"]}
           currentTab={currentTab}
           changeComponentsColor={changeComponentsColor}
+          colorList={availableColors.commonColors}
         />
       );
     }
@@ -46,10 +48,11 @@ const Options = ({
       return;
 
     return (
-      <Color
+      <WrapperColorPicker
         currentComponent={currentSelectedComponent}
         currentTab={currentTab}
         changeComponentsColor={changeComponentsColor}
+        colorList={availableColors.commonColors}
       />
     );
   };

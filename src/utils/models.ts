@@ -64,17 +64,20 @@ interface ICustomOptionsProps {
   currentTypes: Record<string, string>;
   currentComponents: Record<string, IComponent>;
   avatarComponents: Record<string, IAvatarComponents>;
+  availableColors: Record<string, Array<number[]>>;
 }
 
 interface IColorPicker {
   color: number[];
   getUpdateColors: (color: number[]) => void;
+  colorList: Array<number[]>;
 }
 
-interface IColorProps {
+interface WrapperColorPickerProps {
   currentComponent: IComponent;
   currentTab: string;
   changeComponentsColor: ChangeComponentsColor;
+  colorList: Array<number[]>;
 }
 
 export {
@@ -83,5 +86,5 @@ export {
   IComponent,
   SVGElement,
   IColorPicker,
-  IColorProps,
+  WrapperColorPickerProps,
 };

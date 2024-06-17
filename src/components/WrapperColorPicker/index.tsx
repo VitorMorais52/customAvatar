@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ColorPicker from "./ColorPicker";
 
-import { IColorProps } from "../../utils/models";
+import { WrapperColorPickerProps } from "../../utils/models";
 import { hexToRgb, rgbToHex } from "../../utils/functions";
 
 import "./WrapperColorPicker.css";
 
-function Color({
+function WrapperColorPicker({
   currentComponent,
   currentTab,
   changeComponentsColor,
-}: IColorProps) {
+  colorList,
+}: WrapperColorPickerProps) {
   const [currentItem, setCurrentItem] = useState(0);
   const [currentColors, setCurrentColors] = useState<Array<number[] | null>>(
     []
@@ -38,7 +39,7 @@ function Color({
           type="button"
           className={currentItem === index ? "selectedItem" : ""}
           onClick={() => setCurrentItem(index)}
-          key={color.toString()}
+          key={color.toString() + index}
           style={{
             margin: "0 auto",
             padding: "0.5rem",
@@ -64,6 +65,7 @@ function Color({
           const hexColor = rgbToHex(newValue);
           changeComponentsColor(currentTab, currentItem, hexColor);
         }}
+        colorList={colorList}
       />
     );
   };
@@ -81,4 +83,4 @@ function Color({
   );
 }
 
-export default Color;
+export default WrapperColorPicker;

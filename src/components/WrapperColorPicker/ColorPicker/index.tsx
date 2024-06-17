@@ -4,49 +4,11 @@ import "./ColorPicker.css";
 import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
 import { IColorPicker } from "../../../utils/models";
 
-const colorListRGB = [
-  [0, 0, 0],
-  [80, 51, 35],
-  [137, 78, 37],
-  [122, 75, 19],
-  [174, 78, 13],
-
-  [157, 57, 33],
-  [246, 197, 120],
-  [151, 130, 101],
-  [183, 152, 132],
-  [126, 124, 125],
-
-  [127, 83, 144],
-  [148, 108, 207],
-  [109, 94, 195],
-  [26, 75, 164],
-  [4, 101, 161],
-
-  [64, 144, 151],
-  [29, 92, 75],
-  [65, 170, 75],
-  [92, 154, 53],
-  [94, 107, 79],
-
-  [221, 211, 79],
-  [218, 113, 66],
-  [184, 81, 85],
-  [171, 105, 89],
-  [167, 49, 62],
-
-  [140, 21, 94],
-  [232, 86, 156],
-  [189, 131, 146],
-];
-
-function ColorPicker({ color, getUpdateColors }: IColorPicker) {
+function ColorPicker({ color, getUpdateColors, colorList }: IColorPicker) {
   const [copyOriginalColor, setCopyOriginalColor] = useState(color);
   const isBlack = color[0] === color[1] && color[0] === color[2];
   const maxLightness = isBlack ? 1 : 0.9;
   const minLightness = isBlack ? 0 : 0.1;
-
-  console.info("copyOriginalColor", copyOriginalColor);
 
   const isTheSameColor = (a: number[], b: number[]) =>
     a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
@@ -78,7 +40,7 @@ function ColorPicker({ color, getUpdateColors }: IColorPicker) {
           className="wrapperColors"
           style={{ display: "flex", flexWrap: "wrap", marginLeft: "8px" }}
         >
-          {colorListRGB.map((colorItem) => {
+          {colorList.map((colorItem) => {
             return (
               <button
                 type="button"
