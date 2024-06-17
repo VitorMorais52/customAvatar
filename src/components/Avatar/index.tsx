@@ -18,6 +18,7 @@ import {
   skin,
   traffictOrder,
   commonColors,
+  skinColors,
 } from "./newLocalComponents.json";
 
 const components = deepClone(pieces);
@@ -247,7 +248,7 @@ const Avatar = () => {
         currentTypes={currentComponentsType}
         currentComponents={selectedComponents}
         changeComponentsColor={changeComponentColor}
-        availableColors={{ commonColors }}
+        availableColors={{ commonColors, skinColors }}
       />
       <div
         style={{

@@ -39,7 +39,7 @@ const Options = ({
           currentComponent={currentComponents["body"]}
           currentTab={currentTab}
           changeComponentsColor={changeComponentsColor}
-          colorList={availableColors.commonColors}
+          colorList={availableColors.skinColors}
         />
       );
     }
