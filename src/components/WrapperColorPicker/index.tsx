@@ -69,6 +69,7 @@ function WrapperColorPicker({
 
     return (
       <ColorPicker
+        id={currentItem}
         color={theColor}
         getUpdateColors={(newValue) => {
           const hexColor = rgbToHex(newValue);

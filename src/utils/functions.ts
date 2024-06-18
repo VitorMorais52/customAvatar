@@ -165,6 +165,7 @@ function rgbToHex(rgb: number[]): string {
 
 function saveOriginalColors(component: IComponent) {
   if (component?.isNotEditable) return;
+  if (component["originalColors"]) return;
 
   const componentColors = component.svg.map(({ props }: SVGElement) => {
     if (props.isNotEditable || !props.fill) return null;

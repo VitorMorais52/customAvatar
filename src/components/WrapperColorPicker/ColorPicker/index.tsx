@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./ColorPicker.css";
 import { hslToRgb, rgbToHsl } from "./colorPickFunctions";
 import { IColorPicker } from "../../../utils/models";
 
-function ColorPicker({ color, getUpdateColors, colorList }: IColorPicker) {
+function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
   const [copyOriginalColor, setCopyOriginalColor] = useState(color);
   const isBlack = color[0] === color[1] && color[0] === color[2];
   const maxLightness = isBlack ? 1 : 0.9;
@@ -33,6 +33,10 @@ function ColorPicker({ color, getUpdateColors, colorList }: IColorPicker) {
     return hslToRgb([h, s, getLightness() / 100]);
   };
 
+  useEffect(() => {
+    setCopyOriginalColor(color);
+  }, [id]);
+
   return (
     <div className="containerPicker" style={{ minHeight: "180px" }}>
       <div className="contentColors" style={{ width: "372px" }}>
@@ -47,7 +51,9 @@ function ColorPicker({ color, getUpdateColors, colorList }: IColorPicker) {
                 id={colorItem + "" + index}
                 key={colorItem + "" + index}
                 className={`colorBall ${
-                  isTheSameColor(colorItem, color) ? "selectedColor" : ""
+                  isTheSameColor(colorItem, copyOriginalColor)
+                    ? "selectedColor"
+                    : ""
                 }`}
                 style={{
                   backgroundColor: mountsRGB(colorItem),

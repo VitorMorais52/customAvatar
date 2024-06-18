@@ -77,6 +77,9 @@ const Avatar = () => {
       const newComponent = componentList.find((el: IComponent) => el.id === id);
       const { svg, subcomponent } = newComponent;
 
+      saveOriginalColors(newComponent);
+      if (subcomponent) saveOriginalColors(subcomponent);
+
       const currentComponent = selectedComponents[key];
 
       if (
@@ -84,10 +87,8 @@ const Avatar = () => {
         ((!newComponent.isNotEditable && !currentComponent.isNotEditable) ||
           typeof skin.relatedComponents[key] === "object")
       ) {
-        saveOriginalColors(newComponent);
         restoreLastColor(svg, currentComponent);
         if (subcomponent) {
-          saveOriginalColors(subcomponent);
           restoreLastColor(subcomponent.svg, currentComponent);
         }
       }
@@ -114,12 +115,6 @@ const Avatar = () => {
       }
 
       changedComponents[key] = newComponent;
-
-      // Object.entries(changedComponents).forEach(
-      //   ([_, component]: [string, any]) => {
-      //     saveOriginalColors(component);
-      //   }
-      // );
     } else {
       changedComponents[key] = "";
       if (components[key].subcomponentKey) {
