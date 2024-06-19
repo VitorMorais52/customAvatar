@@ -66,7 +66,9 @@ const Avatar = () => {
   }: Record<"componentKey" | "componentId", string>) => {
     const changedComponents = {};
 
-    // const componentsProvider = pieces[key]?.resetColor ?  pieces[key] : components[key];
+    if (id === selectedComponents[key]?.id) {
+      return;
+    }
 
     const {
       components: componentList,

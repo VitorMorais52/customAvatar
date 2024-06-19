@@ -45,8 +45,8 @@ function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
             return (
               <button
                 type="button"
-                id={colorItem + "" + index}
-                key={colorItem + "" + index}
+                id={colorItem + "-" + index}
+                key={colorItem + "-" + index}
                 className={`colorBall ${
                   isTheSameColor(colorItem, copyOriginalColor)
                     ? "selectedColor"

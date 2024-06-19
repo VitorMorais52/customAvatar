@@ -55,6 +55,7 @@ function WrapperColorPicker({
 
     const colorPickerID =
       currentTab + "-" + currentComponent.id + "-" + currentItem;
+
     return (
       <ColorPicker
         id={colorPickerID}
