@@ -13,11 +13,6 @@ function WrapperColorPicker({
   colorList,
 }: WrapperColorPickerProps) {
   const [currentItem, setCurrentItem] = useState(0);
-  const [currentColors, setCurrentColors] = useState<Array<number[] | null>>(
-    []
-  );
-
-  const currentFillProp = currentComponent.svg[currentItem]?.props.fill;
 
   const getNavbarColors = () => {
     const componentColors: Array<number[] | null> = [];
@@ -27,10 +22,11 @@ function WrapperColorPicker({
       const colorInRGB = hexToRgb(props.fill);
       componentColors.push(colorInRGB);
     });
-    setCurrentColors([...componentColors]);
+    return [...componentColors];
   };
 
   const renderNavbarItems = () => {
+    const currentColors = getNavbarColors();
     return currentColors.map((color, index) => {
       if (!color) return null;
       return (
@@ -53,11 +49,12 @@ function WrapperColorPicker({
   };
 
   const renderThePicker = () => {
+    const currentColors = getNavbarColors();
     const theColor = currentColors[currentItem];
     if (!theColor) return null;
 
-    const colorPickerID = JSON.stringify(currentColors) + currentItem;
-
+    const colorPickerID =
+      currentTab + "-" + currentComponent.id + "-" + currentItem;
     return (
       <ColorPicker
         id={colorPickerID}
@@ -70,10 +67,6 @@ function WrapperColorPicker({
       />
     );
   };
-
-  useEffect(() => {
-    getNavbarColors();
-  }, [currentComponent, currentFillProp]);
 
   useEffect(() => {
     setCurrentItem(0);

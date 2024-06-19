@@ -33,9 +33,7 @@ function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
     return hslToRgb([h, s, getLightness() / 100]);
   };
 
-  useEffect(() => {
-    setCopyOriginalColor(color);
-  }, [id]);
+  useEffect(() => setCopyOriginalColor(color), [id]);
 
   return (
     <div className="containerPicker" style={{ minHeight: "180px" }}>
