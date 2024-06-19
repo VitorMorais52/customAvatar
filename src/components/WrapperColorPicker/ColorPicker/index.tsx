@@ -7,14 +7,13 @@ import { IColorPicker } from "../../../utils/models";
 function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
   const [copyOriginalColor, setCopyOriginalColor] = useState(color);
   const isBlack = color[0] === color[1] && color[0] === color[2];
-  const maxLightness = isBlack ? 1 : 0.8;
-  const minLightness = isBlack ? 0 : 0.3;
+  const maxLightness = isBlack ? 1 : 0.9;
+  const minLightness = isBlack ? 0 : 0.1;
 
   const isTheSameColor = (a: number[], b: number[]) =>
     a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 
-  const mountsRGB = (color: number[]) =>
-    `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+  const mountsRGB = ([r, g, b]: number[]) => `rgb(${r}, ${g}, ${b})`;
 
   const maxCurrentColor = () => {
     const [h, s] = rgbToHsl(copyOriginalColor);
@@ -26,7 +25,7 @@ function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
   };
   const getLightness = (rgb?: number[]) => {
     const [h, s, l] = rgbToHsl(rgb || color);
-    return Math.round(l * 100);
+    return l * 100;
   };
   const boxColor = () => {
     const [h, s] = rgbToHsl(color);
@@ -61,7 +60,7 @@ function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  const resultColor = colorItem.map((item) => Math.round(item));
+                  const resultColor = colorItem;
                   setCopyOriginalColor(colorItem);
                   getUpdateColors(resultColor);
                 }}
@@ -113,11 +112,7 @@ function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
           }}
           onChange={({ target }) => {
             const [h, s] = rgbToHsl(color);
-            getUpdateColors(
-              hslToRgb([h, s, +target.value / 100]).map((item) =>
-                Math.round(item)
-              )
-            );
+            getUpdateColors(hslToRgb([h, s, +target.value / 100]));
           }}
         />
       </div>

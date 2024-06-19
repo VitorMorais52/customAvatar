@@ -60,7 +60,8 @@ function WrapperColorPicker({
         id={colorPickerID}
         color={theColor}
         getUpdateColors={(newValue) => {
-          const hexColor = rgbToHex(newValue);
+          const roundedRGB = newValue.map((value) => +value.toFixed(0));
+          const hexColor = rgbToHex(roundedRGB);
           changeComponentsColor(currentTab, currentItem, hexColor);
         }}
         colorList={colorList}
