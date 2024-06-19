@@ -27,7 +27,6 @@ function WrapperColorPicker({
       const colorInRGB = hexToRgb(props.fill);
       componentColors.push(colorInRGB);
     });
-
     setCurrentColors([...componentColors]);
   };
 
@@ -57,25 +56,17 @@ function WrapperColorPicker({
     const theColor = currentColors[currentItem];
     if (!theColor) return null;
 
-    const originalColorsProp = currentComponent["originalColors"];
-    const originalColor =
-      originalColorsProp && originalColorsProp[currentItem]
-        ? hexToRgb(currentComponent["originalColors"][currentItem])
-        : null;
-
-    const updatedColorList = originalColor
-      ? [originalColor, ...colorList]
-      : colorList;
+    const colorPickerID = JSON.stringify(currentColors) + currentItem;
 
     return (
       <ColorPicker
-        id={currentItem}
+        id={colorPickerID}
         color={theColor}
         getUpdateColors={(newValue) => {
           const hexColor = rgbToHex(newValue);
           changeComponentsColor(currentTab, currentItem, hexColor);
         }}
-        colorList={updatedColorList}
+        colorList={colorList}
       />
     );
   };

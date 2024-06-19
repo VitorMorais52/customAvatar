@@ -68,7 +68,7 @@ interface ICustomOptionsProps {
 }
 
 interface IColorPicker {
-  id: number;
+  id: string;
   color: number[];
   getUpdateColors: (color: number[]) => void;
   colorList: Array<number[]>;

@@ -7,8 +7,8 @@ import { IColorPicker } from "../../../utils/models";
 function ColorPicker({ id, color, getUpdateColors, colorList }: IColorPicker) {
   const [copyOriginalColor, setCopyOriginalColor] = useState(color);
   const isBlack = color[0] === color[1] && color[0] === color[2];
-  const maxLightness = isBlack ? 1 : 0.9;
-  const minLightness = isBlack ? 0 : 0.1;
+  const maxLightness = isBlack ? 1 : 0.8;
+  const minLightness = isBlack ? 0 : 0.3;
 
   const isTheSameColor = (a: number[], b: number[]) =>
     a[0] === b[0] && a[1] === b[1] && a[2] === b[2];

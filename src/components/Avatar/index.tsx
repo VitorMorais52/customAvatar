@@ -8,7 +8,6 @@ import {
   validateMatchComponents,
   restoreLastColor,
   updateFillProp,
-  saveOriginalColors,
 } from "../../utils/functions";
 
 import { IComponent } from "../../utils/models";
@@ -67,25 +66,32 @@ const Avatar = () => {
   }: Record<"componentKey" | "componentId", string>) => {
     const changedComponents = {};
 
+    // const componentsProvider = pieces[key]?.resetColor ?  pieces[key] : components[key];
+
     const {
       components: componentList,
       subcomponentKey,
+      resetColor,
       validateMatchComponents: arrMatchComponents,
     } = components[key];
 
     if (id) {
-      const newComponent = componentList.find((el: IComponent) => el.id === id);
-      const { svg, subcomponent } = newComponent;
+      const indexNewComponent = componentList.findIndex(
+        (el: IComponent) => el.id === id
+      );
+      const newComponent = !resetColor
+        ? componentList[indexNewComponent]
+        : deepClone(componentList[indexNewComponent]);
 
-      saveOriginalColors(newComponent);
-      if (subcomponent) saveOriginalColors(subcomponent);
+      const { svg, subcomponent } = newComponent;
 
       const currentComponent = selectedComponents[key];
 
       if (
         currentComponent &&
         ((!newComponent.isNotEditable && !currentComponent.isNotEditable) ||
-          typeof skin.relatedComponents[key] === "object")
+          typeof skin.relatedComponents[key] === "object") &&
+        !components[key]?.resetColor
       ) {
         restoreLastColor(svg, currentComponent);
         if (subcomponent) {
@@ -150,8 +156,6 @@ const Avatar = () => {
         avatar[components[key].subcomponentKey] = avatar[key].subcomponent;
       }
 
-      saveOriginalColors(avatar[key]);
-
       const componentColors = componentInfos.slice(1);
       componentColors.forEach((color: string, indexColor: number) => {
         if (
@@ -201,8 +205,7 @@ const Avatar = () => {
         (component) => component.id === item.id
       );
 
-      const currentComponent = components[key].components[componentIndex];
-      const colors = currentComponent.svg.map(
+      const colors = item.svg.map(
         (svgElement) => svgElement.props.fill || null
       );
 
@@ -265,7 +268,7 @@ const Avatar = () => {
       >
         <textarea
           ref={textareaRef}
-          style={{ width: "800px", height: "16px" }}
+          style={{ width: "800px", height: "80px" }}
           value={getOutpatData()}
           readOnly
         />

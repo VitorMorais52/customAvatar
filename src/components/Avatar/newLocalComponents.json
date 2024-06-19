@@ -1583,6 +1583,7 @@
         }
       ],
       "hasRemoveOption": true,
+      "resetColor": true,
       "validationRequiredBy": "body"
     },
     "glasses": {
@@ -1663,6 +1664,7 @@
         }
       ],
       "hasRemoveOption": true,
+      "resetColor": true,
       "validationRequiredBy": "head"
     }
   }
